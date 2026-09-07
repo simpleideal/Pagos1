@@ -3,302 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bry Paradise - Datos de Transferencia</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <title>Muestras de llavero NFC</title>
+    <meta name="description" content="Tres páginas de cobro de muestra, con datos inventados, para ver la interfaz del llavero NFC.">
     <style>
         :root {
-            --card-bg: rgba(45, 25, 40, 0.92);
-            --accent: #f472b6;
-            --text-main: #f8fafc;
-            --text-muted: #c9a0b5;
-            --success: #22c55e;
-            --border-color: rgba(244, 114, 182, 0.25);
-            --field-bg: rgba(200, 100, 140, 0.20);
+            --bg: #0c0a0b;
+            --card: #1a1418;
+            --line: rgba(236, 163, 189, 0.22);
+            --accent: #eca3bd;
+            --text: #f8f4f6;
+            --muted: #b7a3ad;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            /* IMPORTANTE: Descarga la imagen y úsala localmente (ej: assets/fondo.webp). 
-               El hotlink a Unsplash eventualmente bloqueará la petición. */
-            background: #2d1928 url('https://images.unsplash.com/photo-1607457561901-e6ec3a6d16cf?fm=jpg&q=60&w=3000&auto=format&fit=crop') center/cover fixed;
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
-            /* Padding inferior añadido para que el botón flotante no tape el footer en móviles */
-            padding: 20px 20px 90px 20px; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 50% -10%, #3a1526 0%, transparent 48%),
+                var(--bg);
+            padding: 28px 20px 48px;
         }
 
-        .card {
-            background-color: var(--card-bg);
-            backdrop-filter: blur(8px);
-            border-radius: 16px;
-            padding: 24px;
+        main {
             width: 100%;
-            max-width: 400px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-            border: 1px solid var(--border-color);
+            max-width: 440px;
+            margin: 0 auto;
         }
 
-        .header { text-align: center; margin-bottom: 24px; }
-        .header h1 {
-            font-size: 1.15rem;
+        @media (min-width: 980px) {
+            body { padding: 40px 32px 64px; }
+            main { max-width: 1080px; }
+            h1 { font-size: 2.35rem; max-width: 16ch; }
+            .lead { max-width: 38rem; font-size: 1.05rem; }
+            .pasos { grid-template-columns: repeat(3, 1fr); margin-bottom: 36px; }
+            .muestras { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
+            article { display: flex; flex-direction: column; }
+            .cuerpo { display: flex; flex-direction: column; flex: 1; }
+            article ul { flex: 1; }
+        }
+
+        .aviso {
+            display: inline-block;
+            margin-bottom: 18px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: rgba(236, 163, 189, 0.08);
             color: var(--accent);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            line-height: 1.3;
         }
-        .header p { font-size: 0.85rem; color: var(--text-muted); margin-top: 6px; }
 
-        .field-group {
-            margin-bottom: 12px;
-            background: var(--field-bg);
+        h1 {
+            font-size: 1.85rem;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 10px;
+        }
+
+        .lead {
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 28px;
+        }
+
+        .pasos {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .paso {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
             padding: 12px 14px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(244, 114, 182, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
         }
 
-        .field-info { display: flex; flex-direction: column; overflow: hidden; padding-right: 8px; width: 100%; }
-        .label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .value { font-size: 0.95rem; font-weight: 600; margin-top: 2px; word-break: break-word; }
-        .value.small-text { font-size: 0.8rem; }
-
-        .btn-copy {
-            background-color: var(--accent);
-            color: #1a0d15;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.75rem;
-            cursor: pointer;
+        .paso b {
             flex-shrink: 0;
-            transition: all 0.2s ease;
-        }
-        .btn-copy:hover, .btn-copy-all:hover { filter: brightness(1.1); }
-        .btn-copy.copied, .btn-copy-all.copied { background-color: var(--success); color: #fff; }
-
-        .btn-copy-all, .vcard-btn {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.2s, transform 0.1s;
-        }
-        .btn-copy-all { background-color: var(--accent); color: #1a0d15; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
-        .btn-copy-all:active { transform: scale(0.97); }
-        
-        .vcard-btn { background-color: transparent; border: 1px solid var(--accent); color: var(--accent); }
-        .vcard-btn:active { background-color: rgba(244, 114, 182, 0.15); }
-
-        .whatsapp-float {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 58px;
-            height: 58px;
-            background-color: #25d366;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
-            z-index: 1000;
-            transition: transform 0.2s ease;
+            display: grid;
+            place-items: center;
+            background: var(--accent);
+            color: #1a0d15;
+            font-size: 0.78rem;
         }
-        .whatsapp-float:active { transform: scale(0.9); }
-        .whatsapp-float svg { width: 32px; height: 32px; fill: #ffffff; }
 
-        .footer {
-            margin-top: 20px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border-color);
+        .paso p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            padding-top: 3px;
+        }
+
+        .paso strong { color: var(--text); font-weight: 600; }
+
+        .muestras { display: grid; gap: 14px; }
+
+        article {
+            display: block;
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+        }
+
+        .preview {
+            height: 92px;
+            display: flex;
+            align-items: flex-end;
+            padding: 14px 16px;
+        }
+
+        .preview span {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .claro { background: linear-gradient(180deg, #fff5f7 0%, #f7b4bd 100%); color: #111; }
+        .oscuro { background: radial-gradient(circle at 50% 0%, #5a2440 0%, #1a0d15 70%); color: #eca3bd; }
+        .taller { background: linear-gradient(135deg, #3a342c 0%, #1c1916 70%); color: #c4b5a0; }
+
+        .cuerpo { padding: 16px 16px 18px; }
+
+        article h2 {
+            font-size: 1.15rem;
+            margin-bottom: 4px;
+        }
+
+        .negocio {
+            color: var(--muted);
+            font-size: 0.82rem;
+            margin-bottom: 12px;
+        }
+
+        ul {
+            list-style: none;
+            display: grid;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        li {
+            color: var(--muted);
+            font-size: 0.88rem;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        a.abrir {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            background: var(--accent);
+            color: #1a0d15;
+            font-weight: 700;
+            border-radius: 10px;
+            padding: 12px 14px;
+        }
+
+        a.abrir:active { transform: scale(0.98); }
+
+        footer {
+            margin-top: 28px;
+            color: var(--muted);
+            font-size: 0.8rem;
+            line-height: 1.5;
             text-align: center;
         }
-        .footer .social-label {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-            display: block;
-        }
-        .social-icons { display: flex; justify-content: center; gap: 18px; }
-        .social-icons a { color: var(--text-muted); font-size: 1.6rem; transition: all 0.3s ease; }
-        .social-icons a:hover { color: var(--accent); transform: scale(1.15); }
     </style>
 </head>
 <body>
+    <main>
+        <p class="aviso">Muestra · datos inventados</p>
+        <h1>Llaveros NFC de cobro</h1>
+        <p class="lead">
+            El cliente acerca el teléfono al llavero y se abre esta página:
+            datos listos para copiar y pegar en la app del banco.
+        </p>
 
-    <!-- Uso de etiquetas semánticas (main, header, footer) en lugar de puros divs -->
-    <main class="card">
-        <header class="header">
-            <h1>🌸 Bry Paradise</h1>
-            <p>Datos de Transferencia Bancaria</p>
-        </header>
+        <section class="pasos" aria-label="Cómo se usa">
+            <div class="paso">
+                <b>1</b>
+                <p><strong>Acerca el teléfono.</strong> El chip abre el enlace, sin app ni instalación.</p>
+            </div>
+            <div class="paso">
+                <b>2</b>
+                <p><strong>Copia los datos.</strong> Un toque llena el formulario de transferencia.</p>
+            </div>
+            <div class="paso">
+                <b>3</b>
+                <p><strong>Avisa por WhatsApp.</strong> Manda el comprobante o guarda el contacto.</p>
+            </div>
+        </section>
 
-        <!-- Se añaden atributos data-label y data-value. Esto convierte al HTML en la única fuente de verdad -->
-        <div id="datos-transferencia">
-            <div class="field-group">
-                <div class="field-info">
-                    <span class="label">Titular</span>
-                    <span class="value" data-label="Nombre" data-value="Jose Barrientos">Jose Barrientos</span>
+        <section class="muestras" aria-label="Muestras">
+            <article>
+                <div class="preview claro"><span>Tema claro</span></div>
+                <div class="cuerpo">
+                    <h2>Boutique</h2>
+                    <p class="negocio">Luna Atelier · ropa y accesorios</p>
+                    <ul>
+                        <li>Tarjeta blanca, tipografía de marca</li>
+                        <li>Dos cuentas: BancoEstado y Santander</li>
+                        <li>Instagram en el pie</li>
+                    </ul>
+                    <a class="abrir" href="demo-boutique/">Abrir muestra</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="field-group">
-                <div class="field-info">
-                    <span class="label">RUT</span>
-                    <span class="value" data-label="RUT" data-value="20.523.380-6">20.523.380-6</span>
+            <article>
+                <div class="preview oscuro"><span>Tema oscuro · redes</span></div>
+                <div class="cuerpo">
+                    <h2>Segunda mano</h2>
+                    <p class="negocio">Verde Segunda · moda reciclada</p>
+                    <ul>
+                        <li>Fondo de marca, sin foto externa</li>
+                        <li>Pestañas Santander y BancoEstado</li>
+                        <li>Instagram y Facebook</li>
+                    </ul>
+                    <a class="abrir" href="demo-segunda/">Abrir muestra</a>
                 </div>
-                <button class="btn-copy" onclick="copyText('20.523.380-6', this)" aria-label="Copiar RUT">Copiar</button>
-            </div>
+            </article>
 
-            <div class="field-group">
-                <div class="field-info">
-                    <span class="label">Banco</span>
-                    <span class="value" data-label="Banco" data-value="Banco de Chile">Banco de Chile</span>
+            <article>
+                <div class="preview taller"><span>Una cuenta</span></div>
+                <div class="cuerpo">
+                    <h2>Taller</h2>
+                    <p class="negocio">Taller Norte Ltda · metal y reparación</p>
+                    <ul>
+                        <li>Foto del rubro de fondo</li>
+                        <li>Una sola cuenta BCI, sin pestañas</li>
+                        <li>Sin redes: solo cobro y WhatsApp</li>
+                    </ul>
+                    <a class="abrir" href="demo-taller/">Abrir muestra</a>
                 </div>
-            </div>
+            </article>
+        </section>
 
-            <div class="field-group">
-                <div class="field-info">
-                    <span class="label">Tipo de Cuenta</span>
-                    <span class="value" data-label="Tipo de Cuenta" data-value="Cuenta Vista">Cuenta Vista</span>
-                </div>
-            </div>
-
-            <div class="field-group">
-                <div class="field-info">
-                    <span class="label">N° de Cuenta</span>
-                    <span class="value" data-label="Número de Cuenta" data-value="00-020-08220-11">00-020-08220-11</span>
-                </div>
-                <!-- El botón individual también entrega el número limpio de guiones -->
-                <button class="btn-copy" onclick="copyText('000200822011', this)" aria-label="Copiar Número de Cuenta">Copiar</button>
-            </div>
-
-            <div class="field-group">
-                <div class="field-info">
-                    <span class="label">Correo Confirmación</span>
-                    <span class="value small-text" data-label="Correo" data-value="joserespaldo4@gmail.com">joserespaldo4@gmail.com</span>
-                </div>
-                <button class="btn-copy" onclick="copyText('joserespaldo4@gmail.com', this)" aria-label="Copiar Correo">Copiar</button>
-            </div>
-        </div>
-
-        <button id="copyAllBtn" class="btn-copy-all" onclick="copyAllData()">
-            📋 Copiar Todos los Datos
-        </button>
-
-        <button class="vcard-btn" onclick="downloadVCard()">📇 Guardar Contacto en Agenda</button>
-
-        <footer class="footer">
-            <span class="social-label">Síguenos en redes</span>
-            <div class="social-icons">
-                <a href="https://www.instagram.com/boutique_bryy?igsi=dnE3bWZ5amVjeHJx" target="_blank" aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="https://www.facebook.com/share/19Cg8w2pWA/" target="_blank" aria-label="Facebook">
-                    <i class="fab fa-facebook"></i>
-                </a>
-                <!-- Enlace vacío de TikTok eliminado. Generaba errores de navegación y saltos visuales -->
-            </div>
+        <footer>
+            Nombres, RUT, cuentas, correos y teléfonos son ficticios.
+            No corresponden a personas ni negocios reales.
         </footer>
     </main>
-
-    <a href="https://wa.me/56967509800?text=Hola%20Jose,%20te%20env%C3%ADo%20el%20comprobante%20de%20la%20transferencia." class="whatsapp-float" target="_blank" aria-label="Enviar comprobante por WhatsApp">
-        <svg viewBox="0 0 32 32">
-            <path d="M16 2a13 13 0 0 0-11.2 19.6L3 29l7.7-2A13 13 0 1 0 16 2zm0 23.6a10.6 10.6 0 0 1-5.4-1.5l-.4-.2-4 1 1-3.9-.3-.5A10.6 10.6 0 1 1 16 25.6zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-.9 1.2-.3.2-.6 0a8 8 0 0 1-2.4-1.5 8.9 8.9 0 0 1-1.6-2c-.2-.3 0-.5.1-.6s.3-.4.4-.6a1.7 1.7 0 0 0 .3-.5.6.6 0 0 0 0-.5c0-.2-.7-1.7-1-2.3s-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.9.4 3.7 3.7 0 0 0-1.2 2.7 6.4 6.4 0 0 0 1.3 3.4 14.7 14.7 0 0 0 5.7 5 19 19 0 0 0 1.9.7 4.6 4.6 0 0 0 2.1.1 3.4 3.4 0 0 0 2.2-1.6 2.8 2.8 0 0 0 .2-1.5c-.1-.1-.3-.2-.6-.4z"/>
-        </svg>
-    </a>
-
-    <script>
-        // Función centralizada para manejar el feedback visual de los botones
-        function triggerFeedback(btn, tempText, className) {
-            const originalText = btn.dataset.originalText || btn.innerText;
-            if (!btn.dataset.originalText) btn.dataset.originalText = originalText;
-            
-            btn.innerText = tempText;
-            if (className) btn.classList.add(className);
-            
-            setTimeout(() => {
-                btn.innerText = originalText;
-                if (className) btn.classList.remove(className);
-            }, 2000);
-        }
-
-        async function copyText(text, btn) {
-            try {
-                await navigator.clipboard.writeText(text);
-                if (navigator.vibrate) navigator.vibrate(50);
-                triggerFeedback(btn, "¡Copiado!", "copied");
-            } catch (err) {
-                triggerFeedback(btn, "Error al copiar", "");
-            }
-        }
-
-        async function copyAllData() {
-            const btn = document.getElementById('copyAllBtn');
-            const nodos = document.querySelectorAll('.value');
-            
-            let textoPlano = "";
-            nodos.forEach(nodo => {
-                const etiqueta = nodo.getAttribute('data-label');
-                let valor = nodo.getAttribute('data-value');
-                
-                // Limpieza estricta de cuenta bancaria
-                if (etiqueta === "Número de Cuenta") {
-                    valor = valor.replace(/[^0-9]/g, '');
-                }
-                
-                textoPlano += `${etiqueta}: ${valor}\n`;
-            });
-
-            try {
-                await navigator.clipboard.writeText(textoPlano.trim());
-                if (navigator.vibrate) navigator.vibrate(50);
-                triggerFeedback(btn, "✅ ¡Todos Copiados!", "copied");
-            } catch (err) {
-                console.error("Fallo de API Clipboard", err);
-                triggerFeedback(btn, "❌ Copia manual requerida", "");
-            }
-        }
-
-        function downloadVCard() {
-            // Reutiliza los datos directamente del DOM sin hardcodear
-            const nodos = document.querySelectorAll('.value');
-            const vcardData = 
-`BEGIN:VCARD
-VERSION:3.0
-FN:${nodos[0].getAttribute('data-value')}
-ORG:Bry Paradise
-EMAIL:${nodos[5].getAttribute('data-value')}
-TEL:+56967509800
-END:VCARD`;
-
-            const blob = new Blob([vcardData], { type: 'text/vcard' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Transferencia_Bry_Paradise.vcf';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url); // Fundamental para evitar fugas de memoria en navegadores móviles
-        }
-    </script>
 </body>
 </html>
