@@ -30,5 +30,6 @@ python3 -m http.server 8080 --bind 0.0.0.0
 
 Portafolio: en `demo-portafolio/index.html`, el bloque **DATOS DEL PORTAFOLIO**.
 
-Carta: en `demo-carta/index.html`, el bloque **DATOS DE LA CARTA**:
-`LOCAL`, `CONTACTO`, `SECCIONES` y `PLATOS`.
+Carta: en `demo-carta/index.html`, el bloque **DATOS DE LA CARTA**.
+Cada plato puede llevar varias `fotos`; si hay más de una, rotan
+cada 4 segundos.

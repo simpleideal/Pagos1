@@ -13,7 +13,7 @@
             --accent-oscuro: #8a3d1d;
             --text: #2a211c;
             --muted: #6d5c50;
-            --pill: #efe4d6;
+            --foto: 112px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,7 +32,7 @@
             margin: 0 auto;
         }
 
-        header { margin-bottom: 20px; }
+        header { margin-bottom: 18px; }
 
         .oficio {
             color: var(--accent);
@@ -54,14 +54,14 @@
         .lugar {
             color: var(--muted);
             font-size: 0.95rem;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .datos {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .chip {
@@ -80,83 +80,112 @@
             line-height: 1.45;
         }
 
-        h2 {
-            font-size: 0.78rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin: 22px 0 10px;
-        }
-
         .secciones {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: 20px;
+            margin: 8px 0 14px;
+            border-bottom: 1px solid var(--line);
         }
 
         .secciones button {
             border: none;
-            border-radius: 999px;
-            padding: 8px 12px;
-            font-size: 0.8rem;
+            background: none;
+            padding: 8px 0 10px;
+            font-size: 0.95rem;
             font-weight: 700;
-            background: var(--pill);
-            color: var(--text);
+            color: var(--muted);
             cursor: pointer;
+            border-bottom: 2px solid transparent;
         }
 
         .secciones button[aria-pressed="true"] {
-            background: var(--accent);
-            color: #fffdf9;
+            color: var(--text);
+            border-bottom-color: var(--accent);
         }
 
-        .platos { display: grid; gap: 14px; }
+        .platos { display: grid; gap: 10px; }
 
         article {
+            display: flex;
+            gap: 12px;
+            align-items: stretch;
             background: var(--card);
             border: 1px solid var(--line);
             border-radius: 14px;
-            overflow: hidden;
+            padding: 12px;
         }
 
-        article img {
-            display: block;
-            width: 100%;
-            height: 168px;
-            object-fit: cover;
-            background: #e4d4c4;
-        }
-
-        .cuerpo-plato { padding: 12px 14px 14px; }
-
-        .fila-titulo {
+        .cuerpo-plato {
+            flex: 1;
+            min-width: 0;
             display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            align-items: baseline;
-            margin-bottom: 4px;
+            flex-direction: column;
         }
 
-        article h3 { font-size: 1.05rem; }
-
-        .precio {
-            flex-shrink: 0;
-            font-weight: 700;
-            color: var(--accent-oscuro);
-        }
-
-        .meta {
-            color: var(--muted);
-            font-size: 0.82rem;
-            margin-bottom: 8px;
+        article h3 {
+            font-family: Didot, "Bodoni MT", "Times New Roman", serif;
+            font-size: 1.12rem;
+            line-height: 1.2;
+            margin-bottom: 6px;
         }
 
         .nota {
+            color: var(--muted);
+            font-size: 0.84rem;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .meta {
+            margin-top: 10px;
             color: var(--text);
             font-size: 0.88rem;
-            line-height: 1.4;
+            font-weight: 600;
         }
+
+        .precio { color: var(--accent-oscuro); }
+
+        .foto {
+            position: relative;
+            width: var(--foto);
+            height: var(--foto);
+            flex-shrink: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #e4d4c4;
+        }
+
+        .pista {
+            display: flex;
+            height: 100%;
+            transition: transform 0.45s ease;
+        }
+
+        .pista img {
+            width: var(--foto);
+            height: var(--foto);
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .puntos {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 6px;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .puntos span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.45);
+        }
+
+        .puntos span.activo { background: #ffffff; }
 
         .acciones {
             display: grid;
@@ -219,8 +248,7 @@
             <p class="presentacion" id="presentacion"></p>
         </header>
 
-        <h2>La carta</h2>
-        <div class="secciones" id="secciones" role="group" aria-label="Filtrar por sección"></div>
+        <div class="secciones" id="secciones" role="tablist" aria-label="Secciones de la carta"></div>
         <section class="platos" id="platos" aria-label="Platos"></section>
 
         <div class="acciones">
@@ -234,7 +262,7 @@
         /* ==================================================================
            DATOS DE LA CARTA
 
-           Esto es lo único que se cambia para un llavero nuevo.
+           fotos: una o más del mismo plato. Si hay varias, rotan solas.
            ================================================================== */
 
         const LOCAL = {
@@ -243,7 +271,7 @@
             lugar: 'Osorno',
             oficio: 'Cocina chilena',
             horario: '13:00 – 23:00',
-            presentacion: 'Carta del día. Cada plato con su foto, el precio y el tiempo aproximado de cocina.'
+            presentacion: 'Carta del día. Cada plato con foto, precio y tiempo de cocina.'
         };
 
         const CONTACTO = {
@@ -257,14 +285,13 @@
         };
 
         const SECCIONES = [
-            { id: 'todas', nombre: 'Todas' },
             { id: 'entradas', nombre: 'Entradas' },
-            { id: 'platos', nombre: 'Platos' },
+            { id: 'fondos', nombre: 'Fondos' },
             { id: 'postres', nombre: 'Postres' }
         ];
 
-        /* Platos típicos de cartas chilenas (Chimenea, Chancho Seis, etc.).
-           Nombres y precios son inventados. Las fotos son de Unsplash. */
+        const INTERVALO_FOTOS = 4000;
+
         const PLATOS = [
             {
                 seccion: 'entradas',
@@ -272,7 +299,10 @@
                 precio: '$4.500',
                 minutos: 15,
                 nota: 'Horno. Carne, cebolla, huevo y aceituna.',
-                foto: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=60'
+                fotos: [
+                    'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=400&q=60',
+                    'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=400&q=60'
+                ]
             },
             {
                 seccion: 'entradas',
@@ -280,39 +310,55 @@
                 precio: '$8.900',
                 minutos: 12,
                 nota: 'Pescado fresco, limón, cilantro y cebolla morada.',
-                foto: 'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?auto=format&fit=crop&w=800&q=60'
+                fotos: [
+                    'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?auto=format&fit=crop&w=400&q=60',
+                    'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=400&q=60'
+                ]
             },
             {
-                seccion: 'platos',
+                seccion: 'fondos',
+                titulo: 'Completo italiano',
+                precio: '$3.900',
+                minutos: 10,
+                nota: 'Vienesa, palta, tomate y mayo. Tres tomas del mismo plato.',
+                fotos: [
+                    'https://images.unsplash.com/photo-1612392061787-2d078b3e9a1a?auto=format&fit=crop&w=400&q=60',
+                    'https://images.unsplash.com/photo-1612392062422-ef11b256e1e0?auto=format&fit=crop&w=400&q=60',
+                    'https://images.unsplash.com/photo-1529312266912-b300077eae0a?auto=format&fit=crop&w=400&q=60'
+                ]
+            },
+            {
+                seccion: 'fondos',
                 titulo: 'Pastel de choclo',
                 precio: '$11.500',
                 minutos: 25,
                 nota: 'Choclo molido, pino de vacuno y albahaca. Al horno.',
-                foto: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=60'
+                fotos: [
+                    'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=400&q=60',
+                    'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=400&q=60'
+                ]
             },
             {
-                seccion: 'platos',
-                titulo: 'Cazuela de vacuno',
-                precio: '$10.900',
-                minutos: 20,
-                nota: 'Caldo, zapallo, papa, choclo y carne.',
-                foto: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=60'
-            },
-            {
-                seccion: 'platos',
+                seccion: 'fondos',
                 titulo: 'Lomo a lo pobre',
                 precio: '$13.900',
                 minutos: 22,
                 nota: 'Lomo, papas fritas, cebolla y dos huevos fritos.',
-                foto: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=800&q=60'
+                fotos: [
+                    'https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=400&q=60',
+                    'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=400&q=60'
+                ]
             },
             {
-                seccion: 'platos',
+                seccion: 'fondos',
                 titulo: 'Chorrillana para compartir',
                 precio: '$14.900',
                 minutos: 25,
                 nota: 'Papas, carne, cebolla y huevo. Para dos.',
-                foto: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=800&q=60'
+                fotos: [
+                    'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=400&q=60',
+                    'https://images.unsplash.com/photo-1576107232684-127baa5d60c0?auto=format&fit=crop&w=400&q=60'
+                ]
             },
             {
                 seccion: 'postres',
@@ -320,7 +366,10 @@
                 precio: '$4.200',
                 minutos: 8,
                 nota: 'Flan de leche, azúcar quemada.',
-                foto: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=60'
+                fotos: [
+                    'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=400&q=60',
+                    'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=400&q=60'
+                ]
             },
             {
                 seccion: 'postres',
@@ -328,7 +377,10 @@
                 precio: '$4.800',
                 minutos: 10,
                 nota: 'Masa mantecosa y manzana. Sur de Chile.',
-                foto: 'https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&w=800&q=60'
+                fotos: [
+                    'https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&w=400&q=60',
+                    'https://images.unsplash.com/photo-1562007908-859b4ba9e031?auto=format&fit=crop&w=400&q=60'
+                ]
             }
         ];
 
@@ -349,11 +401,50 @@
             }
         };
 
-        let seccionActiva = 'todas';
+        let seccionActiva = 'fondos';
+        let carruselTimer = null;
+
+        function fotosDe(plato) {
+            if (plato.fotos && plato.fotos.length) return plato.fotos;
+            return plato.foto ? [plato.foto] : [];
+        }
 
         function platosFiltrados() {
-            if (seccionActiva === 'todas') return PLATOS;
             return PLATOS.filter((plato) => plato.seccion === seccionActiva);
+        }
+
+        function mostrarFoto(pista, puntos, indice) {
+            const n = pista.children.length;
+            pista.dataset.indice = String(indice);
+            pista.style.transform = 'translateX(-' + (indice * 112) + 'px)';
+            if (!puntos) return;
+            Array.prototype.forEach.call(puntos.children, (punto, i) => {
+                punto.classList.toggle('activo', i === indice);
+            });
+        }
+
+        function arrancarCarruseles() {
+            if (carruselTimer) {
+                clearInterval(carruselTimer);
+                carruselTimer = null;
+            }
+
+            const pistas = document.querySelectorAll('.pista');
+            const hayVarias = Array.prototype.some.call(pistas, (pista) => {
+                return pista.children.length > 1;
+            });
+            if (!hayVarias) return;
+
+            carruselTimer = setInterval(() => {
+                document.querySelectorAll('.pista').forEach((pista) => {
+                    const n = pista.children.length;
+                    if (n < 2) return;
+                    const actual = Number(pista.dataset.indice || 0);
+                    const siguiente = (actual + 1) % n;
+                    const puntos = pista.parentElement.querySelector('.puntos');
+                    mostrarFoto(pista, puntos, siguiente);
+                });
+            }, INTERVALO_FOTOS);
         }
 
         function renderSecciones() {
@@ -377,27 +468,49 @@
             const lista = document.getElementById('platos');
             lista.replaceChildren();
             platosFiltrados().forEach((plato) => {
+                const fotos = fotosDe(plato);
                 const articulo = document.createElement('article');
-                const img = document.createElement('img');
-                img.src = plato.foto;
-                img.alt = plato.titulo;
-                img.loading = 'lazy';
-                img.referrerPolicy = 'no-referrer';
 
                 const cuerpo = document.createElement('div');
                 cuerpo.className = 'cuerpo-plato';
-                cuerpo.innerHTML =
-                    '<div class="fila-titulo"><h3></h3><span class="precio"></span></div>' +
-                    '<p class="meta"></p><p class="nota"></p>';
+                cuerpo.innerHTML = '<h3></h3><p class="nota"></p><p class="meta"></p>';
                 cuerpo.querySelector('h3').textContent = plato.titulo;
-                cuerpo.querySelector('.precio').textContent = plato.precio;
-                cuerpo.querySelector('.meta').textContent = plato.minutos + ' min aprox.';
                 cuerpo.querySelector('.nota').textContent = plato.nota;
+                cuerpo.querySelector('.meta').innerHTML =
+                    '<span class="precio"></span> · ' + plato.minutos + ' min';
+                cuerpo.querySelector('.precio').textContent = plato.precio;
 
-                articulo.appendChild(img);
+                const foto = document.createElement('div');
+                foto.className = 'foto';
+                const pista = document.createElement('div');
+                pista.className = 'pista';
+                pista.dataset.indice = '0';
+                fotos.forEach((src) => {
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.alt = plato.titulo;
+                    img.loading = 'lazy';
+                    img.referrerPolicy = 'no-referrer';
+                    pista.appendChild(img);
+                });
+                foto.appendChild(pista);
+
+                if (fotos.length > 1) {
+                    const puntos = document.createElement('div');
+                    puntos.className = 'puntos';
+                    fotos.forEach((_, i) => {
+                        const punto = document.createElement('span');
+                        if (i === 0) punto.className = 'activo';
+                        puntos.appendChild(punto);
+                    });
+                    foto.appendChild(puntos);
+                }
+
                 articulo.appendChild(cuerpo);
+                articulo.appendChild(foto);
                 lista.appendChild(articulo);
             });
+            arrancarCarruseles();
         }
 
         function renderRedes() {
@@ -432,12 +545,10 @@
             document.getElementById('presentacion').textContent = LOCAL.presentacion;
 
             const datos = document.getElementById('datos');
-            [LOCAL.horario].forEach((texto) => {
-                const chip = document.createElement('span');
-                chip.className = 'chip';
-                chip.textContent = texto;
-                datos.appendChild(chip);
-            });
+            const chip = document.createElement('span');
+            chip.className = 'chip';
+            chip.textContent = LOCAL.horario;
+            datos.appendChild(chip);
 
             const wa = 'https://wa.me/' + CONTACTO.whatsapp +
                 '?text=' + encodeURIComponent(CONTACTO.mensajeWhatsapp);
