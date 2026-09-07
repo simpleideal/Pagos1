@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta</title>
+    <style>
+        :root {
+            --bg: #f6efe6;
+            --card: #fffdf9;
+            --line: #e4d4c4;
+            --accent: #b4532a;
+            --accent-oscuro: #8a3d1d;
+            --text: #2a211c;
+            --muted: #6d5c50;
+            --pill: #efe4d6;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            padding: 24px 16px calc(32px + env(safe-area-inset-bottom, 0px));
+        }
+
+        main {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        header { margin-bottom: 20px; }
+
+        .oficio {
+            color: var(--accent);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            font-family: Didot, "Bodoni MT", "Times New Roman", serif;
+            font-size: 2rem;
+            letter-spacing: 0.04em;
+            line-height: 1.1;
+            margin-bottom: 6px;
+        }
+
+        .lugar {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+        }
+
+        .datos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .chip {
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: var(--card);
+            color: var(--text);
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .presentacion {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.45;
+        }
+
+        h2 {
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 22px 0 10px;
+        }
+
+        .secciones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .secciones button {
+            border: none;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            background: var(--pill);
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .secciones button[aria-pressed="true"] {
+            background: var(--accent);
+            color: #fffdf9;
+        }
+
+        .platos { display: grid; gap: 14px; }
+
+        article {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        article img {
+            display: block;
+            width: 100%;
+            height: 168px;
+            object-fit: cover;
+            background: #e4d4c4;
+        }
+
+        .cuerpo-plato { padding: 12px 14px 14px; }
+
+        .fila-titulo {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+
+        article h3 { font-size: 1.05rem; }
+
+        .precio {
+            flex-shrink: 0;
+            font-weight: 700;
+            color: var(--accent-oscuro);
+        }
+
+        .meta {
+            color: var(--muted);
+            font-size: 0.82rem;
+            margin-bottom: 8px;
+        }
+
+        .nota {
+            color: var(--text);
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+
+        .acciones {
+            display: grid;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .acciones a.principal,
+        .acciones a.secundario {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            padding: 13px 14px;
+            font-weight: 700;
+        }
+
+        .principal {
+            background: var(--accent);
+            color: #fffdf9;
+        }
+
+        .secundario {
+            border: 1px solid var(--accent);
+            color: var(--accent-oscuro);
+        }
+
+        .redes {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 8px;
+        }
+
+        .red-social {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid var(--line);
+            background: var(--card);
+            color: var(--accent-oscuro);
+            display: grid;
+            place-items: center;
+        }
+
+        .red-social svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <p class="oficio" id="oficio"></p>
+            <h1 id="nombre"></h1>
+            <p class="lugar" id="lugar"></p>
+            <div class="datos" id="datos"></div>
+            <p class="presentacion" id="presentacion"></p>
+        </header>
+
+        <h2>La carta</h2>
+        <div class="secciones" id="secciones" role="group" aria-label="Filtrar por sección"></div>
+        <section class="platos" id="platos" aria-label="Platos"></section>
+
+        <div class="acciones">
+            <a class="principal" id="botonWhatsapp" target="_blank" rel="noopener">Reservar por WhatsApp</a>
+            <a class="secundario" id="botonLlamar">Llamar</a>
+            <nav class="redes" id="redes" aria-label="Redes sociales"></nav>
+        </div>
+    </main>
+
+    <script>
+        /* ==================================================================
+           DATOS DE LA CARTA
+
+           Esto es lo único que se cambia para un llavero nuevo.
+           ================================================================== */
+
+        const LOCAL = {
+            titulo: 'Carta - Casa Fogón',
+            nombre: 'Casa Fogón',
+            lugar: 'Osorno',
+            oficio: 'Cocina chilena',
+            horario: '13:00 – 23:00',
+            presentacion: 'Carta del día. Cada plato con su foto, el precio y el tiempo aproximado de cocina.'
+        };
+
+        const CONTACTO = {
+            telefono: '+56955556666',
+            whatsapp: '56955556666',
+            mensajeWhatsapp: 'Hola, quiero reservar en Casa Fogón.',
+            redes: [
+                { red: 'instagram', url: 'https://www.instagram.com/casafogon.demo' },
+                { red: 'facebook', url: 'https://www.facebook.com/casafogon.demo' }
+            ]
+        };
+
+        const SECCIONES = [
+            { id: 'todas', nombre: 'Todas' },
+            { id: 'entradas', nombre: 'Entradas' },
+            { id: 'platos', nombre: 'Platos' },
+            { id: 'postres', nombre: 'Postres' }
+        ];
+
+        /* Platos típicos de cartas chilenas (Chimenea, Chancho Seis, etc.).
+           Nombres y precios son inventados. Las fotos son de Unsplash. */
+        const PLATOS = [
+            {
+                seccion: 'entradas',
+                titulo: 'Empanadas de pino',
+                precio: '$4.500',
+                minutos: 15,
+                nota: 'Horno. Carne, cebolla, huevo y aceituna.',
+                foto: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=60'
+            },
+            {
+                seccion: 'entradas',
+                titulo: 'Ceviche del día',
+                precio: '$8.900',
+                minutos: 12,
+                nota: 'Pescado fresco, limón, cilantro y cebolla morada.',
+                foto: 'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?auto=format&fit=crop&w=800&q=60'
+            },
+            {
+                seccion: 'platos',
+                titulo: 'Pastel de choclo',
+                precio: '$11.500',
+                minutos: 25,
+                nota: 'Choclo molido, pino de vacuno y albahaca. Al horno.',
+                foto: 'https://images.unsplash.com/photo-1657299170950-30156d900e3d?auto=format&fit=crop&w=800&q=60'
+            },
+            {
+                seccion: 'platos',
+                titulo: 'Cazuela de vacuno',
+                precio: '$10.900',
+                minutos: 20,
+                nota: 'Caldo, zapallo, papa, choclo y carne.',
+                foto: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=60'
+            },
+            {
+                seccion: 'platos',
+                titulo: 'Lomo a lo pobre',
+                precio: '$13.900',
+                minutos: 22,
+                nota: 'Lomo, papas fritas, cebolla y dos huevos fritos.',
+                foto: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=800&q=60'
+            },
+            {
+                seccion: 'platos',
+                titulo: 'Chorrillana para compartir',
+                precio: '$14.900',
+                minutos: 25,
+                nota: 'Papas, carne, cebolla y huevo. Para dos.',
+                foto: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=800&q=60'
+            },
+            {
+                seccion: 'postres',
+                titulo: 'Leche asada',
+                precio: '$4.200',
+                minutos: 8,
+                nota: 'Flan de leche, azúcar quemada.',
+                foto: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=60'
+            },
+            {
+                seccion: 'postres',
+                titulo: 'Kuchen de manzana',
+                precio: '$4.800',
+                minutos: 10,
+                nota: 'Masa mantecosa y manzana. Sur de Chile.',
+                foto: 'https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&w=800&q=60'
+            }
+        ];
+
+        /* ==================================================================
+           FIN DE LOS DATOS DE LA CARTA
+           ================================================================== */
+
+        const ICONOS_REDES = {
+            instagram: {
+                nombre: 'Instagram',
+                viewBox: '0 0 24 24',
+                path: 'M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4c0 3.2-2.6 5.8-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2zm0 2C5.7 4 4 5.7 4 7.8v8.4C4 18.3 5.7 20 7.8 20h8.4c2.1 0 3.8-1.7 3.8-3.8V7.8C20 5.7 18.3 4 16.2 4H7.8zM17.5 5.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2zM12 7a5 5 0 1 1 0 10 5 5 0 1 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 1 0 0-6z'
+            },
+            facebook: {
+                nombre: 'Facebook',
+                viewBox: '0 0 24 24',
+                path: 'M14.5 4h3V.5h-3.3C10.2.5 9.5 3.4 9.5 5.3V7.5h-3v4h3V23.5h5v-12h3.9l.4-4H14.5z'
+            }
+        };
+
+        let seccionActiva = 'todas';
+
+        function platosFiltrados() {
+            if (seccionActiva === 'todas') return PLATOS;
+            return PLATOS.filter((plato) => plato.seccion === seccionActiva);
+        }
+
+        function renderSecciones() {
+            const nav = document.getElementById('secciones');
+            nav.replaceChildren();
+            SECCIONES.forEach((seccion) => {
+                const boton = document.createElement('button');
+                boton.type = 'button';
+                boton.textContent = seccion.nombre;
+                boton.setAttribute('aria-pressed', seccion.id === seccionActiva ? 'true' : 'false');
+                boton.addEventListener('click', () => {
+                    seccionActiva = seccion.id;
+                    renderSecciones();
+                    renderPlatos();
+                });
+                nav.appendChild(boton);
+            });
+        }
+
+        function renderPlatos() {
+            const lista = document.getElementById('platos');
+            lista.replaceChildren();
+            platosFiltrados().forEach((plato) => {
+                const articulo = document.createElement('article');
+                const img = document.createElement('img');
+                img.src = plato.foto;
+                img.alt = plato.titulo;
+                img.loading = 'lazy';
+                img.referrerPolicy = 'no-referrer';
+
+                const cuerpo = document.createElement('div');
+                cuerpo.className = 'cuerpo-plato';
+                cuerpo.innerHTML =
+                    '<div class="fila-titulo"><h3></h3><span class="precio"></span></div>' +
+                    '<p class="meta"></p><p class="nota"></p>';
+                cuerpo.querySelector('h3').textContent = plato.titulo;
+                cuerpo.querySelector('.precio').textContent = plato.precio;
+                cuerpo.querySelector('.meta').textContent = plato.minutos + ' min aprox.';
+                cuerpo.querySelector('.nota').textContent = plato.nota;
+
+                articulo.appendChild(img);
+                articulo.appendChild(cuerpo);
+                lista.appendChild(articulo);
+            });
+        }
+
+        function renderRedes() {
+            const nav = document.getElementById('redes');
+            nav.replaceChildren();
+            const NS = 'http://www.w3.org/2000/svg';
+            (CONTACTO.redes || []).forEach((item) => {
+                const icono = ICONOS_REDES[item.red];
+                if (!icono || !item.url) return;
+                const enlace = document.createElement('a');
+                enlace.className = 'red-social';
+                enlace.href = item.url;
+                enlace.target = '_blank';
+                enlace.rel = 'noopener';
+                enlace.setAttribute('aria-label', icono.nombre);
+                const svg = document.createElementNS(NS, 'svg');
+                svg.setAttribute('viewBox', icono.viewBox);
+                svg.setAttribute('aria-hidden', 'true');
+                const path = document.createElementNS(NS, 'path');
+                path.setAttribute('d', icono.path);
+                svg.appendChild(path);
+                enlace.appendChild(svg);
+                nav.appendChild(enlace);
+            });
+        }
+
+        function aplicarCarta() {
+            document.title = LOCAL.titulo;
+            document.getElementById('oficio').textContent = LOCAL.oficio;
+            document.getElementById('nombre').textContent = LOCAL.nombre;
+            document.getElementById('lugar').textContent = LOCAL.lugar;
+            document.getElementById('presentacion').textContent = LOCAL.presentacion;
+
+            const datos = document.getElementById('datos');
+            [LOCAL.horario].forEach((texto) => {
+                const chip = document.createElement('span');
+                chip.className = 'chip';
+                chip.textContent = texto;
+                datos.appendChild(chip);
+            });
+
+            const wa = 'https://wa.me/' + CONTACTO.whatsapp +
+                '?text=' + encodeURIComponent(CONTACTO.mensajeWhatsapp);
+            document.getElementById('botonWhatsapp').href = wa;
+            document.getElementById('botonLlamar').href = 'tel:' + CONTACTO.telefono;
+
+            renderSecciones();
+            renderPlatos();
+            renderRedes();
+        }
+
+        aplicarCarta();
+    </script>
+</body>
+</html>
