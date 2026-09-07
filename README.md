@@ -32,4 +32,6 @@ python3 -m http.server 8080 --bind 0.0.0.0
 ## Cómo se cambia el portafolio
 
 En `demo-portafolio/index.html`, el bloque **DATOS DEL PORTAFOLIO**:
-`EMPRESA`, `CONTACTO` y `OBRAS`.
+`EMPRESA`, `CONTACTO`, `ZONAS` y `OBRAS`. Cada obra lleva una `zona`
+(`ciudad`, `lago` o `interior`) para el filtro. Eso refleja que la
+cuadrilla se mueve fuera de la ciudad.

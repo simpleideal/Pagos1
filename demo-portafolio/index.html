@@ -6,12 +6,14 @@
     <title>Portafolio de obras</title>
     <style>
         :root {
-            --bg: #0e1114;
-            --card: #181c21;
-            --line: rgba(255, 255, 255, 0.10);
-            --accent: #d5dbe1;
-            --text: #eef1f4;
-            --muted: #8b949e;
+            --bg: #f3f5f6;
+            --card: #ffffff;
+            --line: #d8dee2;
+            --teal: #0b7a7c;
+            --teal-oscuro: #065f61;
+            --text: #1a2226;
+            --muted: #5c676e;
+            --pill: #e6eaed;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -50,12 +52,10 @@
             margin: 0 auto;
         }
 
-        header {
-            margin-bottom: 22px;
-        }
+        header { margin-bottom: 20px; }
 
         .oficio {
-            color: var(--accent);
+            color: var(--teal);
             font-size: 0.72rem;
             font-weight: 700;
             letter-spacing: 0.08em;
@@ -87,7 +87,7 @@
             padding: 6px 10px;
             border-radius: 999px;
             border: 1px solid var(--line);
-            background: rgba(255, 255, 255, 0.04);
+            background: var(--card);
             color: var(--text);
             font-size: 0.78rem;
             font-weight: 600;
@@ -104,15 +104,44 @@
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: var(--muted);
-            margin: 26px 0 12px;
+            margin: 22px 0 10px;
+        }
+
+        .zonas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .zonas button {
+            border: none;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            background: var(--pill);
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .zonas button[aria-pressed="true"] {
+            background: var(--teal);
+            color: #ffffff;
         }
 
         .obras { display: grid; gap: 14px; }
 
+        .vacio {
+            color: var(--muted);
+            font-size: 0.9rem;
+            padding: 18px 4px;
+        }
+
         article {
             background: var(--card);
             border: 1px solid var(--line);
-            border-radius: 16px;
+            border-radius: 14px;
             overflow: hidden;
         }
 
@@ -121,12 +150,10 @@
             width: 100%;
             height: 168px;
             object-fit: cover;
-            background: #23282e;
+            background: #d8dee2;
         }
 
-        .obra {
-            padding: 12px 14px 14px;
-        }
+        .obra { padding: 12px 14px 14px; }
 
         article h3 {
             font-size: 1.05rem;
@@ -161,13 +188,13 @@
         }
 
         .principal {
-            background: var(--accent);
-            color: #111418;
+            background: var(--teal);
+            color: #ffffff;
         }
 
         .secundario {
-            border: 1px solid var(--accent);
-            color: var(--accent);
+            border: 1px solid var(--teal);
+            color: var(--teal-oscuro);
         }
 
         .whatsapp-float {
@@ -181,7 +208,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
             z-index: 1000;
         }
 
@@ -200,7 +227,8 @@
             <p class="presentacion" id="presentacion"></p>
         </header>
 
-        <h2>Obras ejecutadas</h2>
+        <h2>Obras por zona</h2>
+        <div class="zonas" id="zonas" role="group" aria-label="Filtrar por zona"></div>
         <section class="obras" id="obras" aria-label="Obras ejecutadas"></section>
 
         <div class="acciones">
@@ -228,8 +256,8 @@
             persona: 'Héctor Rivera Soto',
             oficio: 'Construcción · obras menores',
             anios: '12 años',
-            zona: 'Osorno y alrededores',
-            presentacion: 'Ampliaciones, radieres, techumbres y locales. Se muestra obra hecha, no una lista de servicios.'
+            desplazamiento: 'Cuadrilla que se mueve',
+            presentacion: 'La cuadrilla sale de Osorno: ciudad, lago e interior. Se muestra obra hecha, no una lista de servicios.'
         };
 
         const CONTACTO = {
@@ -238,11 +266,19 @@
             mensajeWhatsapp: 'Hola Héctor, vi el portafolio de Obras Rivera y quiero cotizar un trabajo.'
         };
 
-        /* foto: URL pública. En un llavero real van fotos propias del cliente,
-           no de bancos de imágenes. Acá son de Unsplash, solo para la muestra. */
+        /* "id" de cada zona es lo que se pone en obra.zona */
+        const ZONAS = [
+            { id: 'todas', nombre: 'Todas' },
+            { id: 'ciudad', nombre: 'Ciudad' },
+            { id: 'lago', nombre: 'Lago y costa' },
+            { id: 'interior', nombre: 'Interior' }
+        ];
+
+        /* foto: URL pública. En un llavero real van fotos propias del cliente. */
         const OBRAS = [
             {
                 titulo: 'Ampliación de vivienda',
+                zona: 'ciudad',
                 lugar: 'Rahue, Osorno',
                 anio: '2024',
                 metros: '42 m²',
@@ -250,15 +286,35 @@
                 foto: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=60'
             },
             {
+                titulo: 'Remodelación de local',
+                zona: 'ciudad',
+                lugar: 'Osorno centro',
+                anio: '2022',
+                metros: '65 m²',
+                nota: 'Tabiquería, cielo y piso para un local de barrio. Entrega en 18 días.',
+                foto: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=60'
+            },
+            {
                 titulo: 'Radier y cierre perimetral',
+                zona: 'lago',
                 lugar: 'Puerto Octay',
                 anio: '2023',
                 metros: '180 m²',
-                nota: 'Plataforma de hormigón para galpón agrícola y reja perimetral.',
+                nota: 'Plataforma de hormigón para galpón agrícola. La cuadrilla pernoctó tres noches.',
                 foto: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=60'
             },
             {
+                titulo: 'Casa de veraneo',
+                zona: 'lago',
+                lugar: 'Entre Lagos',
+                anio: '2024',
+                metros: '78 m²',
+                nota: 'Estructura, cubierta y terminaciones. Ida y vuelta desde Osorno cada semana.',
+                foto: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=60'
+            },
+            {
                 titulo: 'Cambio de techumbre',
+                zona: 'interior',
                 lugar: 'Río Negro',
                 anio: '2023',
                 metros: '90 m²',
@@ -266,18 +322,78 @@
                 foto: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=60'
             },
             {
-                titulo: 'Remodelación de local',
-                lugar: 'Osorno centro',
-                anio: '2022',
-                metros: '65 m²',
-                nota: 'Tabiquería, cielo y piso para un local de barrio. Entrega en 18 días.',
-                foto: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=60'
+                titulo: 'Galpón de faena',
+                zona: 'interior',
+                lugar: 'Purranque',
+                anio: '2021',
+                metros: '220 m²',
+                nota: 'Estructura metálica y radier. Obra fuera de la ciudad, con campamento chico.',
+                foto: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800&q=60'
             }
         ];
 
         /* ==================================================================
            FIN DE LOS DATOS DEL PORTAFOLIO
            ================================================================== */
+
+        let zonaActiva = 'todas';
+
+        function obrasFiltradas() {
+            if (zonaActiva === 'todas') return OBRAS;
+            return OBRAS.filter((obra) => obra.zona === zonaActiva);
+        }
+
+        function renderZonas() {
+            const nav = document.getElementById('zonas');
+            nav.replaceChildren();
+            ZONAS.forEach((zona) => {
+                const boton = document.createElement('button');
+                boton.type = 'button';
+                boton.textContent = zona.nombre;
+                boton.setAttribute('aria-pressed', zona.id === zonaActiva ? 'true' : 'false');
+                boton.addEventListener('click', () => {
+                    zonaActiva = zona.id;
+                    renderZonas();
+                    renderObras();
+                });
+                nav.appendChild(boton);
+            });
+        }
+
+        function renderObras() {
+            const lista = document.getElementById('obras');
+            lista.replaceChildren();
+            const filas = obrasFiltradas();
+
+            if (!filas.length) {
+                const vacio = document.createElement('p');
+                vacio.className = 'vacio';
+                vacio.textContent = 'No hay obras en esta zona.';
+                lista.appendChild(vacio);
+                return;
+            }
+
+            filas.forEach((obra) => {
+                const articulo = document.createElement('article');
+                const img = document.createElement('img');
+                img.src = obra.foto;
+                img.alt = obra.titulo;
+                img.loading = 'lazy';
+                img.referrerPolicy = 'no-referrer';
+
+                const cuerpo = document.createElement('div');
+                cuerpo.className = 'obra';
+                cuerpo.innerHTML = '<h3></h3><p class="meta"></p><p class="nota"></p>';
+                cuerpo.querySelector('h3').textContent = obra.titulo;
+                cuerpo.querySelector('.meta').textContent =
+                    [obra.lugar, obra.anio, obra.metros].filter(Boolean).join(' · ');
+                cuerpo.querySelector('.nota').textContent = obra.nota;
+
+                articulo.appendChild(img);
+                articulo.appendChild(cuerpo);
+                lista.appendChild(articulo);
+            });
+        }
 
         function aplicarPortafolio() {
             document.title = EMPRESA.titulo;
@@ -287,7 +403,7 @@
             document.getElementById('presentacion').textContent = EMPRESA.presentacion;
 
             const datos = document.getElementById('datos');
-            [EMPRESA.anios, EMPRESA.zona].forEach((texto) => {
+            [EMPRESA.anios, EMPRESA.desplazamiento].forEach((texto) => {
                 const chip = document.createElement('span');
                 chip.className = 'chip';
                 chip.textContent = texto;
@@ -300,28 +416,8 @@
             document.getElementById('whatsappFloat').href = wa;
             document.getElementById('botonLlamar').href = 'tel:' + CONTACTO.telefono;
 
-            const lista = document.getElementById('obras');
-            OBRAS.forEach((obra) => {
-                const articulo = document.createElement('article');
-                const img = document.createElement('img');
-                img.src = obra.foto;
-                img.alt = obra.titulo;
-                img.loading = 'lazy';
-                img.referrerPolicy = 'no-referrer';
-
-                const cuerpo = document.createElement('div');
-                cuerpo.className = 'obra';
-                cuerpo.innerHTML =
-                    '<h3></h3><p class="meta"></p><p class="nota"></p>';
-                cuerpo.querySelector('h3').textContent = obra.titulo;
-                cuerpo.querySelector('.meta').textContent =
-                    [obra.lugar, obra.anio, obra.metros].filter(Boolean).join(' · ');
-                cuerpo.querySelector('.nota').textContent = obra.nota;
-
-                articulo.appendChild(img);
-                articulo.appendChild(cuerpo);
-                lista.appendChild(articulo);
-            });
+            renderZonas();
+            renderObras();
         }
 
         aplicarPortafolio();
