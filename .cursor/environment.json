@@ -1,0 +1,16 @@
+{
+  "name": "Muestra llavero NFC",
+  "install": "python3 --version",
+  "terminals": [
+    {
+      "name": "web",
+      "command": "python3 -m http.server 8080 --bind 0.0.0.0"
+    }
+  ],
+  "ports": [
+    {
+      "name": "web",
+      "port": 8080
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+---
+description: Convenciones de la página de cobro para llaveros NFC
+alwaysApply: true
+---
+
+Este repositorio es la **muestra pública** de la página de cobro para llaveros
+NFC: un solo archivo `index.html`, sin dependencias ni compilación, publicado
+con GitHub Pages. Los datos son inventados a propósito (marca Casa Bruma) para
+ofrecer el producto y grabar videos, sin usar información de clientes reales.
+
+No copiar ramas ni datos desde repositorios de clientes (ch-moda, La Nico u
+otros). Si hay que traer una función nueva, copiar solo el código de la
+plantilla o de la interfaz, y dejar los datos de Casa Bruma.
+
+## Regla principal
+
+Los datos del cliente viven únicamente en el bloque `DATOS DEL CLIENTE`, al
+inicio del `<script>`, formado por `CLIENTE`, `CONTACTO` y `CUENTAS`.
+
+Para adaptar la página a un cliente nuevo o cambiar sus datos, editar solo ese
+bloque. No escribir datos del cliente en el HTML de la tarjeta ni en el CSS: el
+script los inyecta al cargar y los marcadores `—` del HTML deben quedarse así.
+
+Si un cambio parece exigir tocar el código de abajo, es señal de que falta una
+opción en la configuración. Agregarla ahí en lugar de escribir el valor a mano.
+
+## Datos bancarios
+
+En este repositorio los datos **tienen** que ser inventados. No pegar RUT,
+cuentas, teléfonos, correos ni redes de personas o negocios reales.
+
+En un llavero de cliente de verdad vale la regla inversa: nunca inventar un
+número de cuenta, un RUT, un correo o un teléfono. Aquí no aplica, porque esta
+página no se entrega a nadie para cobrar.
+
+## Bancos
+
+Los bancos se agregan al catálogo `BANCOS`, con `nombre`, `sigla` y `color`.
+El logo es opcional: sin él, la pestaña muestra la sigla y el nombre.
+
+Los logos se incrustan como `<symbol>` en el sprite del inicio del `<body>`,
+tomados del sitio oficial del banco y en su versión para fondo oscuro. No
+enlazar imágenes externas: la página se usa en la calle y con mala señal.
+
+## Estilo del código
+
+El código y los comentarios están en español, con nombres de variables en
+español. Los comentarios explican por qué algo está hecho de cierta forma
+(restricciones de los formularios bancarios, navegadores que bloquean el
+portapapeles), no lo que hace la línea siguiente.
+
+Al terminar un cambio, verificarlo en un navegador de verdad: cambiar de
+pestaña, copiar todos los datos, recorrer el modo paso a paso y revisar que no
+haya errores de consola.
