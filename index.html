@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Muestras de llavero NFC</title>
-    <meta name="description" content="Tres páginas de cobro de muestra, con datos inventados, para ver la interfaz del llavero NFC.">
+    <meta name="description" content="Dos usos del llavero NFC: página de cobro y portafolio de obras. Datos inventados.">
     <style>
         :root {
             --bg: #0c0a0b;
             --card: #1a1418;
             --line: rgba(236, 163, 189, 0.22);
             --accent: #eca3bd;
+            --obra: #d4a574;
             --text: #f8f4f6;
             --muted: #b7a3ad;
         }
@@ -33,16 +34,14 @@
             margin: 0 auto;
         }
 
-        @media (min-width: 980px) {
+        @media (min-width: 900px) {
             body { padding: 40px 32px 64px; }
-            main { max-width: 1080px; }
-            h1 { font-size: 2.35rem; max-width: 16ch; }
-            .lead { max-width: 38rem; font-size: 1.05rem; }
-            .pasos { grid-template-columns: repeat(3, 1fr); margin-bottom: 36px; }
-            .muestras { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
+            main { max-width: 860px; }
+            h1 { font-size: 2.35rem; max-width: 18ch; }
+            .lead { max-width: 40rem; }
+            .productos { grid-template-columns: 1fr 1fr; align-items: stretch; }
             article { display: flex; flex-direction: column; }
             .cuerpo { display: flex; flex-direction: column; flex: 1; }
-            article ul { flex: 1; }
         }
 
         .aviso {
@@ -73,56 +72,17 @@
             margin-bottom: 28px;
         }
 
-        .pasos {
-            display: grid;
-            gap: 10px;
-            margin-bottom: 28px;
-        }
-
-        .paso {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            padding: 12px 14px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
-        }
-
-        .paso b {
-            flex-shrink: 0;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            background: var(--accent);
-            color: #1a0d15;
-            font-size: 0.78rem;
-        }
-
-        .paso p {
-            color: var(--muted);
-            font-size: 0.9rem;
-            line-height: 1.4;
-            padding-top: 3px;
-        }
-
-        .paso strong { color: var(--text); font-weight: 600; }
-
-        .muestras { display: grid; gap: 14px; }
+        .productos { display: grid; gap: 16px; }
 
         article {
-            display: block;
             background: var(--card);
             border: 1px solid var(--line);
             border-radius: 18px;
             overflow: hidden;
-            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
         }
 
         .preview {
-            height: 92px;
+            height: 88px;
             display: flex;
             align-items: flex-end;
             padding: 14px 16px;
@@ -135,46 +95,21 @@
             text-transform: uppercase;
         }
 
-        .claro { background: linear-gradient(180deg, #fff5f7 0%, #f7b4bd 100%); color: #111; }
-        .oscuro { background: radial-gradient(circle at 50% 0%, #5a2440 0%, #1a0d15 70%); color: #eca3bd; }
-        .taller { background: linear-gradient(135deg, #3a342c 0%, #1c1916 70%); color: #c4b5a0; }
+        .cobro { background: linear-gradient(180deg, #fff5f7 0%, #f7b4bd 100%); color: #111; }
+        .obra { background: linear-gradient(135deg, #5a3d24 0%, #1c1610 75%); color: var(--obra); }
 
         .cuerpo { padding: 16px 16px 18px; }
 
         article h2 {
-            font-size: 1.15rem;
-            margin-bottom: 4px;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
         }
 
-        .negocio {
+        article .para {
             color: var(--muted);
-            font-size: 0.82rem;
-            margin-bottom: 12px;
-        }
-
-        ul {
-            list-style: none;
-            display: grid;
-            gap: 6px;
-            margin-bottom: 16px;
-        }
-
-        li {
-            color: var(--muted);
-            font-size: 0.88rem;
-            padding-left: 16px;
-            position: relative;
-        }
-
-        li::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 8px;
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--accent);
+            font-size: 0.92rem;
+            line-height: 1.45;
+            margin-bottom: 14px;
         }
 
         a.abrir {
@@ -188,7 +123,38 @@
             padding: 12px 14px;
         }
 
-        a.abrir:active { transform: scale(0.98); }
+        article.obra-card a.abrir {
+            background: var(--obra);
+            color: #1a120c;
+        }
+
+        .pieles {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .pieles p {
+            color: var(--muted);
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+        }
+
+        .pieles nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pieles a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
 
         footer {
             margin-top: 28px;
@@ -202,74 +168,49 @@
 <body>
     <main>
         <p class="aviso">Muestra · datos inventados</p>
-        <h1>Llaveros NFC de cobro</h1>
+        <h1>Llaveros NFC</h1>
         <p class="lead">
-            El cliente acerca el teléfono al llavero y se abre esta página:
-            datos listos para copiar y pegar en la app del banco.
+            El chip abre una página. Hay dos usos distintos: cobrar
+            una transferencia, o presentarse con obras hechas.
         </p>
 
-        <section class="pasos" aria-label="Cómo se usa">
-            <div class="paso">
-                <b>1</b>
-                <p><strong>Acerca el teléfono.</strong> El chip abre el enlace, sin app ni instalación.</p>
-            </div>
-            <div class="paso">
-                <b>2</b>
-                <p><strong>Copia los datos.</strong> Un toque llena el formulario de transferencia.</p>
-            </div>
-            <div class="paso">
-                <b>3</b>
-                <p><strong>Avisa por WhatsApp.</strong> Manda el comprobante o guarda el contacto.</p>
-            </div>
-        </section>
-
-        <section class="muestras" aria-label="Muestras">
+        <section class="productos" aria-label="Usos del llavero">
             <article>
-                <div class="preview claro"><span>Tema claro</span></div>
+                <div class="preview cobro"><span>Cobro</span></div>
                 <div class="cuerpo">
-                    <h2>Boutique</h2>
-                    <p class="negocio">Luna Atelier · ropa y accesorios</p>
-                    <ul>
-                        <li>Tarjeta blanca, tipografía de marca</li>
-                        <li>Dos cuentas: BancoEstado y Santander</li>
-                        <li>Instagram en el pie</li>
-                    </ul>
-                    <a class="abrir" href="demo-boutique/">Abrir muestra</a>
+                    <h2>Página de cobro</h2>
+                    <p class="para">
+                        El cliente copia los datos bancarios y pega en la app
+                        del banco. Es la misma interfaz, con otra piel.
+                    </p>
+                    <a class="abrir" href="demo-boutique/">Abrir cobro</a>
+                    <div class="pieles">
+                        <p>Otras pieles, mismo cobro</p>
+                        <nav>
+                            <a href="demo-boutique/">Claro</a>
+                            <a href="demo-segunda/">Oscuro</a>
+                            <a href="demo-taller/">Taller</a>
+                        </nav>
+                    </div>
                 </div>
             </article>
 
-            <article>
-                <div class="preview oscuro"><span>Tema oscuro · redes</span></div>
+            <article class="obra-card">
+                <div class="preview obra"><span>Portafolio</span></div>
                 <div class="cuerpo">
-                    <h2>Segunda mano</h2>
-                    <p class="negocio">Verde Segunda · moda reciclada</p>
-                    <ul>
-                        <li>Fondo de marca, sin foto externa</li>
-                        <li>Pestañas Santander y BancoEstado</li>
-                        <li>Instagram y Facebook</li>
-                    </ul>
-                    <a class="abrir" href="demo-segunda/">Abrir muestra</a>
-                </div>
-            </article>
-
-            <article>
-                <div class="preview taller"><span>Una cuenta</span></div>
-                <div class="cuerpo">
-                    <h2>Taller</h2>
-                    <p class="negocio">Taller Norte Ltda · metal y reparación</p>
-                    <ul>
-                        <li>Foto del rubro de fondo</li>
-                        <li>Una sola cuenta BCI, sin pestañas</li>
-                        <li>Sin redes: solo cobro y WhatsApp</li>
-                    </ul>
-                    <a class="abrir" href="demo-taller/">Abrir muestra</a>
+                    <h2>Portafolio de obras</h2>
+                    <p class="para">
+                        Para constructoras y oficios que cotizan en terreno
+                        o licitan en privado. Muestra trabajos anteriores.
+                        No reemplaza los papeles de una licitación pública.
+                    </p>
+                    <a class="abrir" href="demo-portafolio/">Abrir portafolio</a>
                 </div>
             </article>
         </section>
 
         <footer>
-            Nombres, RUT, cuentas, correos y teléfonos son ficticios.
-            No corresponden a personas ni negocios reales.
+            Nombres, obras, fotos de stock, cuentas y teléfonos son ficticios.
         </footer>
     </main>
 </body>
