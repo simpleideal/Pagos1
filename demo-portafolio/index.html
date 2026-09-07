@@ -256,8 +256,8 @@
             persona: 'Héctor Rivera Soto',
             oficio: 'Construcción · obras menores',
             anios: '12 años',
-            desplazamiento: 'Cuadrilla que se mueve',
-            presentacion: 'La cuadrilla sale de Osorno: ciudad, lago e interior. Se muestra obra hecha, no una lista de servicios.'
+            cobertura: 'Osorno y otras comunas',
+            presentacion: 'Obras ejecutadas en ciudad, lago e interior. Se muestra trabajo hecho, no una lista de servicios.'
         };
 
         const CONTACTO = {
@@ -300,7 +300,7 @@
                 lugar: 'Puerto Octay',
                 anio: '2023',
                 metros: '180 m²',
-                nota: 'Plataforma de hormigón para galpón agrícola. La cuadrilla pernoctó tres noches.',
+                nota: 'Plataforma de hormigón para galpón agrícola y reja perimetral.',
                 foto: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=60'
             },
             {
@@ -309,7 +309,7 @@
                 lugar: 'Entre Lagos',
                 anio: '2024',
                 metros: '78 m²',
-                nota: 'Estructura, cubierta y terminaciones. Ida y vuelta desde Osorno cada semana.',
+                nota: 'Estructura, cubierta y terminaciones de una casa junto al lago.',
                 foto: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=60'
             },
             {
@@ -327,7 +327,7 @@
                 lugar: 'Purranque',
                 anio: '2021',
                 metros: '220 m²',
-                nota: 'Estructura metálica y radier. Obra fuera de la ciudad, con campamento chico.',
+                nota: 'Estructura metálica y radier para un galpón de faena.',
                 foto: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800&q=60'
             }
         ];
@@ -403,7 +403,7 @@
             document.getElementById('presentacion').textContent = EMPRESA.presentacion;
 
             const datos = document.getElementById('datos');
-            [EMPRESA.anios, EMPRESA.desplazamiento].forEach((texto) => {
+            [EMPRESA.anios, EMPRESA.cobertura].forEach((texto) => {
                 const chip = document.createElement('span');
                 chip.className = 'chip';
                 chip.textContent = texto;
