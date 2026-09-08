@@ -705,6 +705,7 @@
                 hoja.classList.remove('arrastrando');
                 hoja.style.transform = '';
                 const delta = evento.clientY - inicioY;
+                arrastro = Math.abs(delta) > 10;
                 if (abiertaAlEmpezar && delta > 50) cerrarHoja();
                 else if (!abiertaAlEmpezar && delta < -40) abrirHoja();
             });
