@@ -23,7 +23,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: var(--text);
             background: var(--bg);
-            padding: 24px 16px calc(100px + env(safe-area-inset-bottom, 0px));
+            padding: 24px 16px calc(96px + env(safe-area-inset-bottom, 0px));
         }
 
         main {
@@ -258,7 +258,7 @@
             bottom: 0;
             width: min(420px, 100%);
             height: min(86vh, 640px);
-            transform: translate(-50%, calc(100% - 78px));
+            transform: translate(-50%, calc(100% - 72px));
             background: var(--card);
             border-radius: 22px 22px 0 0;
             box-shadow: 0 -10px 32px rgba(0, 0, 0, 0.18);
@@ -535,8 +535,11 @@
             }
         };
 
+        const ASOMO_HOJA = 72;
+
         let seccionActiva = 'fondos';
         let carruselTimer = null;
+        let yaAbrioPorScroll = false;
 
         function fotosDe(plato) {
             if (plato.fotos && plato.fotos.length) return plato.fotos;
@@ -703,8 +706,8 @@
             asa.addEventListener('pointermove', (evento) => {
                 if (!asa.hasPointerCapture(evento.pointerId)) return;
                 const delta = evento.clientY - inicioY;
-                const base = abiertaAlEmpezar ? 0 : hoja.offsetHeight - 78;
-                const siguiente = Math.max(0, Math.min(hoja.offsetHeight - 78, base + delta));
+                const base = abiertaAlEmpezar ? 0 : hoja.offsetHeight - ASOMO_HOJA;
+                const siguiente = Math.max(0, Math.min(hoja.offsetHeight - ASOMO_HOJA, base + delta));
                 hoja.style.transform = 'translate(-50%, ' + siguiente + 'px)';
             });
 
@@ -720,9 +723,13 @@
             });
 
             window.addEventListener('scroll', () => {
+                if (yaAbrioPorScroll) return;
                 const sobra = document.documentElement.scrollHeight -
                     (window.scrollY + window.innerHeight);
-                if (sobra < 48) abrirHoja();
+                if (sobra < 48) {
+                    yaAbrioPorScroll = true;
+                    abrirHoja();
+                }
             }, { passive: true });
         }
 
@@ -773,6 +780,7 @@
             renderBebestibles();
             renderRedes();
             arrancarHoja();
+            if (location.hash === '#bebestibles') abrirHoja();
         }
 
         aplicarCarta();
