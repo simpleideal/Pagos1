@@ -138,7 +138,7 @@
 
         .claro { background: linear-gradient(180deg, #fff5f7 0%, #f7b4bd 100%); color: #111; }
         .obra { background: linear-gradient(180deg, #0b7a7c 0%, #0e2a2b 100%); color: #e8f4f4; }
-        .taller { background: linear-gradient(135deg, #3a342c 0%, #1c1916 70%); color: #c4b5a0; }
+        .carta { background: linear-gradient(180deg, #f3d2b8 0%, #b4532a 100%); color: #3a1c10; }
 
         .cuerpo { padding: 16px 16px 18px; }
 
@@ -196,6 +196,13 @@
             color: #ffffff;
         }
 
+        article.carta-card li::before { background: #b4532a; }
+
+        article.carta-card a.abrir {
+            background: #b4532a;
+            color: #fffdf9;
+        }
+
         a.abrir:active { transform: scale(0.98); }
 
         footer {
@@ -213,7 +220,7 @@
         <h1>Llaveros NFC</h1>
         <p class="lead">
             El cliente acerca el teléfono al llavero y se abre una página.
-            Tres muestras: dos de cobro y una de portafolio.
+            Tres muestras distintas: cobro, portafolio de obras y carta de restorán.
         </p>
 
         <section class="pasos" aria-label="Cómo se usa">
@@ -223,7 +230,7 @@
             </div>
             <div class="paso">
                 <b>2</b>
-                <p><strong>Ve cobro u obras.</strong> Copia datos de transferencia, o revisa trabajos hechos.</p>
+                <p><strong>Ve cobro, obras o la carta.</strong> Cada llavero abre un uso distinto.</p>
             </div>
             <div class="paso">
                 <b>3</b>
@@ -259,16 +266,17 @@
                 </div>
             </article>
 
-            <article>
-                <div class="preview taller"><span>Muestra 3 · cobro</span></div>
+            <article class="carta-card">
+                <div class="preview carta"><span>Muestra 3 · carta</span></div>
                 <div class="cuerpo">
-                    <h2>Taller</h2>
-                    <p class="negocio">Taller Norte Ltda · metal y reparación</p>
+                    <h2>Restorán</h2>
+                    <p class="negocio">Casa Fogón · cocina chilena</p>
                     <ul>
-                        <li>Página para copiar datos de transferencia</li>
-                        <li>Una sola cuenta BCI, foto del rubro</li>
+                        <li>Texto a la izquierda, foto a la derecha</li>
+                        <li>Varias fotos del mismo plato, que rotan solas</li>
+                        <li>Bebestibles en una hoja que se desliza</li>
                     </ul>
-                    <a class="abrir" href="demo-taller/">Abrir muestra</a>
+                    <a class="abrir" href="demo-carta/">Abrir muestra</a>
                 </div>
             </article>
         </section>
