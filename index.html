@@ -7,13 +7,14 @@
     <meta name="description" content="Tres muestras de llavero NFC: cobro, portafolio de obras y taller. Datos inventados.">
     <style>
         :root {
-            --bg: #0c0a0b;
-            --card: #1a1418;
-            --line: rgba(236, 163, 189, 0.22);
-            --accent: #eca3bd;
+            --bg: #f2f4f6;
+            --card: #ffffff;
+            --line: rgba(27, 54, 93, 0.14);
+            --accent: #1b365d;
+            --cielo: #8eadd1;
             --obra: #0b7a7c;
-            --text: #f8f4f6;
-            --muted: #b7a3ad;
+            --text: #1a222c;
+            --muted: #5c6b7a;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,7 +24,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: var(--text);
             background:
-                radial-gradient(circle at 50% -10%, #3a1526 0%, transparent 48%),
+                radial-gradient(circle at 50% -12%, #8eadd1 0%, transparent 42%),
                 var(--bg);
             padding: 28px 20px 48px;
         }
@@ -52,7 +53,7 @@
             padding: 6px 12px;
             border-radius: 999px;
             border: 1px solid var(--line);
-            background: rgba(236, 163, 189, 0.08);
+            background: rgba(58, 117, 176, 0.10);
             color: var(--accent);
             font-size: 0.72rem;
             font-weight: 700;
@@ -85,8 +86,8 @@
             gap: 12px;
             align-items: flex-start;
             padding: 12px 14px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: #ffffff;
+            border: 1px solid var(--line);
             border-radius: 12px;
         }
 
@@ -98,7 +99,7 @@
             display: grid;
             place-items: center;
             background: var(--accent);
-            color: #1a0d15;
+            color: #ffffff;
             font-size: 0.78rem;
         }
 
@@ -119,7 +120,7 @@
             border: 1px solid var(--line);
             border-radius: 18px;
             overflow: hidden;
-            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 8px 22px rgba(27, 54, 93, 0.08);
         }
 
         .preview {
@@ -136,7 +137,7 @@
             text-transform: uppercase;
         }
 
-        .claro { background: linear-gradient(180deg, #fff5f7 0%, #f7b4bd 100%); color: #111; }
+        .claro { background: linear-gradient(180deg, #d7e4f2 0%, #1b365d 100%); color: #ffffff; }
         .obra { background: linear-gradient(180deg, #0b7a7c 0%, #0e2a2b 100%); color: #e8f4f4; }
         .carta { background: linear-gradient(180deg, #f3d2b8 0%, #b4532a 100%); color: #3a1c10; }
 
@@ -185,7 +186,7 @@
             text-align: center;
             text-decoration: none;
             background: var(--accent);
-            color: #1a0d15;
+            color: #ffffff;
             font-weight: 700;
             border-radius: 10px;
             padding: 12px 14px;
