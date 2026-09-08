@@ -23,7 +23,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: var(--text);
             background: var(--bg);
-            padding: 24px 16px calc(32px + env(safe-area-inset-bottom, 0px));
+            padding: 24px 16px calc(100px + env(safe-area-inset-bottom, 0px));
         }
 
         main {
@@ -236,6 +236,79 @@
             height: 20px;
             fill: currentColor;
         }
+
+        .velo {
+            position: fixed;
+            inset: 0;
+            background: rgba(24, 16, 12, 0.35);
+            z-index: 40;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .velo.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .hoja {
+            position: fixed;
+            left: 50%;
+            bottom: 0;
+            width: min(420px, 100%);
+            height: min(86vh, 640px);
+            transform: translate(-50%, calc(100% - 78px));
+            background: var(--card);
+            border-radius: 22px 22px 0 0;
+            box-shadow: 0 -10px 32px rgba(0, 0, 0, 0.18);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.28s ease;
+            touch-action: none;
+        }
+
+        .hoja.abierta { transform: translate(-50%, 0); }
+        .hoja.arrastrando { transition: none; }
+
+        .hoja-cabeza {
+            flex-shrink: 0;
+            padding: 10px 16px 8px;
+            text-align: center;
+            cursor: grab;
+        }
+
+        .asa {
+            display: block;
+            width: 36px;
+            height: 4px;
+            margin: 0 auto 10px;
+            border-radius: 999px;
+            background: #d4c4b4;
+        }
+
+        .hoja-rubro {
+            font-family: Didot, "Bodoni MT", "Times New Roman", serif;
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-bottom: 2px;
+        }
+
+        .hoja-titulo {
+            font-family: Didot, "Bodoni MT", "Times New Roman", serif;
+            font-size: 1.35rem;
+        }
+
+        .hoja-cuerpo {
+            overflow-y: auto;
+            padding: 8px 16px 28px;
+            touch-action: pan-y;
+        }
+
+        .hoja article {
+            box-shadow: none;
+        }
     </style>
 </head>
 <body>
@@ -257,6 +330,18 @@
             <nav class="redes" id="redes" aria-label="Redes sociales"></nav>
         </div>
     </main>
+
+    <div class="velo" id="velo" hidden></div>
+    <aside class="hoja" id="hoja" aria-label="Bebestibles">
+        <div class="hoja-cabeza" id="asa">
+            <span class="asa" aria-hidden="true"></span>
+            <p class="hoja-rubro">Carta de bar</p>
+            <p class="hoja-titulo">Bebestibles</p>
+        </div>
+        <div class="hoja-cuerpo">
+            <section class="platos" id="bebestibles" aria-label="Bebestibles"></section>
+        </div>
+    </aside>
 
     <script>
         /* ==================================================================
@@ -384,6 +469,46 @@
             }
         ];
 
+        const BEBESTIBLES = [
+            {
+                titulo: 'Pisco sour',
+                precio: '$7.500',
+                minutos: 8,
+                nota: 'Pisco, limón, goma y clara.',
+                fotos: [
+                    'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=400&q=60',
+                    'https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=400&q=60'
+                ]
+            },
+            {
+                titulo: 'Sour negroni',
+                precio: '$9.500',
+                minutos: 8,
+                nota: 'Gin, vermut rojo, Campari y limón.',
+                fotos: [
+                    'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?auto=format&fit=crop&w=400&q=60'
+                ]
+            },
+            {
+                titulo: 'Cerveza artesanal',
+                precio: '$4.200',
+                minutos: 3,
+                nota: 'Tirada. Rubia o ambar.',
+                fotos: [
+                    'https://images.unsplash.com/photo-1436076863939-06870fe779c2?auto=format&fit=crop&w=400&q=60'
+                ]
+            },
+            {
+                titulo: 'Jugo natural',
+                precio: '$3.500',
+                minutos: 5,
+                nota: 'Naranja, frutilla o mango.',
+                fotos: [
+                    'https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=400&q=60'
+                ]
+            }
+        ];
+
         /* ==================================================================
            FIN DE LOS DATOS DE LA CARTA
            ================================================================== */
@@ -464,53 +589,131 @@
             });
         }
 
+        function crearTarjeta(plato) {
+            const fotos = fotosDe(plato);
+            const articulo = document.createElement('article');
+
+            const cuerpo = document.createElement('div');
+            cuerpo.className = 'cuerpo-plato';
+            cuerpo.innerHTML = '<h3></h3><p class="nota"></p><p class="meta"></p>';
+            cuerpo.querySelector('h3').textContent = plato.titulo;
+            cuerpo.querySelector('.nota').textContent = plato.nota;
+            cuerpo.querySelector('.meta').innerHTML =
+                '<span class="precio"></span> · ' + plato.minutos + ' min';
+            cuerpo.querySelector('.precio').textContent = plato.precio;
+
+            const foto = document.createElement('div');
+            foto.className = 'foto';
+            const pista = document.createElement('div');
+            pista.className = 'pista';
+            pista.dataset.indice = '0';
+            fotos.forEach((src) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = plato.titulo;
+                img.loading = 'lazy';
+                img.referrerPolicy = 'no-referrer';
+                pista.appendChild(img);
+            });
+            foto.appendChild(pista);
+
+            if (fotos.length > 1) {
+                const puntos = document.createElement('div');
+                puntos.className = 'puntos';
+                fotos.forEach((_, i) => {
+                    const punto = document.createElement('span');
+                    if (i === 0) punto.className = 'activo';
+                    puntos.appendChild(punto);
+                });
+                foto.appendChild(puntos);
+            }
+
+            articulo.appendChild(cuerpo);
+            articulo.appendChild(foto);
+            return articulo;
+        }
+
         function renderPlatos() {
             const lista = document.getElementById('platos');
             lista.replaceChildren();
             platosFiltrados().forEach((plato) => {
-                const fotos = fotosDe(plato);
-                const articulo = document.createElement('article');
-
-                const cuerpo = document.createElement('div');
-                cuerpo.className = 'cuerpo-plato';
-                cuerpo.innerHTML = '<h3></h3><p class="nota"></p><p class="meta"></p>';
-                cuerpo.querySelector('h3').textContent = plato.titulo;
-                cuerpo.querySelector('.nota').textContent = plato.nota;
-                cuerpo.querySelector('.meta').innerHTML =
-                    '<span class="precio"></span> · ' + plato.minutos + ' min';
-                cuerpo.querySelector('.precio').textContent = plato.precio;
-
-                const foto = document.createElement('div');
-                foto.className = 'foto';
-                const pista = document.createElement('div');
-                pista.className = 'pista';
-                pista.dataset.indice = '0';
-                fotos.forEach((src) => {
-                    const img = document.createElement('img');
-                    img.src = src;
-                    img.alt = plato.titulo;
-                    img.loading = 'lazy';
-                    img.referrerPolicy = 'no-referrer';
-                    pista.appendChild(img);
-                });
-                foto.appendChild(pista);
-
-                if (fotos.length > 1) {
-                    const puntos = document.createElement('div');
-                    puntos.className = 'puntos';
-                    fotos.forEach((_, i) => {
-                        const punto = document.createElement('span');
-                        if (i === 0) punto.className = 'activo';
-                        puntos.appendChild(punto);
-                    });
-                    foto.appendChild(puntos);
-                }
-
-                articulo.appendChild(cuerpo);
-                articulo.appendChild(foto);
-                lista.appendChild(articulo);
+                lista.appendChild(crearTarjeta(plato));
             });
             arrancarCarruseles();
+        }
+
+        function renderBebestibles() {
+            const lista = document.getElementById('bebestibles');
+            lista.replaceChildren();
+            BEBESTIBLES.forEach((trago) => {
+                lista.appendChild(crearTarjeta(trago));
+            });
+        }
+
+        function abrirHoja() {
+            document.getElementById('hoja').classList.add('abierta');
+            const velo = document.getElementById('velo');
+            velo.hidden = false;
+            velo.classList.add('visible');
+        }
+
+        function cerrarHoja() {
+            document.getElementById('hoja').classList.remove('abierta');
+            const velo = document.getElementById('velo');
+            velo.classList.remove('visible');
+            velo.hidden = true;
+        }
+
+        function arrancarHoja() {
+            const hoja = document.getElementById('hoja');
+            const asa = document.getElementById('asa');
+            const velo = document.getElementById('velo');
+            let inicioY = 0;
+            let abiertaAlEmpezar = false;
+            let arrastro = false;
+
+            asa.addEventListener('click', (evento) => {
+                if (arrastro) {
+                    arrastro = false;
+                    evento.preventDefault();
+                    return;
+                }
+                if (hoja.classList.contains('abierta')) cerrarHoja();
+                else abrirHoja();
+            });
+
+            velo.addEventListener('click', cerrarHoja);
+
+            asa.addEventListener('pointerdown', (evento) => {
+                inicioY = evento.clientY;
+                abiertaAlEmpezar = hoja.classList.contains('abierta');
+                hoja.classList.add('arrastrando');
+                asa.setPointerCapture(evento.pointerId);
+            });
+
+            asa.addEventListener('pointermove', (evento) => {
+                if (!asa.hasPointerCapture(evento.pointerId)) return;
+                const delta = evento.clientY - inicioY;
+                const base = abiertaAlEmpezar ? 0 : hoja.offsetHeight - 78;
+                const siguiente = Math.max(0, Math.min(hoja.offsetHeight - 78, base + delta));
+                hoja.style.transform = 'translate(-50%, ' + siguiente + 'px)';
+            });
+
+            asa.addEventListener('pointerup', (evento) => {
+                if (!asa.hasPointerCapture(evento.pointerId)) return;
+                asa.releasePointerCapture(evento.pointerId);
+                hoja.classList.remove('arrastrando');
+                hoja.style.transform = '';
+                const delta = evento.clientY - inicioY;
+                if (abiertaAlEmpezar && delta > 50) cerrarHoja();
+                else if (!abiertaAlEmpezar && delta < -40) abrirHoja();
+            });
+
+            window.addEventListener('scroll', () => {
+                const sobra = document.documentElement.scrollHeight -
+                    (window.scrollY + window.innerHeight);
+                if (sobra < 48) abrirHoja();
+            }, { passive: true });
         }
 
         function renderRedes() {
@@ -557,7 +760,9 @@
 
             renderSecciones();
             renderPlatos();
+            renderBebestibles();
             renderRedes();
+            arrancarHoja();
         }
 
         aplicarCarta();
