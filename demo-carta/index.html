@@ -23,7 +23,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: var(--text);
             background: var(--bg);
-            padding: 24px 16px calc(28px + env(safe-area-inset-bottom, 0px));
+            padding: 24px 16px calc(96px + env(safe-area-inset-bottom, 0px));
         }
 
         main {
@@ -82,8 +82,7 @@
 
         .secciones {
             display: flex;
-            justify-content: space-between;
-            gap: 12px;
+            gap: 20px;
             margin: 8px 0 14px;
             border-bottom: 1px solid var(--line);
         }
@@ -92,12 +91,11 @@
             border: none;
             background: none;
             padding: 8px 0 10px;
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             font-weight: 700;
             color: var(--muted);
             cursor: pointer;
             border-bottom: 2px solid transparent;
-            white-space: nowrap;
         }
 
         .secciones button[aria-pressed="true"] {
@@ -239,6 +237,78 @@
             fill: currentColor;
         }
 
+        .velo {
+            position: fixed;
+            inset: 0;
+            background: rgba(24, 16, 12, 0.35);
+            z-index: 40;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .velo.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .hoja {
+            position: fixed;
+            left: 50%;
+            bottom: 0;
+            width: min(420px, 100%);
+            height: min(86vh, 640px);
+            transform: translate(-50%, calc(100% - 72px));
+            background: var(--card);
+            border-radius: 22px 22px 0 0;
+            box-shadow: 0 -10px 32px rgba(0, 0, 0, 0.18);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.28s ease;
+            touch-action: none;
+        }
+
+        .hoja.abierta { transform: translate(-50%, 0); }
+        .hoja.arrastrando { transition: none; }
+
+        .hoja-cabeza {
+            flex-shrink: 0;
+            padding: 10px 16px 8px;
+            text-align: center;
+            cursor: grab;
+        }
+
+        .asa {
+            display: block;
+            width: 36px;
+            height: 4px;
+            margin: 0 auto 10px;
+            border-radius: 999px;
+            background: #d4c4b4;
+        }
+
+        .hoja-rubro {
+            font-family: Didot, "Bodoni MT", "Times New Roman", serif;
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-bottom: 2px;
+        }
+
+        .hoja-titulo {
+            font-family: Didot, "Bodoni MT", "Times New Roman", serif;
+            font-size: 1.35rem;
+        }
+
+        .hoja-cuerpo {
+            overflow-y: auto;
+            padding: 8px 16px 28px;
+            touch-action: pan-y;
+        }
+
+        .hoja article {
+            box-shadow: none;
+        }
     </style>
 </head>
 <body>
@@ -260,6 +330,18 @@
             <nav class="redes" id="redes" aria-label="Redes sociales"></nav>
         </div>
     </main>
+
+    <div class="velo" id="velo" hidden></div>
+    <aside class="hoja" id="hoja" aria-label="Bebestibles">
+        <div class="hoja-cabeza" id="asa">
+            <span class="asa" aria-hidden="true"></span>
+            <p class="hoja-rubro">Jugos y bebidas</p>
+            <p class="hoja-titulo">Bebestibles</p>
+        </div>
+        <div class="hoja-cuerpo">
+            <section class="platos" id="bebestibles" aria-label="Bebestibles"></section>
+        </div>
+    </aside>
 
     <script>
         /* ==================================================================
@@ -290,8 +372,7 @@
         const SECCIONES = [
             { id: 'entradas', nombre: 'Entradas' },
             { id: 'fondos', nombre: 'Fondos' },
-            { id: 'postres', nombre: 'Postres' },
-            { id: 'bebestibles', nombre: 'Bebestibles' }
+            { id: 'postres', nombre: 'Postres' }
         ];
 
         const INTERVALO_FOTOS = 4000;
@@ -454,8 +535,11 @@
             }
         };
 
+        const ASOMO_HOJA = 72;
+
         let seccionActiva = 'fondos';
         let carruselTimer = null;
+        let yaAbrioPorScroll = false;
 
         function fotosDe(plato) {
             if (plato.fotos && plato.fotos.length) return plato.fotos;
@@ -463,7 +547,6 @@
         }
 
         function platosFiltrados() {
-            if (seccionActiva === 'bebestibles') return BEBESTIBLES;
             return PLATOS.filter((plato) => plato.seccion === seccionActiva);
         }
 
@@ -571,6 +654,85 @@
             arrancarCarruseles();
         }
 
+        function renderBebestibles() {
+            const lista = document.getElementById('bebestibles');
+            lista.replaceChildren();
+            BEBESTIBLES.forEach((trago) => {
+                lista.appendChild(crearTarjeta(trago));
+            });
+        }
+
+        function abrirHoja() {
+            document.getElementById('hoja').classList.add('abierta');
+            const velo = document.getElementById('velo');
+            velo.hidden = false;
+            velo.classList.add('visible');
+        }
+
+        function cerrarHoja() {
+            document.getElementById('hoja').classList.remove('abierta');
+            const velo = document.getElementById('velo');
+            velo.classList.remove('visible');
+            velo.hidden = true;
+        }
+
+        function arrancarHoja() {
+            const hoja = document.getElementById('hoja');
+            const asa = document.getElementById('asa');
+            const velo = document.getElementById('velo');
+            let inicioY = 0;
+            let abiertaAlEmpezar = false;
+            let arrastro = false;
+
+            asa.addEventListener('click', (evento) => {
+                if (arrastro) {
+                    arrastro = false;
+                    evento.preventDefault();
+                    return;
+                }
+                if (hoja.classList.contains('abierta')) cerrarHoja();
+                else abrirHoja();
+            });
+
+            velo.addEventListener('click', cerrarHoja);
+
+            asa.addEventListener('pointerdown', (evento) => {
+                inicioY = evento.clientY;
+                abiertaAlEmpezar = hoja.classList.contains('abierta');
+                hoja.classList.add('arrastrando');
+                asa.setPointerCapture(evento.pointerId);
+            });
+
+            asa.addEventListener('pointermove', (evento) => {
+                if (!asa.hasPointerCapture(evento.pointerId)) return;
+                const delta = evento.clientY - inicioY;
+                const base = abiertaAlEmpezar ? 0 : hoja.offsetHeight - ASOMO_HOJA;
+                const siguiente = Math.max(0, Math.min(hoja.offsetHeight - ASOMO_HOJA, base + delta));
+                hoja.style.transform = 'translate(-50%, ' + siguiente + 'px)';
+            });
+
+            asa.addEventListener('pointerup', (evento) => {
+                if (!asa.hasPointerCapture(evento.pointerId)) return;
+                asa.releasePointerCapture(evento.pointerId);
+                hoja.classList.remove('arrastrando');
+                hoja.style.transform = '';
+                const delta = evento.clientY - inicioY;
+                arrastro = Math.abs(delta) > 10;
+                if (abiertaAlEmpezar && delta > 50) cerrarHoja();
+                else if (!abiertaAlEmpezar && delta < -40) abrirHoja();
+            });
+
+            window.addEventListener('scroll', () => {
+                if (yaAbrioPorScroll) return;
+                const sobra = document.documentElement.scrollHeight -
+                    (window.scrollY + window.innerHeight);
+                if (sobra < 48) {
+                    yaAbrioPorScroll = true;
+                    abrirHoja();
+                }
+            }, { passive: true });
+        }
+
         function renderRedes() {
             const nav = document.getElementById('redes');
             nav.replaceChildren();
@@ -613,11 +775,12 @@
             document.getElementById('botonWhatsapp').href = wa;
             document.getElementById('botonLlamar').href = 'tel:' + CONTACTO.telefono;
 
-            if (location.hash === '#bebestibles') seccionActiva = 'bebestibles';
-
             renderSecciones();
             renderPlatos();
+            renderBebestibles();
             renderRedes();
+            arrancarHoja();
+            if (location.hash === '#bebestibles') abrirHoja();
         }
 
         aplicarCarta();
