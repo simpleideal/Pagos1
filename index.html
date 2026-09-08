@@ -47,13 +47,23 @@
             article ul { flex: 1; }
         }
 
-        .logo {
-            display: block;
+        .logo-marca {
             width: 88px;
             height: 88px;
-            object-fit: cover;
-            border-radius: 50%;
             margin: 0 0 18px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #e8eef4;
+            clip-path: circle(50%);
+        }
+
+        .logo-marca img {
+            display: block;
+            width: 118%;
+            height: 118%;
+            margin: -9%;
+            object-fit: cover;
+            object-position: center;
         }
 
         .aviso {
@@ -226,7 +236,9 @@
 </head>
 <body>
     <main>
-        <img class="logo" src="assets/logo-simple-ideal.jpg" alt="Simple Ideal, tu punto de soluciones" width="208" height="184">
+        <div class="logo-marca">
+            <img src="assets/logo-simple-ideal.jpg" alt="Simple Ideal, tu punto de soluciones" width="208" height="184">
+        </div>
         <p class="aviso">Muestra · datos inventados</p>
         <h1>Llaveros NFC</h1>
         <p class="lead">
