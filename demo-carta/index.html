@@ -23,7 +23,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: var(--text);
             background: var(--bg);
-            padding: 24px 16px calc(100px + env(safe-area-inset-bottom, 0px));
+            padding: 24px 16px calc(72px + env(safe-area-inset-bottom, 0px));
         }
 
         main {
@@ -252,13 +252,46 @@
             pointer-events: auto;
         }
 
+        .pestana-bebestibles {
+            appearance: none;
+            -webkit-appearance: none;
+            position: fixed;
+            left: 50%;
+            bottom: 0;
+            z-index: 45;
+            transform: translateX(-50%);
+            min-width: 168px;
+            padding: 8px 26px calc(12px + env(safe-area-inset-bottom, 0px));
+            border: 1px solid var(--line);
+            border-bottom: none;
+            border-radius: 16px 16px 0 0;
+            background: var(--card);
+            box-shadow: 0 -6px 18px rgba(42, 33, 28, 0.10);
+            color: var(--text);
+            font-family: Didot, "Bodoni MT", "Times New Roman", serif;
+            font-size: 1.12rem;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .pestana-bebestibles .asa {
+            margin-bottom: 8px;
+        }
+
+        .pestana-bebestibles.oculta {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-50%) translateY(12px);
+        }
+
         .hoja {
             position: fixed;
             left: 50%;
             bottom: 0;
             width: min(420px, 100%);
-            height: min(86vh, 640px);
-            transform: translate(-50%, calc(100% - 78px));
+            height: min(78vh, 560px);
+            transform: translate(-50%, 100%);
             background: var(--card);
             border-radius: 22px 22px 0 0;
             box-shadow: 0 -10px 32px rgba(0, 0, 0, 0.18);
@@ -332,7 +365,11 @@
     </main>
 
     <div class="velo" id="velo" hidden></div>
-    <aside class="hoja" id="hoja" aria-label="Bebestibles">
+    <button type="button" class="pestana-bebestibles" id="pestana" aria-expanded="false" aria-controls="hoja">
+        <span class="asa" aria-hidden="true"></span>
+        Bebestibles
+    </button>
+    <aside class="hoja" id="hoja" aria-label="Bebestibles" aria-hidden="true">
         <div class="hoja-cabeza" id="asa">
             <span class="asa" aria-hidden="true"></span>
             <p class="hoja-rubro">Jugos y bebidas</p>
@@ -660,15 +697,25 @@
         }
 
         function abrirHoja() {
-            document.getElementById('hoja').classList.add('abierta');
+            const hoja = document.getElementById('hoja');
+            const pestana = document.getElementById('pestana');
             const velo = document.getElementById('velo');
+            hoja.classList.add('abierta');
+            hoja.setAttribute('aria-hidden', 'false');
+            pestana.classList.add('oculta');
+            pestana.setAttribute('aria-expanded', 'true');
             velo.hidden = false;
             velo.classList.add('visible');
         }
 
         function cerrarHoja() {
-            document.getElementById('hoja').classList.remove('abierta');
+            const hoja = document.getElementById('hoja');
+            const pestana = document.getElementById('pestana');
             const velo = document.getElementById('velo');
+            hoja.classList.remove('abierta');
+            hoja.setAttribute('aria-hidden', 'true');
+            pestana.classList.remove('oculta');
+            pestana.setAttribute('aria-expanded', 'false');
             velo.classList.remove('visible');
             velo.hidden = true;
         }
@@ -676,10 +723,18 @@
         function arrancarHoja() {
             const hoja = document.getElementById('hoja');
             const asa = document.getElementById('asa');
+            const pestana = document.getElementById('pestana');
             const velo = document.getElementById('velo');
             let inicioY = 0;
-            let abiertaAlEmpezar = false;
             let arrastro = false;
+
+            pestana.addEventListener('click', () => {
+                if (arrastro) {
+                    arrastro = false;
+                    return;
+                }
+                abrirHoja();
+            });
 
             asa.addEventListener('click', (evento) => {
                 if (arrastro) {
@@ -687,43 +742,54 @@
                     evento.preventDefault();
                     return;
                 }
-                if (hoja.classList.contains('abierta')) cerrarHoja();
-                else abrirHoja();
+                cerrarHoja();
             });
 
             velo.addEventListener('click', cerrarHoja);
 
+            function soltarArrastre(evento, destino, alSoltar) {
+                if (!destino.hasPointerCapture(evento.pointerId)) return;
+                destino.releasePointerCapture(evento.pointerId);
+                hoja.classList.remove('arrastrando');
+                hoja.style.transform = '';
+                const delta = evento.clientY - inicioY;
+                arrastro = Math.abs(delta) > 10;
+                alSoltar(delta);
+            }
+
+            pestana.addEventListener('pointerdown', (evento) => {
+                inicioY = evento.clientY;
+                arrastro = false;
+                pestana.setPointerCapture(evento.pointerId);
+            });
+
+            pestana.addEventListener('pointerup', (evento) => {
+                if (!pestana.hasPointerCapture(evento.pointerId)) return;
+                pestana.releasePointerCapture(evento.pointerId);
+                const delta = evento.clientY - inicioY;
+                arrastro = Math.abs(delta) > 10;
+                if (delta < -36) abrirHoja();
+            });
+
             asa.addEventListener('pointerdown', (evento) => {
                 inicioY = evento.clientY;
-                abiertaAlEmpezar = hoja.classList.contains('abierta');
                 hoja.classList.add('arrastrando');
                 asa.setPointerCapture(evento.pointerId);
             });
 
             asa.addEventListener('pointermove', (evento) => {
                 if (!asa.hasPointerCapture(evento.pointerId)) return;
-                const delta = evento.clientY - inicioY;
-                const base = abiertaAlEmpezar ? 0 : hoja.offsetHeight - 78;
-                const siguiente = Math.max(0, Math.min(hoja.offsetHeight - 78, base + delta));
-                hoja.style.transform = 'translate(-50%, ' + siguiente + 'px)';
+                const delta = Math.max(0, evento.clientY - inicioY);
+                hoja.style.transform = 'translate(-50%, ' + delta + 'px)';
             });
 
             asa.addEventListener('pointerup', (evento) => {
-                if (!asa.hasPointerCapture(evento.pointerId)) return;
-                asa.releasePointerCapture(evento.pointerId);
-                hoja.classList.remove('arrastrando');
-                hoja.style.transform = '';
-                const delta = evento.clientY - inicioY;
-                arrastro = Math.abs(delta) > 10;
-                if (abiertaAlEmpezar && delta > 50) cerrarHoja();
-                else if (!abiertaAlEmpezar && delta < -40) abrirHoja();
+                soltarArrastre(evento, asa, (delta) => {
+                    if (delta > 50) cerrarHoja();
+                });
             });
 
-            window.addEventListener('scroll', () => {
-                const sobra = document.documentElement.scrollHeight -
-                    (window.scrollY + window.innerHeight);
-                if (sobra < 48) abrirHoja();
-            }, { passive: true });
+            if (location.hash === '#bebestibles') abrirHoja();
         }
 
         function renderRedes() {
