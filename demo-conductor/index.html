@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conductor</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css">
     <style>
         :root {
             --bg: #121417;
@@ -79,12 +80,50 @@
             margin-bottom: 14px;
         }
 
+        .identificacion {
+            display: grid;
+            grid-template-columns: 1fr 92px;
+            gap: 8px;
+            align-items: stretch;
+        }
+
+        .identificacion.sin-fotos { grid-template-columns: 1fr; }
+
         .escena-auto {
             position: relative;
             height: 280px;
             border-radius: 12px;
             overflow: hidden;
             background: #141820;
+        }
+
+        .fotos-auto {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .fotos-auto button {
+            appearance: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            width: 92px;
+            height: 88px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #0d0f12;
+            cursor: zoom-in;
+        }
+
+        .fotos-auto img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .poster-auto {
@@ -97,14 +136,17 @@
 
         model-viewer {
             display: block;
-            position: relative;
+            position: absolute;
+            inset: 0;
             width: 100%;
-            height: 280px;
+            height: 100%;
             background: transparent;
             --poster-color: transparent;
+            opacity: 0;
+            transition: opacity 0.35s ease;
         }
 
-        model-viewer[hidden] { display: none; }
+        model-viewer.listo { opacity: 1; }
 
         .patente {
             display: block;
@@ -328,30 +370,37 @@
         <h1 id="nombre"></h1>
 
         <section class="escena" aria-label="Identificar el auto">
-            <div class="escena-auto">
-                <svg class="poster-auto" viewBox="0 0 640 360" role="img" aria-hidden="true">
-                    <rect width="640" height="360" fill="#141820"/>
-                    <ellipse cx="320" cy="278" rx="200" ry="20" fill="#000" opacity="0.35"/>
-                    <g fill="#2c313a" stroke="#e8c547" stroke-width="6" stroke-linejoin="round">
-                        <path d="M86 256 v-20 h70 c12-44 36-68 72-68 h58 c26-46 70-70 118-70 h48 c38 0 64 16 86 48 h42 c26 0 38 16 38 36 v52 h-28 v22 H86 z"/>
-                    </g>
-                    <path fill="#3d4450" stroke="#e8c547" stroke-width="5" d="M278 104 h92 c22 0 42 10 58 32 H312 c-12-20-26-32-42-32z"/>
-                    <circle cx="198" cy="244" r="32" fill="#12141a" stroke="#e8c547" stroke-width="6"/>
-                    <circle cx="198" cy="244" r="12" fill="#e8c547"/>
-                    <circle cx="454" cy="244" r="32" fill="#12141a" stroke="#e8c547" stroke-width="6"/>
-                    <circle cx="454" cy="244" r="12" fill="#e8c547"/>
-                </svg>
-                <model-viewer
-                    id="auto3d"
-                    alt="Silueta genérica de un auto"
-                    hidden
-                    camera-controls
-                    auto-rotate
-                    shadow-intensity="1"
-                    exposure="1.05"
-                    camera-orbit="25deg 72deg 105%"
-                    touch-action="pan-y">
-                </model-viewer>
+            <div class="identificacion" id="identificacion">
+                <div class="escena-auto">
+                    <svg class="poster-auto" viewBox="0 0 640 360" role="img" aria-hidden="true">
+                        <rect width="640" height="360" fill="#141820"/>
+                        <ellipse cx="320" cy="278" rx="200" ry="20" fill="#000" opacity="0.35"/>
+                        <g fill="#2c313a" stroke="#e8c547" stroke-width="6" stroke-linejoin="round">
+                            <path d="M86 256 v-20 h70 c12-44 36-68 72-68 h58 c26-46 70-70 118-70 h48 c38 0 64 16 86 48 h42 c26 0 38 16 38 36 v52 h-28 v22 H86 z"/>
+                        </g>
+                        <path fill="#3d4450" stroke="#e8c547" stroke-width="5" d="M278 104 h92 c22 0 42 10 58 32 H312 c-12-20-26-32-42-32z"/>
+                        <circle cx="198" cy="244" r="32" fill="#12141a" stroke="#e8c547" stroke-width="6"/>
+                        <circle cx="198" cy="244" r="12" fill="#e8c547"/>
+                        <circle cx="454" cy="244" r="32" fill="#12141a" stroke="#e8c547" stroke-width="6"/>
+                        <circle cx="454" cy="244" r="12" fill="#e8c547"/>
+                    </svg>
+                    <model-viewer
+                        id="auto3d"
+                        alt="Auto en 3D, se puede girar"
+                        camera-controls
+                        auto-rotate
+                        auto-rotate-delay="0"
+                        rotation-per-second="18deg"
+                        shadow-intensity="1"
+                        exposure="1.15"
+                        environment-image="neutral"
+                        interaction-prompt="auto"
+                        loading="eager"
+                        reveal="auto"
+                        touch-action="none">
+                    </model-viewer>
+                </div>
+                <div class="fotos-auto" id="fotosAuto" aria-label="Fotos del auto"></div>
             </div>
             <span class="patente"><small>CHILE</small><span id="valorPatente"></span></span>
             <div class="datos-auto">
@@ -421,6 +470,7 @@
            DATOS DEL CONDUCTOR
 
            Inventados. Esto es lo único que se cambia para un llavero nuevo.
+           El auto: un archivo .glb (el modelo) y las fotos que tome el dueño.
            ================================================================== */
 
         const CONDUCTOR = {
@@ -446,9 +496,17 @@
             patente: 'RPKD-12',
             color: 'Negro',
             modelo: 'Hyundai Accent',
+            /* Archivo .glb del auto. Cuando tengas el modelo exacto,
+               ponlo en esta carpeta y deja esa ruta (no se arma con fotos). */
             glb: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Assets@main/Models/ToyCar/glTF-Binary/ToyCar.glb',
-            poster: 'auto-poster.svg',
-            nota: 'Silueta genérica: no es el auto real. Se identifica por el color negro y la patente RPKD-12.'
+            /* Fotos que toma el dueño (frente, costado, atrás).
+               Pueden ser archivos en fotos/ o un enlace. */
+            fotos: [
+                'https://images.unsplash.com/photo-1485291571150-772bcfc10da5?auto=format&fit=crop&w=400&q=60',
+                'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=400&q=60',
+                'https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=400&q=60'
+            ],
+            nota: 'El 3D se gira con el dedo. Al lado van las fotos del auto. El modelo es genérico; se identifica por el color negro y la patente RPKD-12.'
         };
 
         const FISCAL = {
@@ -463,6 +521,53 @@
 
         const ASOMO_HOJA = 72;
         let yaAbrioPorScroll = false;
+        let moduloPhotoSwipe = null;
+        const FOTO_ANCHO = 1600;
+        const FOTO_ALTO = 1067;
+
+        function urlFotoGrande(src) {
+            return String(src).replace(/w=\d+/, 'w=' + FOTO_ANCHO);
+        }
+
+        async function abrirFotosAuto(indice) {
+            const fotos = AUTO.fotos || [];
+            if (!fotos.length) return;
+            if (!moduloPhotoSwipe) {
+                moduloPhotoSwipe = await import('https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.esm.min.js');
+            }
+            const pswp = new moduloPhotoSwipe.default({
+                dataSource: fotos.map((src, i) => ({
+                    src: urlFotoGrande(src),
+                    width: FOTO_ANCHO,
+                    height: FOTO_ALTO,
+                    alt: 'Foto ' + (i + 1) + ' del auto'
+                })),
+                index: indice || 0,
+                bgOpacity: 0.92,
+                pinchToClose: true,
+                wheelToZoom: true
+            });
+            pswp.init();
+        }
+
+        function renderFotosAuto() {
+            const lista = document.getElementById('fotosAuto');
+            const caja = document.getElementById('identificacion');
+            const fotos = AUTO.fotos || [];
+            lista.replaceChildren();
+            caja.classList.toggle('sin-fotos', fotos.length === 0);
+            fotos.forEach((src, indice) => {
+                const boton = document.createElement('button');
+                boton.type = 'button';
+                boton.setAttribute('aria-label', 'Foto ' + (indice + 1) + ' del auto');
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = '';
+                boton.appendChild(img);
+                boton.addEventListener('click', () => abrirFotosAuto(indice));
+                lista.appendChild(boton);
+            });
+        }
 
         function textoCuenta() {
             return [
@@ -622,10 +727,11 @@
             document.getElementById('valorModelo').textContent = AUTO.modelo;
             document.getElementById('notaAuto').textContent = AUTO.nota;
             document.getElementById('notaPdf').textContent = FISCAL.nota;
+            renderFotosAuto();
             const auto3d = document.getElementById('auto3d');
-            auto3d.setAttribute('poster', AUTO.poster);
-            auto3d.addEventListener('load', () => {
-                auto3d.hidden = false;
+            auto3d.addEventListener('load', () => auto3d.classList.add('listo'));
+            auto3d.addEventListener('model-visibility', (evento) => {
+                if (evento.detail && evento.detail.visible) auto3d.classList.add('listo');
             });
             auto3d.setAttribute('src', AUTO.glb);
             document.getElementById('botonPdf').href = FISCAL.pdf;

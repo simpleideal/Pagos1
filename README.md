@@ -7,10 +7,10 @@ Tres muestras en el índice, tres usos distintos:
 
 1. **Cobro** — copiar datos de transferencia. Dos subtipos:
    - **Convencional:** Boutique (Luna Atelier).
-   - **Uber:** conductor (Diego Morales). Primero se ve el auto y la
-     patente; los documentos van arriba; la transferencia se abre en
-     una hoja, como los bebestibles de la carta. PDF de fiscalización
-     con clave `1234`.
+   - **Uber:** conductor (Diego Morales). Primero se ve el auto en 3D,
+     las fotos del dueño y la patente; los documentos van arriba; la
+     transferencia se abre en una hoja, como los bebestibles de la
+     carta. PDF de fiscalización con clave `1234`.
 2. **Obras Rivera** — portafolio de trabajos hechos. Las fotos se abren
    con [PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe).
 3. **Casa Fogón** — carta de restorán (foto, precio y tiempo por plato).
@@ -49,5 +49,6 @@ Cada plato puede llevar varias `fotos`; si hay más de una, rotan
 cada 4 segundos.
 
 Conductor (subtipo Uber del cobro): en `demo-conductor/index.html`,
-el bloque **DATOS DEL CONDUCTOR**. El PDF de muestra está en
+el bloque **DATOS DEL CONDUCTOR**. El `.glb` del auto y las fotos
+del dueño se cambian ahí. El PDF de muestra está en
 `demo-conductor/documentos/permiso-muestra.pdf` (clave `1234`).
