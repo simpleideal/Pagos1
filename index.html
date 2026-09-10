@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Muestras de llavero NFC</title>
-    <meta name="description" content="Tres muestras de llavero NFC: cobro, portafolio de obras y taller. Datos inventados.">
+    <meta name="description" content="Tres muestras de llavero NFC: cobro (boutique o Uber), portafolio de obras y carta. Datos inventados.">
     <style>
         :root {
             --bg: #f2f4f6;
@@ -13,6 +13,7 @@
             --accent: #1b365d;
             --cielo: #8eadd1;
             --obra: #0b7a7c;
+            --carta: #b4532a;
             --text: #1a222c;
             --muted: #5c6b7a;
         }
@@ -45,6 +46,7 @@
             article { display: flex; flex-direction: column; }
             .cuerpo { display: flex; flex-direction: column; flex: 1; }
             article ul { flex: 1; }
+            .subtipos { flex: 1; }
         }
 
         .logo-marca {
@@ -222,6 +224,67 @@
             color: #fffdf9;
         }
 
+        .subtipos {
+            display: grid;
+            gap: 10px;
+        }
+
+        .subtipo {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px;
+            background: #f7f9fb;
+        }
+
+        .subtipo.uber {
+            background: #1a1810;
+            border-color: rgba(232, 197, 71, 0.28);
+        }
+
+        .subtipo .etiqueta {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .subtipo.uber .etiqueta { color: #e8c547; }
+
+        .subtipo h3 {
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .subtipo.uber h3 { color: #fff8dc; }
+
+        .subtipo .negocio {
+            margin-bottom: 8px;
+        }
+
+        .subtipo.uber .negocio { color: #c4b896; }
+
+        .subtipo p.detalle {
+            color: var(--muted);
+            font-size: 0.82rem;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .subtipo.uber p.detalle { color: #c4b896; }
+
+        .subtipo a.abrir {
+            padding: 10px 12px;
+            font-size: 0.88rem;
+        }
+
+        .subtipo.uber a.abrir {
+            background: #e8c547;
+            color: #1a1810;
+        }
+
         a.abrir:active { transform: scale(0.98); }
 
         footer {
@@ -264,13 +327,24 @@
             <article>
                 <div class="preview claro"><span>Muestra 1 · cobro</span></div>
                 <div class="cuerpo">
-                    <h2>Boutique</h2>
-                    <p class="negocio">Luna Atelier · ropa y accesorios</p>
-                    <ul>
-                        <li>Página para copiar datos de transferencia</li>
-                        <li>Tema claro, dos bancos, Instagram</li>
-                    </ul>
-                    <a class="abrir" href="demo-boutique/">Abrir muestra</a>
+                    <h2>Cobro</h2>
+                    <p class="negocio">Copiar datos de transferencia. Dos subtipos.</p>
+                    <div class="subtipos">
+                        <div class="subtipo">
+                            <span class="etiqueta">Convencional</span>
+                            <h3>Boutique</h3>
+                            <p class="negocio">Luna Atelier · ropa y accesorios</p>
+                            <p class="detalle">Tema claro, dos bancos, Instagram.</p>
+                            <a class="abrir" href="demo-boutique/">Abrir boutique</a>
+                        </div>
+                        <div class="subtipo uber">
+                            <span class="etiqueta">Uber</span>
+                            <h3>Conductor</h3>
+                            <p class="negocio">Diego Morales · viaje</p>
+                            <p class="detalle">Patente, silueta 3D genérica y PDF de fiscalización (clave 1234).</p>
+                            <a class="abrir" href="demo-conductor/">Abrir conductor</a>
+                        </div>
+                    </div>
                 </div>
             </article>
 
@@ -283,6 +357,7 @@
                         <li>Presentarse con trabajos anteriores</li>
                         <li>Filtro por zona: ciudad, lago e interior</li>
                         <li>Foto, lugar, año y metros de cada obra</li>
+                        <li>Toca la foto y se abre a pantalla completa</li>
                     </ul>
                     <a class="abrir" href="demo-portafolio/">Abrir muestra</a>
                 </div>
@@ -296,6 +371,7 @@
                     <ul>
                         <li>Texto a la izquierda, foto a la derecha</li>
                         <li>Varias fotos del mismo plato, que rotan solas</li>
+                        <li>Toca la foto y se abre a pantalla completa</li>
                         <li>Bebestibles en una hoja que se asoma; se abre sola la primera vez</li>
                     </ul>
                     <a class="abrir" href="demo-carta/">Abrir muestra</a>

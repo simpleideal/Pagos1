@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conductor</title>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+    <style>
+        :root {
+            --bg: #121417;
+            --card: #1c2026;
+            --line: rgba(255, 255, 255, 0.10);
+            --accent: #e8c547;
+            --text: #f4f5f7;
+            --muted: #9aa3ad;
+            --ok: #1f8a4c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 50% -8%, #3a3420 0%, transparent 40%),
+                var(--bg);
+            padding: 22px 16px calc(36px + env(safe-area-inset-bottom, 0px));
+        }
+
+        main {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .oficio {
+            color: var(--accent);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            font-size: 1.7rem;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 6px;
+        }
+
+        .sub {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+        }
+
+        h2 {
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 0 0 12px;
+        }
+
+        .bloque {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+
+        .campo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .campo:last-of-type { border-bottom: none; }
+
+        .etiqueta {
+            display: block;
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .valor {
+            font-size: 1rem;
+            font-weight: 650;
+            word-break: break-word;
+        }
+
+        button, .boton {
+            appearance: none;
+            border: none;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .copiar {
+            flex-shrink: 0;
+            background: rgba(232, 197, 71, 0.14);
+            color: var(--accent);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .copiar.ok { background: var(--ok); color: #fff; }
+
+        .boton-ancho {
+            display: block;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            padding: 13px 14px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .principal {
+            background: var(--accent);
+            color: #1a1404;
+        }
+
+        .secundario {
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: transparent;
+        }
+
+        .nota {
+            color: var(--muted);
+            font-size: 0.82rem;
+            line-height: 1.45;
+            margin-top: 10px;
+        }
+
+        .patente {
+            display: block;
+            width: 100%;
+            margin: 4px 0 14px;
+            padding: 16px 12px 12px;
+            border-radius: 12px;
+            background: #f4f4f1;
+            color: #111;
+            text-align: center;
+            box-shadow: inset 0 0 0 3px #111;
+            letter-spacing: 0.18em;
+            font-weight: 800;
+            font-size: 2rem;
+            font-family: "Arial Black", Arial, sans-serif;
+        }
+
+        .patente small {
+            display: block;
+            letter-spacing: 0.28em;
+            font-size: 0.62rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #1d4f9c;
+        }
+
+        .datos-auto {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .dato-auto {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+
+        model-viewer {
+            display: block;
+            width: 100%;
+            height: 220px;
+            border-radius: 12px;
+            background: #0d0f12;
+            --poster-color: transparent;
+        }
+
+        .aviso-fiscal {
+            background: rgba(232, 197, 71, 0.08);
+            border: 1px dashed rgba(232, 197, 71, 0.35);
+            color: var(--accent);
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 10px;
+            padding: 8px 10px;
+            margin-bottom: 12px;
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 24px;
+            transform: translateX(-50%) translateY(12px);
+            background: #111;
+            color: #fff;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 20;
+        }
+
+        .toast.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <p class="oficio" id="oficio"></p>
+        <h1 id="nombre"></h1>
+        <p class="sub" id="resumen"></p>
+
+        <section class="bloque" aria-label="Datos de transferencia">
+            <h2>Transferencia</h2>
+            <div class="campo">
+                <div>
+                    <span class="etiqueta">Nombre</span>
+                    <p class="valor" id="valorNombre"></p>
+                </div>
+                <button type="button" class="copiar" data-copiar="nombre">Copiar</button>
+            </div>
+            <div class="campo">
+                <div>
+                    <span class="etiqueta">RUT</span>
+                    <p class="valor" id="valorRut"></p>
+                </div>
+                <button type="button" class="copiar" data-copiar="rut">Copiar</button>
+            </div>
+            <div class="campo">
+                <div>
+                    <span class="etiqueta">Banco</span>
+                    <p class="valor" id="valorBanco"></p>
+                </div>
+            </div>
+            <div class="campo">
+                <div>
+                    <span class="etiqueta">Tipo de cuenta</span>
+                    <p class="valor" id="valorTipo"></p>
+                </div>
+            </div>
+            <div class="campo">
+                <div>
+                    <span class="etiqueta">N° de cuenta</span>
+                    <p class="valor" id="valorCuenta"></p>
+                </div>
+                <button type="button" class="copiar" data-copiar="cuenta">Copiar</button>
+            </div>
+            <button type="button" class="boton-ancho principal" id="btnCopiarTodo">Copiar todos los datos</button>
+            <a class="boton-ancho secundario" id="botonWhatsapp" target="_blank" rel="noopener">Mandar comprobante por WhatsApp</a>
+        </section>
+
+        <section class="bloque" aria-label="Identificar el auto">
+            <h2>Este auto</h2>
+            <span class="patente"><small>CHILE</small><span id="valorPatente"></span></span>
+            <div class="datos-auto">
+                <div class="dato-auto">
+                    <span class="etiqueta">Color</span>
+                    <p class="valor" id="valorColor"></p>
+                </div>
+                <div class="dato-auto">
+                    <span class="etiqueta">Modelo</span>
+                    <p class="valor" id="valorModelo"></p>
+                </div>
+            </div>
+            <model-viewer
+                id="auto3d"
+                alt="Silueta genérica de un auto"
+                camera-controls
+                auto-rotate
+                shadow-intensity="1"
+                exposure="1.05"
+                touch-action="pan-y">
+            </model-viewer>
+            <p class="nota" id="notaAuto"></p>
+        </section>
+
+        <section class="bloque" aria-label="Documentos de fiscalización">
+            <h2>Fiscalización</h2>
+            <p class="aviso-fiscal">Para inspector · no para el pasajero</p>
+            <p class="nota" id="notaPdf"></p>
+            <a class="boton-ancho principal" id="botonPdf" download>Abrir PDF (clave 1234)</a>
+        </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+        /* ==================================================================
+           DATOS DEL CONDUCTOR
+
+           Inventados. Esto es lo único que se cambia para un llavero nuevo.
+           ================================================================== */
+
+        const CONDUCTOR = {
+            titulo: 'Conductor - Diego Morales',
+            oficio: 'Viaje · conductor',
+            nombre: 'Diego Morales',
+            resumen: 'Paga la carrera, identifica el auto y, si te fiscalizan, abre el PDF.'
+        };
+
+        const CUENTA = {
+            nombre: 'Diego Morales Vargas',
+            rut: '17.284.519-3',
+            banco: 'BancoEstado',
+            tipoCuenta: 'CuentaRUT',
+            cuenta: '17284519'
+        };
+
+        const CONTACTO = {
+            whatsapp: '56977778888',
+            mensajeWhatsapp: 'Hola Diego, te mando el comprobante de la transferencia.'
+        };
+
+        const AUTO = {
+            patente: 'RPKD-12',
+            color: 'Negro',
+            modelo: 'Hyundai Accent',
+            glb: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Assets@main/Models/ToyCar/glTF-Binary/ToyCar.glb',
+            poster: 'auto-poster.svg',
+            nota: 'Silueta genérica: no es el auto real. Se identifica por el color negro y la patente RPKD-12.'
+        };
+
+        const FISCAL = {
+            pdf: 'documentos/permiso-muestra.pdf',
+            clave: '1234',
+            nota: 'PDF de muestra, con clave. En este muñeco la clave es 1234. No es un documento real.'
+        };
+
+        /* ==================================================================
+           FIN DE LOS DATOS DEL CONDUCTOR
+           ================================================================== */
+
+        function textoCuenta() {
+            return [
+                'Nombre: ' + CUENTA.nombre,
+                'RUT: ' + CUENTA.rut,
+                'Banco: ' + CUENTA.banco,
+                'Tipo de cuenta: ' + CUENTA.tipoCuenta,
+                'Número de cuenta: ' + CUENTA.cuenta
+            ].join('\n');
+        }
+
+        function valorDe(clave) {
+            if (clave === 'nombre') return CUENTA.nombre;
+            if (clave === 'rut') return CUENTA.rut;
+            if (clave === 'cuenta') return CUENTA.cuenta;
+            return textoCuenta();
+        }
+
+        function copiaLegacy(texto) {
+            const area = document.createElement('textarea');
+            area.value = texto;
+            area.setAttribute('readonly', '');
+            area.style.position = 'fixed';
+            area.style.opacity = '0';
+            document.body.appendChild(area);
+            area.select();
+            let exito = false;
+            try {
+                exito = document.execCommand('copy');
+            } catch (e) {
+                exito = false;
+            }
+            document.body.removeChild(area);
+            return exito;
+        }
+
+        async function copiar(texto) {
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(texto);
+                    return true;
+                } catch (e) {
+                    /* cae al respaldo */
+                }
+            }
+            return copiaLegacy(texto);
+        }
+
+        let toastTimer;
+        function mostrarToast(mensaje) {
+            const toast = document.getElementById('toast');
+            toast.textContent = mensaje;
+            toast.classList.add('visible');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('visible'), 2200);
+        }
+
+        async function copiarCampo(clave, boton) {
+            const ok = await copiar(valorDe(clave));
+            if (boton) {
+                const original = boton.dataset.texto || boton.textContent;
+                boton.dataset.texto = original;
+                boton.textContent = ok ? 'Listo' : 'Error';
+                boton.classList.toggle('ok', ok);
+                setTimeout(() => {
+                    boton.textContent = original;
+                    boton.classList.remove('ok');
+                }, 1600);
+            }
+            mostrarToast(ok ? 'Copiado' : 'No se pudo copiar');
+        }
+
+        function aplicarConductor() {
+            document.title = CONDUCTOR.titulo;
+            document.getElementById('oficio').textContent = CONDUCTOR.oficio;
+            document.getElementById('nombre').textContent = CONDUCTOR.nombre;
+            document.getElementById('resumen').textContent = CONDUCTOR.resumen;
+            document.getElementById('valorNombre').textContent = CUENTA.nombre;
+            document.getElementById('valorRut').textContent = CUENTA.rut;
+            document.getElementById('valorBanco').textContent = CUENTA.banco;
+            document.getElementById('valorTipo').textContent = CUENTA.tipoCuenta;
+            document.getElementById('valorCuenta').textContent = CUENTA.cuenta;
+            document.getElementById('valorPatente').textContent = AUTO.patente;
+            document.getElementById('valorColor').textContent = AUTO.color;
+            document.getElementById('valorModelo').textContent = AUTO.modelo;
+            document.getElementById('notaAuto').textContent = AUTO.nota;
+            document.getElementById('notaPdf').textContent = FISCAL.nota;
+            document.getElementById('auto3d').setAttribute('src', AUTO.glb);
+            document.getElementById('auto3d').setAttribute('poster', AUTO.poster);
+            document.getElementById('botonPdf').href = FISCAL.pdf;
+            document.getElementById('botonWhatsapp').href =
+                'https://wa.me/' + CONTACTO.whatsapp +
+                '?text=' + encodeURIComponent(CONTACTO.mensajeWhatsapp);
+
+            document.querySelectorAll('[data-copiar]').forEach((boton) => {
+                boton.addEventListener('click', () => copiarCampo(boton.dataset.copiar, boton));
+            });
+            document.getElementById('btnCopiarTodo').addEventListener('click', (evento) => {
+                copiarCampo('todo', evento.currentTarget);
+            });
+        }
+
+        aplicarConductor();
+    </script>
+</body>
+</html>

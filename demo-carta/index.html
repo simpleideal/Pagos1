@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carta</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css">
     <style>
         :root {
             --bg: #f6efe6;
@@ -153,6 +154,7 @@
             border-radius: 12px;
             overflow: hidden;
             background: #e4d4c4;
+            cursor: zoom-in;
         }
 
         .pista {
@@ -540,6 +542,38 @@
         let seccionActiva = 'fondos';
         let carruselTimer = null;
         let yaAbrioPorScroll = false;
+        let moduloPhotoSwipe = null;
+        const FOTO_ANCHO = 1600;
+        const FOTO_ALTO = 1067;
+
+        function urlFotoGrande(src) {
+            return String(src).replace(/w=\d+/, 'w=' + FOTO_ANCHO);
+        }
+
+        async function abrirGaleriaPlato(fotos, titulo, indice) {
+            if (!fotos.length) return;
+            if (carruselTimer) {
+                clearInterval(carruselTimer);
+                carruselTimer = null;
+            }
+            if (!moduloPhotoSwipe) {
+                moduloPhotoSwipe = await import('https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.esm.min.js');
+            }
+            const pswp = new moduloPhotoSwipe.default({
+                dataSource: fotos.map((src) => ({
+                    src: urlFotoGrande(src),
+                    width: FOTO_ANCHO,
+                    height: FOTO_ALTO,
+                    alt: titulo
+                })),
+                index: indice || 0,
+                bgOpacity: 0.92,
+                pinchToClose: true,
+                wheelToZoom: true
+            });
+            pswp.on('close', () => arrancarCarruseles());
+            pswp.init();
+        }
 
         function fotosDe(plato) {
             if (plato.fotos && plato.fotos.length) return plato.fotos;
@@ -639,6 +673,21 @@
                 });
                 foto.appendChild(puntos);
             }
+
+            const abrir = () => {
+                abrirGaleriaPlato(fotos, plato.titulo, Number(pista.dataset.indice || 0));
+            };
+            foto.setAttribute('role', 'button');
+            foto.tabIndex = 0;
+            foto.title = 'Ver foto grande';
+            foto.setAttribute('aria-label', 'Ver fotos de ' + plato.titulo);
+            foto.addEventListener('click', abrir);
+            foto.addEventListener('keydown', (evento) => {
+                if (evento.key === 'Enter' || evento.key === ' ') {
+                    evento.preventDefault();
+                    abrir();
+                }
+            });
 
             articulo.appendChild(cuerpo);
             articulo.appendChild(foto);
