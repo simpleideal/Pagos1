@@ -25,7 +25,7 @@
             background:
                 radial-gradient(circle at 50% -8%, #3a3420 0%, transparent 40%),
                 var(--bg);
-            padding: 22px 16px calc(36px + env(safe-area-inset-bottom, 0px));
+            padding: 16px 16px calc(96px + env(safe-area-inset-bottom, 0px));
         }
 
         main {
@@ -34,54 +34,97 @@
             margin: 0 auto;
         }
 
+        .boton-docs {
+            display: block;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            background: var(--accent);
+            color: #1a1404;
+            font-weight: 700;
+            border-radius: 12px;
+            padding: 13px 14px;
+            margin-bottom: 8px;
+        }
+
+        .nota-docs {
+            color: var(--muted);
+            font-size: 0.78rem;
+            line-height: 1.4;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
         .oficio {
             color: var(--accent);
             font-size: 0.72rem;
             font-weight: 700;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        h1 {
-            font-size: 1.7rem;
-            letter-spacing: -0.03em;
-            line-height: 1.15;
             margin-bottom: 6px;
         }
 
-        .sub {
-            color: var(--muted);
-            font-size: 0.95rem;
-            margin-bottom: 18px;
-        }
-
-        h2 {
-            font-size: 0.75rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin: 0 0 12px;
-        }
-
-        .bloque {
-            background: var(--card);
-            border: 1px solid var(--line);
-            border-radius: 16px;
-            padding: 16px;
+        h1 {
+            font-size: 1.55rem;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
             margin-bottom: 14px;
         }
 
-        .campo {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--line);
+        .escena {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 14px;
         }
 
-        .campo:last-of-type { border-bottom: none; }
+        model-viewer {
+            display: block;
+            width: 100%;
+            height: 280px;
+            border-radius: 12px;
+            background: #0d0f12;
+            --poster-color: transparent;
+        }
+
+        .patente {
+            display: block;
+            width: 100%;
+            margin: 12px 0 0;
+            padding: 16px 12px 12px;
+            border-radius: 12px;
+            background: #f4f4f1;
+            color: #111;
+            text-align: center;
+            box-shadow: inset 0 0 0 3px #111;
+            letter-spacing: 0.18em;
+            font-weight: 800;
+            font-size: 2rem;
+            font-family: "Arial Black", Arial, sans-serif;
+        }
+
+        .patente small {
+            display: block;
+            letter-spacing: 0.28em;
+            font-size: 0.62rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #1d4f9c;
+        }
+
+        .datos-auto {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .dato-auto {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
 
         .etiqueta {
             display: block;
@@ -98,6 +141,32 @@
             font-weight: 650;
             word-break: break-word;
         }
+
+        .nota {
+            color: var(--muted);
+            font-size: 0.82rem;
+            line-height: 1.45;
+            margin-top: 12px;
+        }
+
+        h2 {
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 0 0 8px;
+        }
+
+        .campo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .campo:last-of-type { border-bottom: none; }
 
         button, .boton {
             appearance: none;
@@ -140,75 +209,78 @@
             background: transparent;
         }
 
-        .nota {
-            color: var(--muted);
-            font-size: 0.82rem;
-            line-height: 1.45;
-            margin-top: 10px;
+        .velo {
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 8, 10, 0.55);
+            z-index: 40;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
         }
 
-        .patente {
-            display: block;
-            width: 100%;
-            margin: 4px 0 14px;
-            padding: 16px 12px 12px;
-            border-radius: 12px;
-            background: #f4f4f1;
-            color: #111;
+        .velo.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .hoja {
+            position: fixed;
+            left: 50%;
+            bottom: 0;
+            width: min(420px, 100%);
+            height: min(86vh, 640px);
+            transform: translate(-50%, calc(100% - 72px));
+            background: var(--card);
+            border-radius: 22px 22px 0 0;
+            box-shadow: 0 -10px 32px rgba(0, 0, 0, 0.35);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.28s ease;
+            touch-action: none;
+        }
+
+        .hoja.abierta { transform: translate(-50%, 0); }
+        .hoja.arrastrando { transition: none; }
+
+        .hoja-cabeza {
+            flex-shrink: 0;
+            padding: 10px 16px 8px;
             text-align: center;
-            box-shadow: inset 0 0 0 3px #111;
-            letter-spacing: 0.18em;
-            font-weight: 800;
-            font-size: 2rem;
-            font-family: "Arial Black", Arial, sans-serif;
+            cursor: grab;
         }
 
-        .patente small {
+        .asa {
             display: block;
-            letter-spacing: 0.28em;
-            font-size: 0.62rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: #1d4f9c;
+            width: 36px;
+            height: 4px;
+            margin: 0 auto 10px;
+            border-radius: 999px;
+            background: #4a4538;
         }
 
-        .datos-auto {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 12px;
+        .hoja-rubro {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-bottom: 2px;
         }
 
-        .dato-auto {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 10px;
-            padding: 10px 12px;
+        .hoja-titulo {
+            font-size: 1.25rem;
+            font-weight: 750;
         }
 
-        model-viewer {
-            display: block;
-            width: 100%;
-            height: 220px;
-            border-radius: 12px;
-            background: #0d0f12;
-            --poster-color: transparent;
-        }
-
-        .aviso-fiscal {
-            background: rgba(232, 197, 71, 0.08);
-            border: 1px dashed rgba(232, 197, 71, 0.35);
-            color: var(--accent);
-            font-size: 0.8rem;
-            font-weight: 700;
-            border-radius: 10px;
-            padding: 8px 10px;
-            margin-bottom: 12px;
+        .hoja-cuerpo {
+            overflow-y: auto;
+            padding: 4px 16px 28px;
+            touch-action: pan-y;
         }
 
         .toast {
             position: fixed;
             left: 50%;
-            bottom: 24px;
+            bottom: 88px;
             transform: translateX(-50%) translateY(12px);
             background: #111;
             color: #fff;
@@ -220,7 +292,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s ease, transform 0.2s ease;
-            z-index: 20;
+            z-index: 60;
         }
 
         .toast.visible {
@@ -231,12 +303,45 @@
 </head>
 <body>
     <main>
+        <a class="boton-docs" id="botonPdf" target="_blank" rel="noopener">Documentos de persona y vehículo</a>
+        <p class="nota-docs" id="notaPdf"></p>
+
         <p class="oficio" id="oficio"></p>
         <h1 id="nombre"></h1>
-        <p class="sub" id="resumen"></p>
 
-        <section class="bloque" aria-label="Datos de transferencia">
-            <h2>Transferencia</h2>
+        <section class="escena" aria-label="Identificar el auto">
+            <model-viewer
+                id="auto3d"
+                alt="Silueta genérica de un auto"
+                camera-controls
+                auto-rotate
+                shadow-intensity="1"
+                exposure="1.05"
+                touch-action="pan-y">
+            </model-viewer>
+            <span class="patente"><small>CHILE</small><span id="valorPatente"></span></span>
+            <div class="datos-auto">
+                <div class="dato-auto">
+                    <span class="etiqueta">Color</span>
+                    <p class="valor" id="valorColor"></p>
+                </div>
+                <div class="dato-auto">
+                    <span class="etiqueta">Modelo</span>
+                    <p class="valor" id="valorModelo"></p>
+                </div>
+            </div>
+            <p class="nota" id="notaAuto"></p>
+        </section>
+    </main>
+
+    <div class="velo" id="velo" hidden></div>
+    <aside class="hoja" id="hoja" aria-label="Datos de transferencia">
+        <div class="hoja-cabeza" id="asa">
+            <span class="asa" aria-hidden="true"></span>
+            <p class="hoja-rubro">Pagar la carrera</p>
+            <p class="hoja-titulo">Transferencia</p>
+        </div>
+        <div class="hoja-cuerpo">
             <div class="campo">
                 <div>
                     <span class="etiqueta">Nombre</span>
@@ -272,40 +377,8 @@
             </div>
             <button type="button" class="boton-ancho principal" id="btnCopiarTodo">Copiar todos los datos</button>
             <a class="boton-ancho secundario" id="botonWhatsapp" target="_blank" rel="noopener">Mandar comprobante por WhatsApp</a>
-        </section>
-
-        <section class="bloque" aria-label="Identificar el auto">
-            <h2>Este auto</h2>
-            <span class="patente"><small>CHILE</small><span id="valorPatente"></span></span>
-            <div class="datos-auto">
-                <div class="dato-auto">
-                    <span class="etiqueta">Color</span>
-                    <p class="valor" id="valorColor"></p>
-                </div>
-                <div class="dato-auto">
-                    <span class="etiqueta">Modelo</span>
-                    <p class="valor" id="valorModelo"></p>
-                </div>
-            </div>
-            <model-viewer
-                id="auto3d"
-                alt="Silueta genérica de un auto"
-                camera-controls
-                auto-rotate
-                shadow-intensity="1"
-                exposure="1.05"
-                touch-action="pan-y">
-            </model-viewer>
-            <p class="nota" id="notaAuto"></p>
-        </section>
-
-        <section class="bloque" aria-label="Documentos de fiscalización">
-            <h2>Fiscalización</h2>
-            <p class="aviso-fiscal">Para inspector · no para el pasajero</p>
-            <p class="nota" id="notaPdf"></p>
-            <a class="boton-ancho principal" id="botonPdf" download>Abrir PDF (clave 1234)</a>
-        </section>
-    </main>
+        </div>
+    </aside>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -319,8 +392,7 @@
         const CONDUCTOR = {
             titulo: 'Conductor - Diego Morales',
             oficio: 'Viaje · conductor',
-            nombre: 'Diego Morales',
-            resumen: 'Paga la carrera, identifica el auto y, si te fiscalizan, abre el PDF.'
+            nombre: 'Diego Morales'
         };
 
         const CUENTA = {
@@ -348,12 +420,15 @@
         const FISCAL = {
             pdf: 'documentos/permiso-muestra.pdf',
             clave: '1234',
-            nota: 'PDF de muestra, con clave. En este muñeco la clave es 1234. No es un documento real.'
+            nota: 'Para inspector. PDF de muestra, persona y vehículo. Clave 1234.'
         };
 
         /* ==================================================================
            FIN DE LOS DATOS DEL CONDUCTOR
            ================================================================== */
+
+        const ASOMO_HOJA = 72;
+        let yaAbrioPorScroll = false;
 
         function textoCuenta() {
             return [
@@ -426,11 +501,81 @@
             mostrarToast(ok ? 'Copiado' : 'No se pudo copiar');
         }
 
+        function abrirHoja() {
+            document.getElementById('hoja').classList.add('abierta');
+            const velo = document.getElementById('velo');
+            velo.hidden = false;
+            velo.classList.add('visible');
+        }
+
+        function cerrarHoja() {
+            document.getElementById('hoja').classList.remove('abierta');
+            const velo = document.getElementById('velo');
+            velo.classList.remove('visible');
+            velo.hidden = true;
+        }
+
+        function arrancarHoja() {
+            const hoja = document.getElementById('hoja');
+            const asa = document.getElementById('asa');
+            const velo = document.getElementById('velo');
+            let inicioY = 0;
+            let abiertaAlEmpezar = false;
+            let arrastro = false;
+
+            asa.addEventListener('click', (evento) => {
+                if (arrastro) {
+                    arrastro = false;
+                    evento.preventDefault();
+                    return;
+                }
+                if (hoja.classList.contains('abierta')) cerrarHoja();
+                else abrirHoja();
+            });
+
+            velo.addEventListener('click', cerrarHoja);
+
+            asa.addEventListener('pointerdown', (evento) => {
+                inicioY = evento.clientY;
+                abiertaAlEmpezar = hoja.classList.contains('abierta');
+                hoja.classList.add('arrastrando');
+                asa.setPointerCapture(evento.pointerId);
+            });
+
+            asa.addEventListener('pointermove', (evento) => {
+                if (!asa.hasPointerCapture(evento.pointerId)) return;
+                const delta = evento.clientY - inicioY;
+                const base = abiertaAlEmpezar ? 0 : hoja.offsetHeight - ASOMO_HOJA;
+                const siguiente = Math.max(0, Math.min(hoja.offsetHeight - ASOMO_HOJA, base + delta));
+                hoja.style.transform = 'translate(-50%, ' + siguiente + 'px)';
+            });
+
+            asa.addEventListener('pointerup', (evento) => {
+                if (!asa.hasPointerCapture(evento.pointerId)) return;
+                asa.releasePointerCapture(evento.pointerId);
+                hoja.classList.remove('arrastrando');
+                hoja.style.transform = '';
+                const delta = evento.clientY - inicioY;
+                arrastro = Math.abs(delta) > 10;
+                if (abiertaAlEmpezar && delta > 50) cerrarHoja();
+                else if (!abiertaAlEmpezar && delta < -40) abrirHoja();
+            });
+
+            window.addEventListener('scroll', () => {
+                if (yaAbrioPorScroll) return;
+                const sobra = document.documentElement.scrollHeight -
+                    (window.scrollY + window.innerHeight);
+                if (sobra < 48) {
+                    yaAbrioPorScroll = true;
+                    abrirHoja();
+                }
+            }, { passive: true });
+        }
+
         function aplicarConductor() {
             document.title = CONDUCTOR.titulo;
             document.getElementById('oficio').textContent = CONDUCTOR.oficio;
             document.getElementById('nombre').textContent = CONDUCTOR.nombre;
-            document.getElementById('resumen').textContent = CONDUCTOR.resumen;
             document.getElementById('valorNombre').textContent = CUENTA.nombre;
             document.getElementById('valorRut').textContent = CUENTA.rut;
             document.getElementById('valorBanco').textContent = CUENTA.banco;
@@ -454,6 +599,7 @@
             document.getElementById('btnCopiarTodo').addEventListener('click', (evento) => {
                 copiarCampo('todo', evento.currentTarget);
             });
+            arrancarHoja();
         }
 
         aplicarConductor();
