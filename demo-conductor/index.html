@@ -341,6 +341,7 @@
             color: 'Negro',
             modelo: 'Hyundai Accent',
             glb: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Assets@main/Models/ToyCar/glTF-Binary/ToyCar.glb',
+            poster: 'auto-poster.svg',
             nota: 'Silueta genérica: no es el auto real. Se identifica por el color negro y la patente RPKD-12.'
         };
 
@@ -441,6 +442,7 @@
             document.getElementById('notaAuto').textContent = AUTO.nota;
             document.getElementById('notaPdf').textContent = FISCAL.nota;
             document.getElementById('auto3d').setAttribute('src', AUTO.glb);
+            document.getElementById('auto3d').setAttribute('poster', AUTO.poster);
             document.getElementById('botonPdf').href = FISCAL.pdf;
             document.getElementById('botonWhatsapp').href =
                 'https://wa.me/' + CONTACTO.whatsapp +
