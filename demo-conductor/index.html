@@ -97,14 +97,17 @@
 
         model-viewer {
             display: block;
-            position: relative;
+            position: absolute;
+            inset: 0;
             width: 100%;
-            height: 280px;
+            height: 100%;
             background: transparent;
             --poster-color: transparent;
+            opacity: 0;
+            transition: opacity 0.35s ease;
         }
 
-        model-viewer[hidden] { display: none; }
+        model-viewer.listo { opacity: 1; }
 
         .patente {
             display: block;
@@ -343,14 +346,18 @@
                 </svg>
                 <model-viewer
                     id="auto3d"
-                    alt="Silueta genérica de un auto"
-                    hidden
+                    alt="Auto en 3D, se puede girar"
                     camera-controls
                     auto-rotate
+                    auto-rotate-delay="0"
+                    rotation-per-second="18deg"
                     shadow-intensity="1"
-                    exposure="1.05"
-                    camera-orbit="25deg 72deg 105%"
-                    touch-action="pan-y">
+                    exposure="1.15"
+                    environment-image="neutral"
+                    interaction-prompt="auto"
+                    loading="eager"
+                    reveal="auto"
+                    touch-action="none">
                 </model-viewer>
             </div>
             <span class="patente"><small>CHILE</small><span id="valorPatente"></span></span>
@@ -448,7 +455,7 @@
             modelo: 'Hyundai Accent',
             glb: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Assets@main/Models/ToyCar/glTF-Binary/ToyCar.glb',
             poster: 'auto-poster.svg',
-            nota: 'Silueta genérica: no es el auto real. Se identifica por el color negro y la patente RPKD-12.'
+            nota: 'Modelo 3D genérico: gíralo con el dedo. No es el auto real; se identifica por el color negro y la patente RPKD-12.'
         };
 
         const FISCAL = {
@@ -623,9 +630,9 @@
             document.getElementById('notaAuto').textContent = AUTO.nota;
             document.getElementById('notaPdf').textContent = FISCAL.nota;
             const auto3d = document.getElementById('auto3d');
-            auto3d.setAttribute('poster', AUTO.poster);
-            auto3d.addEventListener('load', () => {
-                auto3d.hidden = false;
+            auto3d.addEventListener('load', () => auto3d.classList.add('listo'));
+            auto3d.addEventListener('model-visibility', (evento) => {
+                if (evento.detail && evento.detail.visible) auto3d.classList.add('listo');
             });
             auto3d.setAttribute('src', AUTO.glb);
             document.getElementById('botonPdf').href = FISCAL.pdf;
