@@ -7,8 +7,9 @@ Tres muestras en el índice, tres usos distintos:
 
 1. **Cobro** — copiar datos de transferencia. Dos subtipos:
    - **Convencional:** Boutique (Luna Atelier).
-   - **Uber:** conductor (Diego Morales). Misma idea de cobro, más
-     patente, silueta 3D genérica del auto y un PDF de fiscalización
+   - **Uber:** conductor (Diego Morales). Primero se ve el auto y la
+     patente; los documentos van arriba; la transferencia se abre en
+     una hoja, como los bebestibles de la carta. PDF de fiscalización
      con clave `1234`.
 2. **Obras Rivera** — portafolio de trabajos hechos. Las fotos se abren
    con [PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe).
