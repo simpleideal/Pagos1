@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Muestras de llavero NFC</title>
-    <meta name="description" content="Tres muestras de llavero NFC: cobro, portafolio de obras y taller. Datos inventados.">
+    <meta name="description" content="Cuatro muestras de llavero NFC: cobro, portafolio, carta y conductor. Datos inventados.">
     <style>
         :root {
             --bg: #f2f4f6;
@@ -13,6 +13,8 @@
             --accent: #1b365d;
             --cielo: #8eadd1;
             --obra: #0b7a7c;
+            --carta: #b4532a;
+            --viaje: #c9a227;
             --text: #1a222c;
             --muted: #5c6b7a;
         }
@@ -41,7 +43,7 @@
             h1 { font-size: 2.35rem; max-width: 16ch; }
             .lead { max-width: 38rem; font-size: 1.05rem; }
             .pasos { grid-template-columns: repeat(3, 1fr); margin-bottom: 36px; }
-            .muestras { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
+            .muestras { grid-template-columns: repeat(2, 1fr); align-items: stretch; }
             article { display: flex; flex-direction: column; }
             .cuerpo { display: flex; flex-direction: column; flex: 1; }
             article ul { flex: 1; }
@@ -158,6 +160,7 @@
         .claro { background: linear-gradient(180deg, #d7e4f2 0%, #1b365d 100%); color: #ffffff; }
         .obra { background: linear-gradient(180deg, #0b7a7c 0%, #0e2a2b 100%); color: #e8f4f4; }
         .carta { background: linear-gradient(180deg, #f3d2b8 0%, #b4532a 100%); color: #3a1c10; }
+        .viaje { background: linear-gradient(180deg, #e8c547 0%, #1a1810 100%); color: #fff8dc; }
 
         .cuerpo { padding: 16px 16px 18px; }
 
@@ -222,6 +225,13 @@
             color: #fffdf9;
         }
 
+        article.viaje-card li::before { background: #c9a227; }
+
+        article.viaje-card a.abrir {
+            background: #1a1810;
+            color: #e8c547;
+        }
+
         a.abrir:active { transform: scale(0.98); }
 
         footer {
@@ -242,7 +252,7 @@
         <h1>Llaveros NFC</h1>
         <p class="lead">
             El cliente acerca el teléfono al llavero y se abre una página.
-            Tres muestras distintas: cobro, portafolio de obras y carta de restorán.
+            Cuatro muestras distintas: cobro, portafolio de obras, carta de restorán y conductor.
         </p>
 
         <section class="pasos" aria-label="Cómo se usa">
@@ -252,7 +262,7 @@
             </div>
             <div class="paso">
                 <b>2</b>
-                <p><strong>Ve cobro, obras o la carta.</strong> Cada llavero abre un uso distinto.</p>
+                <p><strong>Ve cobro, obras, la carta o el viaje.</strong> Cada llavero abre un uso distinto.</p>
             </div>
             <div class="paso">
                 <b>3</b>
@@ -283,6 +293,7 @@
                         <li>Presentarse con trabajos anteriores</li>
                         <li>Filtro por zona: ciudad, lago e interior</li>
                         <li>Foto, lugar, año y metros de cada obra</li>
+                        <li>Toca la foto y se abre a pantalla completa</li>
                     </ul>
                     <a class="abrir" href="demo-portafolio/">Abrir muestra</a>
                 </div>
@@ -296,9 +307,24 @@
                     <ul>
                         <li>Texto a la izquierda, foto a la derecha</li>
                         <li>Varias fotos del mismo plato, que rotan solas</li>
+                        <li>Toca la foto y se abre a pantalla completa</li>
                         <li>Bebestibles en una hoja que se asoma; se abre sola la primera vez</li>
                     </ul>
                     <a class="abrir" href="demo-carta/">Abrir muestra</a>
+                </div>
+            </article>
+
+            <article class="viaje-card">
+                <div class="preview viaje"><span>Muestra 4 · conductor</span></div>
+                <div class="cuerpo">
+                    <h2>Conductor</h2>
+                    <p class="negocio">Diego Morales · viaje</p>
+                    <ul>
+                        <li>Copiar datos de transferencia y mandar el comprobante</li>
+                        <li>Patente, color y silueta 3D genérica del auto</li>
+                        <li>PDF de fiscalización con clave 1234</li>
+                    </ul>
+                    <a class="abrir" href="demo-conductor/">Abrir muestra</a>
                 </div>
             </article>
         </section>

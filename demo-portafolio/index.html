@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portafolio de obras</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.css">
     <style>
         :root {
             --bg: #f3f5f6;
@@ -131,6 +132,7 @@
             height: 168px;
             object-fit: cover;
             background: #d8dee2;
+            cursor: zoom-in;
         }
 
         .obra { padding: 12px 14px 14px; }
@@ -292,6 +294,35 @@
            ================================================================== */
 
         let zonaActiva = 'todas';
+        let moduloPhotoSwipe = null;
+        const FOTO_ANCHO = 1600;
+        const FOTO_ALTO = 1067;
+
+        function urlFotoGrande(src) {
+            return String(src).replace(/w=\d+/, 'w=' + FOTO_ANCHO);
+        }
+
+        async function abrirGaleria(indice) {
+            const obras = obrasFiltradas();
+            if (!obras.length) return;
+            if (!moduloPhotoSwipe) {
+                moduloPhotoSwipe = await import('https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.esm.min.js');
+            }
+            const pswp = new moduloPhotoSwipe.default({
+                dataSource: obras.map((obra) => ({
+                    src: urlFotoGrande(obra.foto),
+                    width: FOTO_ANCHO,
+                    height: FOTO_ALTO,
+                    alt: obra.titulo,
+                    caption: [obra.titulo, obra.lugar, obra.anio].filter(Boolean).join(' · ')
+                })),
+                index: indice || 0,
+                bgOpacity: 0.92,
+                pinchToClose: true,
+                wheelToZoom: true
+            });
+            pswp.init();
+        }
 
         function obrasFiltradas() {
             if (zonaActiva === 'todas') return OBRAS;
@@ -328,13 +359,24 @@
                 return;
             }
 
-            filas.forEach((obra) => {
+            filas.forEach((obra, indice) => {
                 const articulo = document.createElement('article');
                 const img = document.createElement('img');
                 img.src = obra.foto;
                 img.alt = obra.titulo;
                 img.loading = 'lazy';
                 img.referrerPolicy = 'no-referrer';
+                img.setAttribute('role', 'button');
+                img.tabIndex = 0;
+                img.title = 'Ver foto grande';
+                const abrir = () => abrirGaleria(indice);
+                img.addEventListener('click', abrir);
+                img.addEventListener('keydown', (evento) => {
+                    if (evento.key === 'Enter' || evento.key === ' ') {
+                        evento.preventDefault();
+                        abrir();
+                    }
+                });
 
                 const cuerpo = document.createElement('div');
                 cuerpo.className = 'obra';
