@@ -346,6 +346,15 @@
             text-align: center;
         }
 
+        /* Lo lee quien paga (el tercero), no el cliente que recibe el WhatsApp. */
+        .aviso-voucher {
+            font-size: 0.8rem;
+            color: var(--text-main);
+            line-height: 1.45;
+            margin-top: 12px;
+            text-align: center;
+        }
+
         /* El pie de redes se llena desde CONTACTO. Sin enlace, queda oculto. */
         .pie-redes {
             display: flex;
@@ -689,6 +698,10 @@
             Antes de confirmar, revisa que el banco y el número de cuenta hayan
             quedado bien.
         </p>
+        <p class="aviso-voucher">
+            📌 <strong>Importante:</strong> sube tu voucher por WhatsApp
+            o muéstraselo a quien te está cobrando.
+        </p>
 
         <footer class="pie-redes" id="pieRedes" hidden>
             <a id="botonInstagram" class="red-social" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
@@ -775,7 +788,7 @@
             correo: 'pagos@lunaatelier.example',
             // Solo dígitos con código de país, sin + ni espacios.
             whatsapp: '56911112222',
-            mensajeWhatsapp: 'Hola Camila. 📌 Importante: sube tu voucher.',
+            mensajeWhatsapp: 'Hola Camila, te aviso que haré la transferencia.',
             archivoVcard: 'Luna_Atelier.vcf',
             instagram: 'https://www.instagram.com/lunaatelier.demo'
         };

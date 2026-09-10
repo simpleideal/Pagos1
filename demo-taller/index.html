@@ -306,6 +306,15 @@
             text-align: center;
         }
 
+        /* Lo lee quien paga (el tercero), no el cliente que recibe el WhatsApp. */
+        .aviso-voucher {
+            font-size: 0.8rem;
+            color: var(--text-main);
+            line-height: 1.45;
+            margin-top: 12px;
+            text-align: center;
+        }
+
         .whatsapp-float {
             position: fixed;
             bottom: calc(24px + env(safe-area-inset-bottom, 0px));
@@ -606,6 +615,10 @@
             Antes de confirmar, revisa que el banco y el número de cuenta hayan
             quedado bien.
         </p>
+        <p class="aviso-voucher">
+            📌 <strong>Importante:</strong> sube tu voucher por WhatsApp
+            o muéstraselo a quien te está cobrando.
+        </p>
     </div>
 
     <a id="botonWhatsapp" class="whatsapp-float" target="_blank" rel="noopener" aria-label="WhatsApp">
@@ -680,7 +693,7 @@
             correo: 'cobros@tallernorte.example',
             // Solo dígitos con código de país, sin + ni espacios.
             whatsapp: '56933334444',
-            mensajeWhatsapp: 'Hola Pedro. 📌 Importante: sube tu voucher.',
+            mensajeWhatsapp: 'Hola Pedro, te aviso que haré la transferencia.',
             archivoVcard: 'Taller_Norte.vcf'
         };
 

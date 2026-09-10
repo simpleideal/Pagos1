@@ -317,6 +317,15 @@
             text-align: center;
         }
 
+        /* Lo lee quien paga (el tercero), no el cliente que recibe el WhatsApp. */
+        .aviso-voucher {
+            font-size: 0.8rem;
+            color: var(--text-main);
+            line-height: 1.45;
+            margin-top: 12px;
+            text-align: center;
+        }
+
         .redes {
             display: flex;
             justify-content: center;
@@ -688,6 +697,10 @@
             Antes de confirmar, revisa que el banco y el número de cuenta hayan
             quedado bien.
         </p>
+        <p class="aviso-voucher">
+            📌 <strong>Importante:</strong> sube tu voucher por WhatsApp
+            o muéstraselo a quien te está cobrando.
+        </p>
 
         <nav class="redes" id="redes" hidden aria-label="Redes sociales"></nav>
     </div>
@@ -764,7 +777,7 @@
             correo: 'hola@verdesegunda.example',
             // Solo dígitos con código de país, sin + ni espacios. Vacío: sin botón.
             whatsapp: '56922223333',
-            mensajeWhatsapp: 'Hola Martina. 📌 Importante: sube tu voucher.',
+            mensajeWhatsapp: 'Hola Martina, te aviso que haré la transferencia.',
             archivoVcard: 'Verde_Segunda.vcf',
             // "red" es una clave de ICONOS_REDES. Sin entradas, el pie no se muestra.
             redes: [

@@ -13,7 +13,12 @@ Tres muestras en el índice, tres usos distintos:
 pero ya no son muestras del índice.
 
 La plantilla de cobro para un cliente real vive en
-[`simpleideal/cobro`](https://github.com/simpleideal/cobro).
+[`simpleideal/cobro`](https://github.com/simpleideal/cobro). Ahí está
+documentada la idea práctica de los llaveros NFC (incluido Uber más
+adelante): el aviso de voucher lo lee quien paga, en la página; el
+WhatsApp le avisa a quien cobra que le van a transferir. Las muestras
+de cobro de este repo siguen esa separación. No aplica a Obras Rivera
+(cotización) ni a Casa Fogón (reserva).
 
 ## Abrir las muestras
 
