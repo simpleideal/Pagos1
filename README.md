@@ -49,6 +49,7 @@ Cada plato puede llevar varias `fotos`; si hay más de una, rotan
 cada 4 segundos.
 
 Conductor (subtipo Uber del cobro): en `demo-conductor/index.html`,
-el bloque **DATOS DEL CONDUCTOR**. El `.glb` del auto y las fotos
-del dueño se cambian ahí. El PDF de muestra está en
+el bloque **DATOS DEL CONDUCTOR**. El modelo 3D es
+`demo-conductor/modelos/auto.glb` (solo el auto). Las fotos del dueño
+se cambian en `fotos`. El PDF de muestra está en
 `demo-conductor/documentos/permiso-muestra.pdf` (clave `1234`).
