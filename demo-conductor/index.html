@@ -147,6 +147,7 @@
         }
 
         model-viewer.listo { opacity: 1; }
+        .escena-auto.listo .poster-auto { opacity: 0; }
 
         .patente {
             display: block;
@@ -497,8 +498,8 @@
             color: 'Negro',
             modelo: 'Hyundai Accent',
             /* Archivo .glb del auto. Cuando tengas el modelo exacto,
-               ponlo en esta carpeta y deja esa ruta (no se arma con fotos). */
-            glb: 'https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Assets@main/Models/ToyCar/glTF-Binary/ToyCar.glb',
+               reemplaza modelos/auto.glb (solo el auto, sin escenario). */
+            glb: 'modelos/auto.glb',
             /* Fotos que toma el dueño (frente, costado, atrás).
                Pueden ser archivos en fotos/ o un enlace. */
             fotos: [
@@ -729,9 +730,14 @@
             document.getElementById('notaPdf').textContent = FISCAL.nota;
             renderFotosAuto();
             const auto3d = document.getElementById('auto3d');
-            auto3d.addEventListener('load', () => auto3d.classList.add('listo'));
+            const marcarListo = () => {
+                auto3d.classList.add('listo');
+                const caja = auto3d.closest('.escena-auto');
+                if (caja) caja.classList.add('listo');
+            };
+            auto3d.addEventListener('load', marcarListo);
             auto3d.addEventListener('model-visibility', (evento) => {
-                if (evento.detail && evento.detail.visible) auto3d.classList.add('listo');
+                if (evento.detail && evento.detail.visible) marcarListo();
             });
             auto3d.setAttribute('src', AUTO.glb);
             document.getElementById('botonPdf').href = FISCAL.pdf;
