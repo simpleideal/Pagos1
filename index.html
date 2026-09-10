@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Muestras de llavero NFC</title>
-    <meta name="description" content="Cuatro muestras de llavero NFC: cobro, portafolio, carta y conductor. Datos inventados.">
+    <meta name="description" content="Tres muestras de llavero NFC: cobro (boutique o Uber), portafolio de obras y carta. Datos inventados.">
     <style>
         :root {
             --bg: #f2f4f6;
@@ -14,7 +14,6 @@
             --cielo: #8eadd1;
             --obra: #0b7a7c;
             --carta: #b4532a;
-            --viaje: #c9a227;
             --text: #1a222c;
             --muted: #5c6b7a;
         }
@@ -43,10 +42,11 @@
             h1 { font-size: 2.35rem; max-width: 16ch; }
             .lead { max-width: 38rem; font-size: 1.05rem; }
             .pasos { grid-template-columns: repeat(3, 1fr); margin-bottom: 36px; }
-            .muestras { grid-template-columns: repeat(2, 1fr); align-items: stretch; }
+            .muestras { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
             article { display: flex; flex-direction: column; }
             .cuerpo { display: flex; flex-direction: column; flex: 1; }
             article ul { flex: 1; }
+            .subtipos { flex: 1; }
         }
 
         .logo-marca {
@@ -160,7 +160,6 @@
         .claro { background: linear-gradient(180deg, #d7e4f2 0%, #1b365d 100%); color: #ffffff; }
         .obra { background: linear-gradient(180deg, #0b7a7c 0%, #0e2a2b 100%); color: #e8f4f4; }
         .carta { background: linear-gradient(180deg, #f3d2b8 0%, #b4532a 100%); color: #3a1c10; }
-        .viaje { background: linear-gradient(180deg, #e8c547 0%, #1a1810 100%); color: #fff8dc; }
 
         .cuerpo { padding: 16px 16px 18px; }
 
@@ -225,11 +224,65 @@
             color: #fffdf9;
         }
 
-        article.viaje-card li::before { background: #c9a227; }
+        .subtipos {
+            display: grid;
+            gap: 10px;
+        }
 
-        article.viaje-card a.abrir {
+        .subtipo {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px;
+            background: #f7f9fb;
+        }
+
+        .subtipo.uber {
             background: #1a1810;
-            color: #e8c547;
+            border-color: rgba(232, 197, 71, 0.28);
+        }
+
+        .subtipo .etiqueta {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .subtipo.uber .etiqueta { color: #e8c547; }
+
+        .subtipo h3 {
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .subtipo.uber h3 { color: #fff8dc; }
+
+        .subtipo .negocio {
+            margin-bottom: 8px;
+        }
+
+        .subtipo.uber .negocio { color: #c4b896; }
+
+        .subtipo p.detalle {
+            color: var(--muted);
+            font-size: 0.82rem;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .subtipo.uber p.detalle { color: #c4b896; }
+
+        .subtipo a.abrir {
+            padding: 10px 12px;
+            font-size: 0.88rem;
+        }
+
+        .subtipo.uber a.abrir {
+            background: #e8c547;
+            color: #1a1810;
         }
 
         a.abrir:active { transform: scale(0.98); }
@@ -252,7 +305,7 @@
         <h1>Llaveros NFC</h1>
         <p class="lead">
             El cliente acerca el teléfono al llavero y se abre una página.
-            Cuatro muestras distintas: cobro, portafolio de obras, carta de restorán y conductor.
+            Tres muestras distintas: cobro, portafolio de obras y carta de restorán.
         </p>
 
         <section class="pasos" aria-label="Cómo se usa">
@@ -262,7 +315,7 @@
             </div>
             <div class="paso">
                 <b>2</b>
-                <p><strong>Ve cobro, obras, la carta o el viaje.</strong> Cada llavero abre un uso distinto.</p>
+                <p><strong>Ve cobro, obras o la carta.</strong> Cada llavero abre un uso distinto.</p>
             </div>
             <div class="paso">
                 <b>3</b>
@@ -274,13 +327,24 @@
             <article>
                 <div class="preview claro"><span>Muestra 1 · cobro</span></div>
                 <div class="cuerpo">
-                    <h2>Boutique</h2>
-                    <p class="negocio">Luna Atelier · ropa y accesorios</p>
-                    <ul>
-                        <li>Página para copiar datos de transferencia</li>
-                        <li>Tema claro, dos bancos, Instagram</li>
-                    </ul>
-                    <a class="abrir" href="demo-boutique/">Abrir muestra</a>
+                    <h2>Cobro</h2>
+                    <p class="negocio">Copiar datos de transferencia. Dos subtipos.</p>
+                    <div class="subtipos">
+                        <div class="subtipo">
+                            <span class="etiqueta">Convencional</span>
+                            <h3>Boutique</h3>
+                            <p class="negocio">Luna Atelier · ropa y accesorios</p>
+                            <p class="detalle">Tema claro, dos bancos, Instagram.</p>
+                            <a class="abrir" href="demo-boutique/">Abrir boutique</a>
+                        </div>
+                        <div class="subtipo uber">
+                            <span class="etiqueta">Uber</span>
+                            <h3>Conductor</h3>
+                            <p class="negocio">Diego Morales · viaje</p>
+                            <p class="detalle">Patente, silueta 3D genérica y PDF de fiscalización (clave 1234).</p>
+                            <a class="abrir" href="demo-conductor/">Abrir conductor</a>
+                        </div>
+                    </div>
                 </div>
             </article>
 
@@ -311,20 +375,6 @@
                         <li>Bebestibles en una hoja que se asoma; se abre sola la primera vez</li>
                     </ul>
                     <a class="abrir" href="demo-carta/">Abrir muestra</a>
-                </div>
-            </article>
-
-            <article class="viaje-card">
-                <div class="preview viaje"><span>Muestra 4 · conductor</span></div>
-                <div class="cuerpo">
-                    <h2>Conductor</h2>
-                    <p class="negocio">Diego Morales · viaje</p>
-                    <ul>
-                        <li>Copiar datos de transferencia y mandar el comprobante</li>
-                        <li>Patente, color y silueta 3D genérica del auto</li>
-                        <li>PDF de fiscalización con clave 1234</li>
-                    </ul>
-                    <a class="abrir" href="demo-conductor/">Abrir muestra</a>
                 </div>
             </article>
         </section>
