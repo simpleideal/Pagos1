@@ -13,9 +13,13 @@ Tres muestras en el índice, tres usos distintos:
      carta. PDF de fiscalización con clave `1234`.
 2. **Obras Rivera** — portafolio de trabajos hechos. Las fotos se abren
    con [PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe).
-3. **Casa Fogón** — carta de restorán (foto, precio y tiempo por plato).
-   Tocar la foto abre PhotoSwipe; el carrusel y la hoja de bebestibles
-   siguen igual.
+3. **Casa Fogón** — restorán: formatos de carta (productos y servicios).
+   - **Carta:** la muestra que ya existía (`demo-carta/`). Foto, precio
+     y tiempo por plato. PhotoSwipe y hoja de bebestibles.
+   - **Página:** otra pinta de Fogón (`demo-fogon-pagina/`), con inicio,
+     carta y contacto. No reemplaza la carta de arriba.
+
+   Los formatos de transferencia van en la **muestra 1** (cobro), no aquí.
 
 `demo-segunda/` y `demo-taller/` siguen en el repo (otras pieles de cobro)
 pero ya no son muestras del índice.
@@ -26,7 +30,7 @@ documentada la idea práctica de los llaveros NFC (incluido Uber más
 adelante): el aviso de voucher lo lee quien paga, en la página; el
 WhatsApp le avisa a quien cobra que le van a transferir. Las muestras
 de cobro de este repo siguen esa separación. No aplica a Obras Rivera
-(cotización) ni a Casa Fogón (reserva).
+(cotización) ni a Casa Fogón (carta y reserva).
 
 ## Abrir las muestras
 
@@ -35,6 +39,7 @@ de cobro de este repo siguen esa separación. No aplica a Obras Rivera
 - [1 · Cobro, Uber](https://simpleideal.github.io/Pagos1/demo-conductor/)
 - [2 · Portafolio](https://simpleideal.github.io/Pagos1/demo-portafolio/)
 - [3 · Carta](https://simpleideal.github.io/Pagos1/demo-carta/)
+- [3 · Página restorán](https://simpleideal.github.io/Pagos1/demo-fogon-pagina/)
 
 ```bash
 python3 -m http.server 8080 --bind 0.0.0.0
@@ -47,6 +52,9 @@ Portafolio: en `demo-portafolio/index.html`, el bloque **DATOS DEL PORTAFOLIO**.
 Carta: en `demo-carta/index.html`, el bloque **DATOS DE LA CARTA**.
 Cada plato puede llevar varias `fotos`; si hay más de una, rotan
 cada 4 segundos.
+
+Página del restorán: en `demo-fogon-pagina/index.html`. Es otra pinta
+de Fogón; no reemplaza `demo-carta/`.
 
 Conductor (subtipo Uber del cobro): en `demo-conductor/index.html`,
 el bloque **DATOS DEL CONDUCTOR**. El modelo 3D es
