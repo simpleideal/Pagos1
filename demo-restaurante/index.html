@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buen Bocado</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Poppins:wght@400;600;700&family=Sansita+Swashed:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rosa: #ed3b6b;
+            --rosa-oscuro: #d12255;
+            --crema: #fff6da;
+            --navy: #042f4b;
+            --salmon: #f7c4b8;
+            --naranja: #f4b183;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Poppins, sans-serif;
+            background: var(--crema);
+            color: #242424;
+        }
+
+        .barra {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-height: 58px;
+            padding: 10px 16px;
+            background: var(--navy);
+        }
+
+        .logo {
+            font-family: Fredoka, sans-serif;
+            color: var(--rosa);
+            font-size: 1.15rem;
+            line-height: 1.15;
+            text-decoration: none;
+        }
+
+        .pestanias {
+            display: flex;
+            gap: 14px;
+        }
+
+        .pestanias button {
+            appearance: none;
+            border: none;
+            background: none;
+            color: #fff6da;
+            font-family: Poppins, sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .pestanias button.activa { color: var(--rosa); }
+
+        .vista { display: none; }
+        .vista.activa { display: block; }
+
+        .inicio {
+            min-height: calc(100vh - 58px);
+            background:
+                linear-gradient(180deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.35)),
+                url("https://images.unsplash.com/photo-1556910103-1c027650aa5f?auto=format&fit=crop&w=1400&q=70")
+                center / cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px 48px;
+            text-align: center;
+        }
+
+        .inicio h1 {
+            font-family: Fredoka, sans-serif;
+            font-size: clamp(1.8rem, 7vw, 2.6rem);
+            line-height: 1.15;
+            max-width: 16ch;
+            background: linear-gradient(90deg, #ed3b6b 0%, #f4b183 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .inicio .bajada {
+            font-family: Fredoka, sans-serif;
+            color: var(--naranja);
+            font-size: 1.05rem;
+            margin-bottom: 18px;
+        }
+
+        .boton-pedir {
+            display: inline-block;
+            background: var(--rosa);
+            color: var(--crema);
+            text-decoration: none;
+            border: none;
+            border-radius: 999px;
+            padding: 10px 22px;
+            font-family: Poppins, sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .ficha {
+            margin-top: 28px;
+            width: min(340px, 100%);
+            background: rgba(0, 0, 0, 0.58);
+            border-radius: 8px;
+            padding: 14px 16px;
+            color: var(--crema);
+            text-align: left;
+            font-size: 0.82rem;
+            line-height: 1.45;
+        }
+
+        .ficha p { margin: 8px 0; }
+
+        .ficha span {
+            color: var(--rosa);
+            margin-right: 8px;
+        }
+
+        .menu,
+        .contacto {
+            padding: 28px 16px 48px;
+        }
+
+        .menu h2,
+        .contacto h2 {
+            font-family: "Sansita Swashed", cursive;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 8px;
+            position: relative;
+            display: table;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .menu h2::after,
+        .contacto h2::after {
+            content: "";
+            display: block;
+            width: 46%;
+            height: 2px;
+            background: var(--rosa);
+            margin: 8px 0 0 auto;
+        }
+
+        .panel {
+            width: min(520px, 100%);
+            margin: 28px auto 0;
+            background: rgba(255, 120, 120, 0.28);
+            border-radius: 18px;
+            padding: 22px 18px;
+        }
+
+        .item {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .item:last-child { margin-bottom: 0; }
+
+        .item img {
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: #fff;
+        }
+
+        .item h3 {
+            font-size: 0.92rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            border-bottom: 1px dashed #333;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+        }
+
+        .item h3 em {
+            font-style: normal;
+            color: var(--rosa);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .item p {
+            font-size: 0.82rem;
+            line-height: 1.35;
+            color: #333;
+        }
+
+        .dato {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+
+        .dato b { color: var(--rosa); min-width: 1.2rem; }
+
+        .panel h3 {
+            font-family: Poppins, sans-serif;
+            font-weight: 600;
+            color: var(--rosa);
+            font-size: 1.05rem;
+            margin: 18px 0 10px;
+        }
+
+        label {
+            display: block;
+            margin-top: 14px;
+            font-size: 0.82rem;
+            color: #666;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            border: none;
+            border-bottom: 2px solid var(--navy);
+            background: transparent;
+            padding: 8px 0;
+            font: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            resize: none;
+        }
+
+        textarea { min-height: 64px; }
+
+        .enviar {
+            margin-top: 16px;
+            background: var(--rosa);
+            color: var(--crema);
+            border: none;
+            border-radius: 6px;
+            padding: 8px 22px;
+            font-family: Poppins, sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .mapa {
+            margin-top: 18px;
+            width: 100%;
+            height: 180px;
+            border: 0;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="barra">
+        <a class="logo" href="#inicio" id="logo">Buen Bocado</a>
+        <div class="pestanias">
+            <button type="button" data-vista="inicio" class="activa">Inicio</button>
+            <button type="button" data-vista="menu">Menú</button>
+            <button type="button" data-vista="contacto">Contáctanos</button>
+        </div>
+    </nav>
+
+    <section class="vista activa inicio" id="vista-inicio">
+        <h1>¡Vengan a disfrutar de una deliciosa gastronomía!</h1>
+        <p class="bajada">¡Delicioso y económico!</p>
+        <button type="button" class="boton-pedir" id="irMenu">¡Ordene ahora!</button>
+        <div class="ficha">
+            <p><span>📍</span> Av. Alemania 1040, Temuco</p>
+            <p><span>🕒</span> Lun a jueves: 12:00 a 22:00<br>Viernes a domingo: 12:00 a 23:30</p>
+        </div>
+    </section>
+
+    <section class="vista menu" id="vista-menu">
+        <h2>Menú 👨‍🍳</h2>
+        <div class="panel" id="listaMenu"></div>
+    </section>
+
+    <section class="vista contacto" id="vista-contacto">
+        <h2>Contáctanos</h2>
+        <div class="panel">
+            <p class="dato"><b>📍</b> Av. Alemania 1040, Temuco</p>
+            <p class="dato"><b>🕒</b> Lunes a jueves: 12:00 a 22:00.<br>Viernes a domingo: 12:00 a 23:30.</p>
+            <p class="dato"><b>📞</b> +56 9 5555 4411</p>
+            <h3>Envíanos un mensaje</h3>
+            <form id="formulario">
+                <label>Nombre completo
+                    <input type="text" name="nombre" required>
+                </label>
+                <label>Correo electrónico
+                    <input type="email" name="correo" required>
+                </label>
+                <label>Escribe tu mensaje...
+                    <textarea name="mensaje" required></textarea>
+                </label>
+                <button class="enviar" type="submit">Enviar</button>
+            </form>
+            <iframe
+                class="mapa"
+                title="Mapa de Temuco"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=-72.62,-38.75,-72.55,-38.72&amp;layer=mapnik">
+            </iframe>
+        </div>
+    </section>
+
+    <script>
+        const LOCAL = {
+            nombre: 'Buen Bocado',
+            whatsapp: '56955554411'
+        };
+
+        const PLATOS = [
+            {
+                titulo: 'Churrasco italiano',
+                precio: '$6.900',
+                nota: 'Pan amasado, palta, tomate y mayo casera.',
+                foto: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=60'
+            },
+            {
+                titulo: 'Lomito barros luco',
+                precio: '$7.400',
+                nota: 'Lomo, queso fundido y pan tostado.',
+                foto: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=300&q=60'
+            },
+            {
+                titulo: 'Churrasco doble queso',
+                precio: '$7.900',
+                nota: 'El mismo churrasco, con una capa extra de queso.',
+                foto: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=300&q=60'
+            },
+            {
+                titulo: 'Bistec a la plancha',
+                precio: '$9.900',
+                nota: 'Filete jugoso, a tu punto, con cebolla.',
+                foto: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=300&q=60'
+            },
+            {
+                titulo: 'Costillar al horno',
+                precio: '$11.900',
+                nota: 'Costillas con salsa de la casa y ensalada.',
+                foto: 'https://images.unsplash.com/photo-1544025162-d766d81c35e4?auto=format&fit=crop&w=300&q=60'
+            },
+            {
+                titulo: 'Sándwich a la plancha',
+                precio: '$4.900',
+                nota: 'Queso tostado y tomate, con pebre.',
+                foto: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=300&q=60'
+            },
+            {
+                titulo: 'Ensalada chilena',
+                precio: '$3.500',
+                nota: 'Tomate, cebolla y cilantro. Acompañamiento.',
+                foto: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=300&q=60'
+            },
+            {
+                titulo: 'Papas fritas',
+                precio: '$2.900',
+                nota: 'Para acompañar el sándwich o solas.',
+                foto: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=300&q=60'
+            }
+        ];
+
+        function mostrarVista(vista) {
+            document.querySelectorAll('.vista').forEach((caja) => {
+                caja.classList.toggle('activa', caja.id === 'vista-' + vista);
+            });
+            document.querySelectorAll('.pestanias button').forEach((boton) => {
+                boton.classList.toggle('activa', boton.dataset.vista === vista);
+            });
+            window.scrollTo(0, 0);
+        }
+
+        function renderMenu() {
+            const lista = document.getElementById('listaMenu');
+            lista.replaceChildren();
+            PLATOS.forEach((plato) => {
+                const item = document.createElement('article');
+                item.className = 'item';
+                const img = document.createElement('img');
+                img.src = plato.foto;
+                img.alt = plato.titulo;
+                img.loading = 'lazy';
+                img.referrerPolicy = 'no-referrer';
+                const cuerpo = document.createElement('div');
+                const h3 = document.createElement('h3');
+                h3.append(plato.titulo + ': ');
+                const precio = document.createElement('em');
+                precio.textContent = plato.precio;
+                h3.appendChild(precio);
+                const p = document.createElement('p');
+                p.textContent = plato.nota;
+                cuerpo.append(h3, p);
+                item.append(img, cuerpo);
+                lista.appendChild(item);
+            });
+        }
+
+        document.querySelectorAll('.pestanias button').forEach((boton) => {
+            boton.addEventListener('click', () => mostrarVista(boton.dataset.vista));
+        });
+        document.getElementById('logo').addEventListener('click', (evento) => {
+            evento.preventDefault();
+            mostrarVista('inicio');
+        });
+        document.getElementById('irMenu').addEventListener('click', () => mostrarVista('menu'));
+        document.getElementById('formulario').addEventListener('submit', (evento) => {
+            evento.preventDefault();
+            const datos = new FormData(evento.currentTarget);
+            const texto =
+                'Hola Buen Bocado, soy ' + datos.get('nombre') +
+                '. ' + datos.get('mensaje');
+            window.open(
+                'https://wa.me/' + LOCAL.whatsapp + '?text=' + encodeURIComponent(texto),
+                '_blank',
+                'noopener'
+            );
+        });
+
+        renderMenu();
+    </script>
+</body>
+</html>

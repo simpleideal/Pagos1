@@ -43,12 +43,13 @@ trabajos anteriores, no para cobrar ni para vender un menú.
 ## Muestra 3 · Carta: productos y servicios
 
 Páginas de **carta**, como en un restorán: se ofrecen productos o
-servicios para elegir (plato, precio, foto, tiempo). No van datos de
-transferencia ni de vehículos; eso es muestra 1.
+servicios para elegir. No van datos de transferencia ni de vehículos;
+eso es muestra 1. Las dos de abajo son **independientes**: no se
+fusionan entre sí.
 
-- **Carta:** Casa Fogón, el menú que ya existía — `demo-carta/`
-- **Página:** misma Fogón, con inicio, carta y contacto —
-  `demo-fogon-pagina/`
+- **Casa Fogón:** la carta que ya existía — `demo-carta/`
+- **Buen Bocado:** otra página, con inicio, menú y contacto
+  (pinta de restorán con foto grande) — `demo-restaurante/`
 
 ## Abrir las muestras
 
@@ -56,8 +57,8 @@ transferencia ni de vehículos; eso es muestra 1.
 - [1 · Cobro, convencional](https://simpleideal.github.io/Pagos1/demo-boutique/)
 - [1 · Cobro, Uber](https://simpleideal.github.io/Pagos1/demo-conductor/)
 - [2 · Portafolio](https://simpleideal.github.io/Pagos1/demo-portafolio/)
-- [3 · Carta](https://simpleideal.github.io/Pagos1/demo-carta/)
-- [3 · Página restorán](https://simpleideal.github.io/Pagos1/demo-fogon-pagina/)
+- [3 · Carta Fogón](https://simpleideal.github.io/Pagos1/demo-carta/)
+- [3 · Restorán Buen Bocado](https://simpleideal.github.io/Pagos1/demo-restaurante/)
 
 ```bash
 python3 -m http.server 8080 --bind 0.0.0.0
@@ -77,9 +78,9 @@ se cambian en `fotos`. El PDF de muestra está en
 Muestra 2, portafolio: en `demo-portafolio/index.html`, el bloque
 **DATOS DEL PORTAFOLIO**.
 
-Muestra 3, carta: en `demo-carta/index.html`, el bloque
+Muestra 3, Fogón: en `demo-carta/index.html`, el bloque
 **DATOS DE LA CARTA**. Cada plato puede llevar varias `fotos`; si hay
 más de una, rotan cada 4 segundos.
 
-Muestra 3, página del restorán: en `demo-fogon-pagina/index.html`. Es
-otra pinta de Fogón; no reemplaza `demo-carta/`.
+Muestra 3, Buen Bocado: en `demo-restaurante/index.html`. Es otra
+página, independiente de Fogón.
