@@ -83,5 +83,6 @@ Muestra 3, Fogón: en `demo-carta/index.html`, el bloque
 más de una, rotan cada 4 segundos.
 
 Muestra 3, Buen Bocado: en `demo-restaurante/index.html`. Es otra
-página, independiente de Fogón. En **Contáctanos** el mapa es de
-Google Maps, para encontrarlo y abrir la app de mapas del teléfono.
+página, independiente de Fogón. El mapa usa un **punto GPS** (`lat`
+y `lng`), no una calle. Sirve cuando el local o la feria está en un
+parque amplio: se pega el pin de Maps y acerca a esa chincheta.
