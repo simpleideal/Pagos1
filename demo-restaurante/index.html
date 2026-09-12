@@ -63,19 +63,40 @@
 
         .vista { display: none; }
         .vista.activa { display: block; }
-
-        .inicio {
-            min-height: calc(100vh - 58px);
-            background:
-                linear-gradient(180deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.35)),
-                url("https://images.unsplash.com/photo-1556910103-1c027650aa5f?auto=format&fit=crop&w=1400&q=70")
-                center / cover no-repeat;
+        .vista.inicio.activa {
             display: flex;
+            min-height: calc(100vh - 58px);
+            position: relative;
+            overflow: hidden;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 32px 16px 48px;
             text-align: center;
+        }
+
+        .inicio .fondo {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .inicio .velo-foto {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.4));
+            z-index: 1;
+        }
+
+        .inicio .contenido {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .inicio h1 {
@@ -193,6 +214,8 @@
             margin-bottom: 6px;
         }
 
+        .item .cuerpo { min-width: 0; flex: 1; }
+
         .item h3 em {
             font-style: normal;
             color: var(--rosa);
@@ -279,12 +302,16 @@
     </nav>
 
     <section class="vista activa inicio" id="vista-inicio">
+        <img class="fondo" alt="" src="https://images.unsplash.com/photo-1556910103-1c027650aa5f?auto=format&fit=crop&w=1400&q=70" referrerpolicy="no-referrer">
+        <div class="velo-foto"></div>
+        <div class="contenido">
         <h1>¡Vengan a disfrutar de una deliciosa gastronomía!</h1>
         <p class="bajada">¡Delicioso y económico!</p>
         <button type="button" class="boton-pedir" id="irMenu">¡Ordene ahora!</button>
         <div class="ficha">
             <p><span>📍</span> Av. Alemania 1040, Temuco</p>
             <p><span>🕒</span> Lun a jueves: 12:00 a 22:00<br>Viernes a domingo: 12:00 a 23:30</p>
+        </div>
         </div>
     </section>
 
@@ -399,6 +426,7 @@
                 img.loading = 'lazy';
                 img.referrerPolicy = 'no-referrer';
                 const cuerpo = document.createElement('div');
+                cuerpo.className = 'cuerpo';
                 const h3 = document.createElement('h3');
                 h3.append(plato.titulo + ': ');
                 const precio = document.createElement('em');
