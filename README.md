@@ -13,12 +13,13 @@ Tres muestras en el índice, tres usos distintos:
      carta. PDF de fiscalización con clave `1234`.
 2. **Obras Rivera** — portafolio de trabajos hechos. Las fotos se abren
    con [PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe).
-3. **Casa Fogón** — restorán, dos subtipos:
-   - **Carta:** foto, precio y tiempo por plato. Tocar la foto abre
-     PhotoSwipe; el carrusel y la hoja de bebestibles siguen igual.
+3. **Casa Fogón** — restorán, tres subtipos:
+   - **Carta:** la muestra que ya existía (`demo-carta/`). Foto, precio
+     y tiempo por plato. PhotoSwipe y hoja de bebestibles.
+   - **Página:** otra pinta de Fogón (`demo-fogon-pagina/`), con inicio,
+     carta y contacto. No reemplaza la carta de arriba.
    - **Cobro:** copia de la plantilla [`simpleideal/cobro`](https://github.com/simpleideal/cobro)
-     dentro de este repo (`demo-fogon-cobro/`), con datos inventados.
-     No es una repo nueva: es el `index.html` de cobro, modificado.
+     en `demo-fogon-cobro/`, con datos inventados.
 
 `demo-segunda/` y `demo-taller/` siguen en el repo (otras pieles de cobro)
 pero ya no son muestras del índice.
@@ -39,6 +40,7 @@ sí la sigue.
 - [1 · Cobro, Uber](https://simpleideal.github.io/Pagos1/demo-conductor/)
 - [2 · Portafolio](https://simpleideal.github.io/Pagos1/demo-portafolio/)
 - [3 · Carta](https://simpleideal.github.io/Pagos1/demo-carta/)
+- [3 · Página restorán](https://simpleideal.github.io/Pagos1/demo-fogon-pagina/)
 - [3 · Cobro, restorán](https://simpleideal.github.io/Pagos1/demo-fogon-cobro/)
 
 ```bash
@@ -52,6 +54,9 @@ Portafolio: en `demo-portafolio/index.html`, el bloque **DATOS DEL PORTAFOLIO**.
 Carta: en `demo-carta/index.html`, el bloque **DATOS DE LA CARTA**.
 Cada plato puede llevar varias `fotos`; si hay más de una, rotan
 cada 4 segundos.
+
+Página del restorán: en `demo-fogon-pagina/index.html`. Es otra pinta
+de Fogón; no reemplaza `demo-carta/`.
 
 Cobro del restorán: en `demo-fogon-cobro/index.html`, el bloque
 **DATOS DEL CLIENTE**. Es la plantilla cobro; debajo de
