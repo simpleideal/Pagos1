@@ -83,4 +83,5 @@ Muestra 3, Fogón: en `demo-carta/index.html`, el bloque
 más de una, rotan cada 4 segundos.
 
 Muestra 3, Buen Bocado: en `demo-restaurante/index.html`. Es otra
-página, independiente de Fogón.
+página, independiente de Fogón. En **Contáctanos** el mapa es de
+Google Maps, para encontrarlo y abrir la app de mapas del teléfono.
