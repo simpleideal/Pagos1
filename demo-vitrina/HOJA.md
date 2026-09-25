@@ -38,10 +38,11 @@ Script) corren en tu cuenta, no en la de Cursor. Con el vínculo de
 plantillas, papeles), una cuenta de servicio. Eso no reemplaza al
 local cada tarde.
 
-## Volver editor al agente (una vez)
+## Volver editor al agente (tubería, no operación)
 
-Sirve para administrar hojas y plantillas. No para marcar `hoy` por
-el local.
+Queda armada **desde ahora** para no reabrir el tema. No significa que
+el agente administre la vitrina del día: el local sigue marcando `hoy`.
+El agente usa el editor para plantillas y papeles.
 
 ### En el escritorio (el video)
 
@@ -67,8 +68,9 @@ tiene tu sesión.
 8. Arranca un **agente nuevo** (este no ve secretos agregados después)
    y dile: *escribe la plantilla en la hoja*.
 
-El script es `demo-vitrina/datos/escribir_hoja.py`. Nunca imprime la
-clave.
+El script de escritura es `demo-vitrina/datos/escribir_hoja.py`.
+Para ver si hay lector y editor: `python3 demo-vitrina/datos/comprobar_acceso.py`.
+Nunca imprimen la clave.
 
 ## Alta de un local
 
