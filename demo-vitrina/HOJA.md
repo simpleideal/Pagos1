@@ -32,6 +32,11 @@ Otras recetas del mismo patrón, por si hace falta mirar: [BaruzoTech](https://w
 No publica de nuevo. No entra a GitHub. El llavero NFC y el QR siguen
 abriendo la misma URL.
 
+El agente no entra a tu Google. Las **extensiones** de Sheets (Apps
+Script) corren en tu cuenta, no en la de Cursor. Con el vínculo de
+**lector** la página y el agente **leen**. Para **escribir** en la hoja
+desde acá haría falta una cuenta de servicio, más adelante.
+
 ## Alta de un local
 
 La hoja la crea **Simple Ideal**, en su propio Drive. Al local no se le
@@ -59,9 +64,10 @@ Si el local no tiene Gmail: se le hace uno de trabajo, o Simple Ideal
 marca `hoy` por WhatsApp el primer tiempo. No se le pide “acceso a tu
 Drive”.
 
-La muestra de GitHub Pages ya está conectada al CSV
-`datos/ofertas.csv`. Cuando haya una hoja real, se pega su URL en
-`FUENTE.hoja`; si esa hoja no responde, se sigue viendo el CSV.
+La muestra de GitHub Pages está conectada a la hoja
+`1EWSAq8OtKFsNgJCNUAWDdCjQRloo_B24kZjsLPOuizQ` (archivo *vitrina*,
+pestaña `Hoja 1`). Si esa pestaña no tiene productos, se muestra
+`datos/ofertas.csv` para que la demo no quede en blanco.
 
 ## Cómo se crea la plantilla en Google Sheets
 

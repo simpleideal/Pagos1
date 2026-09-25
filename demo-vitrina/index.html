@@ -363,8 +363,8 @@
         };
 
         const FUENTE = {
-            hoja: '',
-            pestana: 'ofertas',
+            hoja: 'https://docs.google.com/spreadsheets/d/1EWSAq8OtKFsNgJCNUAWDdCjQRloo_B24kZjsLPOuizQ/edit?usp=sharing',
+            pestana: 'Hoja 1',
             csvLocal: 'datos/ofertas.csv'
         };
 
@@ -738,6 +738,18 @@
                         '<p>Revisa la conexión o el enlace de la hoja.</p></div>';
                     pintarBarra([]);
                     return;
+                }
+            }
+            const hayProductos = filas.some(function (f) { return f.producto; });
+            if (!hayProductos && !q.csv && FUENTE.csvLocal) {
+                try {
+                    const local = await cargarFilas({ tipo: 'csv', url: FUENTE.csvLocal });
+                    if (local.some(function (f) { return f.producto; })) {
+                        filas = local;
+                        origen = 'Hoja conectada, todavía vacía · se muestra la muestra';
+                    }
+                } catch (err3) {
+                    console.warn('CSV local no disponible.', err3);
                 }
             }
             const items = visiblesDe(filas);
