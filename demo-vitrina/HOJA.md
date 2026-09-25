@@ -32,28 +32,33 @@ Otras recetas del mismo patrón, por si hace falta mirar: [BaruzoTech](https://w
 No publica de nuevo. No entra a GitHub. El llavero NFC y el QR siguen
 abriendo la misma URL.
 
-## Cómo se conecta la hoja (una vez, lo hace Simple Ideal)
+## Cómo se crea la plantilla en Google Sheets
 
-1. En Google Sheets: **Archivo → Importar** y sube `datos/plantilla.csv`
-   (o copia `datos/ofertas.csv` para partir con la muestra).
-2. Primera fila: **no cambies los nombres** de columna.
-3. **Compartir** → cualquiera con el enlace puede **ver**.
-4. Opcional y más limpio: **Archivo → Compartir → Publicar en la web** →
-   esa pestaña → **Valores separados por comas (.csv)** → Publicar.
-5. En `demo-vitrina/index.html`, bloque **DATOS DE LA VITRINA**, pega la
-   URL en `hoja`:
+1. En Drive: **Nuevo → Hojas de cálculo**.
+2. **Archivo → Importar → Subir** y elige
+   `demo-vitrina/datos/plantilla-google-sheets.xlsx`
+   (también sirve `plantilla.csv`).
+3. Importar a **una hoja nueva**. Renombra esa pestaña a `ofertas`.
+   No toques la fila 1.
+4. **Compartir** → **Cualquier persona con el enlace** → **Lector**.
+   Con eso la vitrina lee y un agente puede comprobarla. No pongas
+   Editor para cualquiera: el enlace quedaría abierto a borrar precios.
+5. Copia el enlace (el de `/edit` sirve) y pégalo en el chat o, una vez,
+   en `demo-vitrina/index.html` → `FUENTE.hoja`.
 
 ```js
 hoja: 'https://docs.google.com/spreadsheets/d/PEGA_EL_ID/edit#gid=0',
 pestana: 'ofertas',
 ```
 
-Sirve pegar:
+Para otro local: **Archivo → Hacer una copia**. Cada pastelería tiene
+su hoja.
 
-- el enlace de **editar** (`/d/ID/edit`)
-- el de **publicar CSV** (`/pub?output=csv`)
-- solo el **ID** de la hoja (entonces se usa [opensheet](https://opensheet.elk.sh))
-- un `.csv` propio
+Opcional: **Archivo → Compartir → Publicar en la web** → pestaña
+`ofertas` → **Valores separados por comas (.csv)** → Publicar.
+
+También sirve pegar el CSV publicado, o solo el ID de la hoja (entonces
+se usa [opensheet](https://opensheet.elk.sh)).
 
 Si la hoja falla, la página usa `datos/ofertas.csv` para no quedar en
 blanco (eso es el truco de sheet2web).

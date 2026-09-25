@@ -53,7 +53,8 @@ entre sí.
 - **Huerto Dulce:** vitrina de **ofertas de hoy**, no menú completo.
   El local marca en una hoja qué sobró. La página lee esa hoja (CSV
   publicado o Google Sheets). Si la hoja no responde, usa
-  `demo-vitrina/datos/ofertas.csv`. Cómo conectarla:
+  `demo-vitrina/datos/ofertas.csv`. La plantilla para Google Sheets es
+  `demo-vitrina/datos/plantilla-google-sheets.xlsx`. Cómo conectarla:
   `demo-vitrina/HOJA.md`. — `demo-vitrina/`
 
 ## Abrir las muestras
