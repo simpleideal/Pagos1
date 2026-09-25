@@ -34,8 +34,41 @@ abriendo la misma URL.
 
 El agente no entra a tu Google. Las **extensiones** de Sheets (Apps
 Script) corren en tu cuenta, no en la de Cursor. Con el vínculo de
-**lector** la página y el agente **leen**. Para **escribir** en la hoja
-desde acá haría falta una cuenta de servicio, más adelante.
+**lector** la página y el agente **leen**. Para **escribir** (armar
+plantillas, papeles), una cuenta de servicio. Eso no reemplaza al
+local cada tarde.
+
+## Volver editor al agente (una vez)
+
+Sirve para administrar hojas y plantillas. No para marcar `hoy` por
+el local.
+
+### En el escritorio (el video)
+
+En Cursor de la computadora puedes conectar Google Sheets por **MCP**
+(Settings → MCP). Ahí el agente usa **tu** Google, con una ventana de
+permiso. Eso no viaja solo a un agente en la nube: esa máquina no
+tiene tu sesión.
+
+### En un agente en la nube (esta vitrina)
+
+1. [Google Cloud Console](https://console.cloud.google.com/) → proyecto
+   nuevo, por ejemplo `simple-ideal-vitrina`.
+2. **APIs** → habilita **Google Sheets API**.
+3. **IAM → Cuentas de servicio → Crear** (`cursor-vitrina`).
+4. **Claves → Agregar clave → JSON**. Se descarga un archivo. No lo
+   subas a GitHub.
+5. Abre ese JSON y copia `client_email`
+   (`…@….iam.gserviceaccount.com`).
+6. En la hoja **vitrina**: Compartir → pega ese correo → **Editor**.
+7. En Cursor: [Cloud Agents → Secrets](https://cursor.com/dashboard/cloud-agents)
+   → **My Secrets** (personal, para este repo) → **Runtime Secret**
+   llamado `GOOGLE_SERVICE_ACCOUNT_JSON` → pega **todo** el JSON.
+8. Arranca un **agente nuevo** (este no ve secretos agregados después)
+   y dile: *escribe la plantilla en la hoja*.
+
+El script es `demo-vitrina/datos/escribir_hoja.py`. Nunca imprime la
+clave.
 
 ## Alta de un local
 
