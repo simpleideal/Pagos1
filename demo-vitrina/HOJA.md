@@ -32,6 +32,37 @@ Otras recetas del mismo patrón, por si hace falta mirar: [BaruzoTech](https://w
 No publica de nuevo. No entra a GitHub. El llavero NFC y el QR siguen
 abriendo la misma URL.
 
+## Alta de un local
+
+La hoja la crea **Simple Ideal**, en su propio Drive. Al local no se le
+pide acceso a su Google ni que arme la planilla.
+
+Lo único que se le pide es un **correo de Google** (Gmail o Workspace)
+para invitarlo como editor:
+
+> ¿A qué correo te mando la hoja para marcar las ofertas del día?
+
+Pasos, una vez por pastelería:
+
+1. En el Drive de Simple Ideal: **Archivo → Hacer una copia** de
+   `plantilla-google-sheets.xlsx` (o de la hoja maestra). Nombre:
+   `Vitrina · Nombre del local`.
+2. Pestaña `ofertas`, fila 1 intacta.
+3. **Compartir**:
+   - el correo del local → **Editor**
+   - **Cualquier persona con el enlace** → **Lector** (así la página
+     NFC puede leer sin login; no pongas Editor para cualquiera)
+4. Pegar el enlace, una vez, en `FUENTE.hoja` de esa vitrina.
+5. El llavero y el QR ya apuntan a la URL de la página. No se tocan.
+
+Si el local no tiene Gmail: se le hace uno de trabajo, o Simple Ideal
+marca `hoy` por WhatsApp el primer tiempo. No se le pide “acceso a tu
+Drive”.
+
+La muestra de GitHub Pages ya está conectada al CSV
+`datos/ofertas.csv`. Cuando haya una hoja real, se pega su URL en
+`FUENTE.hoja`; si esa hoja no responde, se sigue viendo el CSV.
+
 ## Cómo se crea la plantilla en Google Sheets
 
 1. En Drive: **Nuevo → Hojas de cálculo**.

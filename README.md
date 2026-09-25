@@ -95,9 +95,11 @@ y `lng`), no una calle. Sirve cuando el local o la feria está en un
 parque amplio: se pega el pin de Maps y acerca a esa chincheta.
 
 Muestra 3, Huerto Dulce: en `demo-vitrina/index.html`, el bloque
-**DATOS DE LA VITRINA**. Los productos viven en la hoja o, de
-muestra, en `demo-vitrina/datos/ofertas.csv`. El local no edita
-GitHub: cambia `hoy`, `precio_oferta` y `unidades` en la planilla.
+**DATOS DE LA VITRINA**. La muestra ya lee `datos/ofertas.csv`.
+Para un local real, Simple Ideal crea la hoja en su Drive, le pide
+solo un Gmail para invitarlo como editor, y pega el enlace en `hoja`.
+El local no edita GitHub ni da acceso a su Drive. Cada tarde cambia
+`hoy`, `precio_oferta` y `unidades`.
 En GitHub hay recetas de menú-con-hoja (sheet2web, opensheet, el
 Web App de Kevin Vaghasiya, el café Bill77). Ninguna es vitrina de
 sobras; el molde de acá toma esa tubería y deja fuera cobro y carta
