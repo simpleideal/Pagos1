@@ -1,10 +1,10 @@
 producto,precio_normal,precio_oferta,hoy,activo,nota,foto,unidades,categoria
-Kuchen de manzana,8900,4500,si,si,"Lo que quedó del horno de la tarde. Porción grande.",https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&w=800&q=70,3,Horno
-Pie de limón,7200,3900,si,si,"Merengue tostado. Caja de 6 porciones chicas o 1 tradicional.",https://images.unsplash.com/photo-1519915026285-24c247f5402e?auto=format&fit=crop&w=800&q=70,4,Horno
-Brazo de reina,6500,3500,si,si,"Bizcocho y manjar. Cortamos al momento.",https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=800&q=70,2,Horno
-Mix de facturas (6 un.),5400,2900,si,si,"Medialunas, vigilantes y cañoncitos. Armamos con lo que hay.",https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=70,5,Salado dulce
-Porción mil hojas,4200,2500,si,si,"Crema pastelera. Una porción.",https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=800&q=70,6,Horno
-Berlín de manjar,1800,900,si,si,"Fritos de la mañana. Se acabaron.",https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=70,0,Salado dulce
-Galletas de avena (bolsa),3200,1800,si,si,"Bolsa de 8. Avena y pasas.",https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=800&q=70,8,Para llevar
-Croissant de almendras,2500,1500,no,si,"Mañana sale otra tanda. Hoy no va a la vitrina.",https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=800&q=70,12,Salado dulce
-Torta selva negra (entera),18900,12000,si,no,"La dejamos fuera a propósito: no se ofrece hoy.",https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=70,1,Horno
+Kuchen de manzana,8900,4500,si,si,"Lo que quedó del horno de la tarde. Porción grande.",fotos/kuchen.jpg,3,Horno
+Pie de limón,7200,3900,si,si,"Merengue tostado. Caja de 6 porciones chicas o 1 tradicional.",fotos/pie-limon.jpg,4,Horno
+Brazo de reina,6500,3500,si,si,"Bizcocho y manjar. Cortamos al momento.",fotos/brazo.jpg,2,Horno
+Mix de facturas (6 un.),5400,2900,si,si,"Medialunas, vigilantes y cañoncitos. Armamos con lo que hay.",fotos/facturas.jpg,5,Salado dulce
+Porción mil hojas,4200,2500,si,si,"Crema pastelera. Una porción.",fotos/milhojas.jpg,6,Horno
+Berlín de manjar,1800,900,si,si,"Fritos de la mañana. Se acabaron.",fotos/berlin.jpg,0,Salado dulce
+Galletas de avena (bolsa),3200,1800,si,si,"Bolsa de 8. Avena y pasas.",fotos/galletas.jpg,8,Para llevar
+Croissant de almendras,2500,1500,no,si,"Mañana sale otra tanda. Hoy no va a la vitrina.",fotos/croissant.jpg,12,Salado dulce
+Torta selva negra (entera),18900,12000,si,no,"La dejamos fuera a propósito: no se ofrece hoy.",fotos/selva.jpg,1,Horno

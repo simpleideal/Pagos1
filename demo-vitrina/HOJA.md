@@ -68,7 +68,7 @@ blanco (eso es el truco de sheet2web).
 | `hoy` | `si` o `no`. Solo `si` sale en la vitrina |
 | `activo` | `si` o `no`. `no` = ni se publica |
 | `nota` | Una línea |
-| `foto` | URL `https://…`. Puede ir vacía |
+| `foto` | URL `https://…` o ruta local (`fotos/kuchen.jpg`). Puede ir vacía |
 | `unidades` | Número. `0` = Agotado. Vacío = no se muestra el cupo |
 | `categoria` | Opcional. Si hay, agrupa (Horno, Para llevar…) |
 

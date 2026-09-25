@@ -32,7 +32,7 @@
             background:
                 radial-gradient(circle at 80% -10%, #e7d7b8 0%, transparent 42%),
                 var(--bg);
-            padding: 20px 16px calc(108px + env(safe-area-inset-bottom, 0px));
+            padding: 20px 16px calc(136px + env(safe-area-inset-bottom, 0px));
         }
 
         main {
@@ -190,6 +190,7 @@
         }
 
         .foto {
+            position: relative;
             width: var(--foto);
             height: var(--foto);
             flex-shrink: 0;
@@ -207,8 +208,9 @@
 
         .sello {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 8px;
+            left: 8px;
+            z-index: 2;
             background: var(--agotado);
             color: #fffdf8;
             font-size: 0.68rem;
@@ -555,6 +557,14 @@
             });
         }
 
+        function fotoValida(url) {
+            const u = String(url || '').trim();
+            if (!u) return false;
+            if (/^https?:\/\//i.test(u)) return true;
+            if (/^[a-z][a-z0-9+.-]*:/i.test(u)) return false;
+            return !u.startsWith('//');
+        }
+
         function descuento(fila) {
             const normal = numero(fila.precio_normal);
             const oferta = numero(fila.precio_oferta) || normal;
@@ -605,9 +615,8 @@
             const antesN = numero(fila.precio_normal);
             const dto = descuento(fila);
             const cupo = unidadesDe(fila);
-            const fotoOk = /^https?:\/\//i.test(fila.foto || '');
+            const fotoOk = fotoValida(fila.foto);
             let html = '<article' + (agotado ? ' class="agotado"' : '') + '>';
-            if (agotado) html += '<span class="sello">Agotado</span>';
             html += '<div class="cuerpo">';
             html += '<h3>' + esc(fila.producto) + '</h3>';
             if (fila.nota) html += '<p class="nota">' + esc(fila.nota) + '</p>';
@@ -622,6 +631,7 @@
             }
             html += '</div></div>';
             html += '<div class="foto">';
+            if (agotado) html += '<span class="sello">Agotado</span>';
             if (fotoOk) {
                 html += '<img src="' + esc(fila.foto) + '" alt="" width="108" height="108">';
             }
