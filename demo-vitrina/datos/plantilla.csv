@@ -1,0 +1,4 @@
+producto,precio_normal,precio_oferta,hoy,activo,nota,foto,unidades,categoria
+Kuchen de manzana,8900,4500,si,si,Ejemplo: márcalo si hoy para la vitrina.,,3,Horno
+Pie de limón,7200,3900,no,si,Ejemplo: queda en la hoja pero no sale hoy.,,2,Horno
+Torta de cumpleaños,24900,24900,no,no,Ejemplo: inactivo. El cliente no lo ve.,,1,Encargos
