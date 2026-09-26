@@ -1,0 +1,159 @@
+# Cómo se arma la vitrina (sin tocar GitHub)
+
+La pastelería no edita código. Edita una hoja. Esta página lee esa hoja
+y muestra **ofertas de hoy**, no una carta completa.
+
+En GitHub **sí hay plantillas de la comunidad** para el truco de “la
+hoja es el menú”. Ninguna es un clon de SheetRocket ni está hecha para
+sobras de pastelería en Chile. Lo que copiamos es el **molde**, no el
+producto comercial.
+
+## De dónde sale este molde
+
+| Repo / receta | Qué sirve | Qué no copiamos |
+| --- | --- | --- |
+| [kevin-vaghasiya/restaurant-menu-webapp-gas](https://github.com/kevin-vaghasiya/restaurant-menu-webapp-gas) | Hoja = CMS. Pestañas Settings / Categories / Menu. QR a una URL. [Planilla demo](https://docs.google.com/spreadsheets/d/1fFQ3Way0qLuc6Z1QsqIu8E-8URorVDQwxGII8pnGeW4/edit) | Apps Script: el local tendría que desplegar un Web App. Acá la página vive en GitHub Pages. |
+| [MrHawking655/cafe-menu-system](https://github.com/MrHawking655/cafe-menu-system) | Stock / agotado, cards en el teléfono, pedido por WhatsApp. Lee la hoja con [opensheet](https://github.com/benborgers/opensheet) | Carrito y pedido a mesa. Esta vitrina reserva por WhatsApp, sin carrito. |
+| [lucascervera/sheet2web](https://github.com/lucascervera/sheet2web) | `Archivo → Compartir → Publicar en la web → CSV`. GitHub Pages. CSV local de respaldo. | Directorio genérico, no vitrina de precios. |
+| [fancypams/google-sheets-menu](https://github.com/fancypams/google-sheets-menu) | [sheetrock.js](https://github.com/chriszarate/sheetrock): URL pública de la hoja + plantilla HTML | Depende de jQuery/Handlebars. Acá es un HTML solo. |
+| [abqariyuh/Resto-Google-Sheets-Menu](https://github.com/abqariyuh/Resto-Google-Sheets-Menu) | [Planilla de 3 columnas](https://docs.google.com/spreadsheets/d/1GbXxAkgTFVERTEAvrw-4MCULrhWzR3h4Uy5XnoI467E/view) (sección, ítem, precio) | Pide API key de Google. Eso no lo puede mantener un local. |
+| SheetRocket / Foodee | Idea de producto: link o QR, el dueño edita la hoja | De pago, carta mensual, no vitrina de cierre. |
+
+Otras recetas del mismo patrón, por si hace falta mirar: [BaruzoTech](https://www.baruzotech.com/blogs/how-to-create-a-digital-qr-menu-for-restaurants-using-google-spreadsheet-and-google-apps-script-easy-free-solution) (el tutorial del repo de Kevin), [foodmenu.app](https://foodmenu.app/) (Glide), el POS de [LBC en itch.io](https://g2g2.itch.io/lbcordersys) (CSV + un `index.html`).
+
+## Qué hace el local cada tarde
+
+1. Abre la hoja de Google (la misma de siempre).
+2. En lo que quiere liquidar: `hoy` = `si`, `precio_oferta` y `unidades`.
+3. En lo demás: `hoy` = `no`.
+4. Si se acabó: `unidades` = `0` (sale **Agotado**).
+5. Si un producto no debe verse nunca: `activo` = `no`.
+
+No publica de nuevo. No entra a GitHub. El llavero NFC y el QR siguen
+abriendo la misma URL.
+
+El agente no entra a tu Google. Las **extensiones** de Sheets (Apps
+Script) corren en tu cuenta, no en la de Cursor. Con el vínculo de
+**lector** la página y el agente **leen**. Para **escribir** (armar
+plantillas, papeles), una cuenta de servicio. Eso no reemplaza al
+local cada tarde.
+
+## Volver editor al agente (tubería, no operación)
+
+Queda armada **desde ahora** para no reabrir el tema. No significa que
+el agente administre la vitrina del día: el local sigue marcando `hoy`.
+El agente usa el editor para plantillas y papeles.
+
+### En el escritorio (el video)
+
+En Cursor de la computadora puedes conectar Google Sheets por **MCP**
+(Settings → MCP). Ahí el agente usa **tu** Google, con una ventana de
+permiso. Eso no viaja solo a un agente en la nube: esa máquina no
+tiene tu sesión.
+
+### En un agente en la nube (esta vitrina)
+
+1. [Google Cloud Console](https://console.cloud.google.com/) → proyecto
+   nuevo, por ejemplo `simple-ideal-vitrina`.
+2. **APIs** → habilita **Google Sheets API**.
+3. **IAM → Cuentas de servicio → Crear** (`cursor-vitrina`).
+4. **Claves → Agregar clave → JSON**. Se descarga un archivo. No lo
+   subas a GitHub.
+5. Abre ese JSON y copia `client_email`
+   (`…@….iam.gserviceaccount.com`).
+6. En la hoja **vitrina**: Compartir → pega ese correo → **Editor**.
+7. En Cursor: [Cloud Agents → Secrets](https://cursor.com/dashboard/cloud-agents)
+   → **My Secrets** (personal, para este repo) → **Runtime Secret**
+   llamado `GOOGLE_SERVICE_ACCOUNT_JSON` → pega **todo** el JSON.
+8. Arranca un **agente nuevo** (este no ve secretos agregados después)
+   y dile: *escribe la plantilla en la hoja*.
+
+El script de escritura es `demo-vitrina/datos/escribir_hoja.py`.
+Para ver si hay lector y editor: `python3 demo-vitrina/datos/comprobar_acceso.py`.
+Nunca imprimen la clave.
+
+## Alta de un local
+
+La hoja la crea **Simple Ideal**, en su propio Drive. Al local no se le
+pide acceso a su Google ni que arme la planilla.
+
+Lo único que se le pide es un **correo de Google** (Gmail o Workspace)
+para invitarlo como editor:
+
+> ¿A qué correo te mando la hoja para marcar las ofertas del día?
+
+Pasos, una vez por pastelería:
+
+1. En el Drive de Simple Ideal: **Archivo → Hacer una copia** de
+   `plantilla-google-sheets.xlsx` (o de la hoja maestra). Nombre:
+   `Vitrina · Nombre del local`.
+2. Pestaña `ofertas`, fila 1 intacta.
+3. **Compartir**:
+   - el correo del local → **Editor**
+   - **Cualquier persona con el enlace** → **Lector** (así la página
+     NFC puede leer sin login; no pongas Editor para cualquiera)
+4. Pegar el enlace, una vez, en `FUENTE.hoja` de esa vitrina.
+5. El llavero y el QR ya apuntan a la URL de la página. No se tocan.
+
+Si el local no tiene Gmail: se le hace uno de trabajo, o Simple Ideal
+marca `hoy` por WhatsApp el primer tiempo. No se le pide “acceso a tu
+Drive”.
+
+La muestra de GitHub Pages está conectada a la hoja
+`1EWSAq8OtKFsNgJCNUAWDdCjQRloo_B24kZjsLPOuizQ` (archivo *vitrina*,
+pestaña `Hoja 1`). Si esa pestaña no tiene productos, se muestra
+`datos/ofertas.csv` para que la demo no quede en blanco.
+
+## Cómo se crea la plantilla en Google Sheets
+
+1. En Drive: **Nuevo → Hojas de cálculo**.
+2. **Archivo → Importar → Subir** y elige
+   `demo-vitrina/datos/plantilla-google-sheets.xlsx`
+   (también sirve `plantilla.csv`).
+3. Importar a **una hoja nueva**. Renombra esa pestaña a `ofertas`.
+   No toques la fila 1.
+4. **Compartir** → **Cualquier persona con el enlace** → **Lector**.
+   Con eso la vitrina lee y un agente puede comprobarla. No pongas
+   Editor para cualquiera: el enlace quedaría abierto a borrar precios.
+5. Copia el enlace (el de `/edit` sirve) y pégalo en el chat o, una vez,
+   en `demo-vitrina/index.html` → `FUENTE.hoja`.
+
+```js
+hoja: 'https://docs.google.com/spreadsheets/d/PEGA_EL_ID/edit#gid=0',
+pestana: 'ofertas',
+```
+
+Para otro local: **Archivo → Hacer una copia**. Cada pastelería tiene
+su hoja.
+
+Opcional: **Archivo → Compartir → Publicar en la web** → pestaña
+`ofertas` → **Valores separados por comas (.csv)** → Publicar.
+
+También sirve pegar el CSV publicado, o solo el ID de la hoja (entonces
+se usa [opensheet](https://opensheet.elk.sh)).
+
+Si la hoja falla, la página usa `datos/ofertas.csv` para no quedar en
+blanco (eso es el truco de sheet2web).
+
+## Columnas
+
+| Columna | Qué va |
+| --- | --- |
+| `producto` | Nombre que ve el cliente |
+| `precio_normal` | Precio de vitrina, en pesos, sin `$` |
+| `precio_oferta` | Precio de hoy. Si va vacío, se muestra el normal |
+| `hoy` | `si` o `no`. Solo `si` sale en la vitrina |
+| `activo` | `si` o `no`. `no` = ni se publica |
+| `nota` | Una línea |
+| `foto` | URL `https://…` o ruta local (`fotos/kuchen.jpg`). Puede ir vacía |
+| `unidades` | Número. `0` = Agotado. Vacío = no se muestra el cupo |
+| `categoria` | Opcional. Si hay, agrupa (Horno, Para llevar…) |
+
+La página también entiende encabezados de las plantillas de GitHub
+(`name`, `price`, `image`, `description`, `stok`, `category`) para no
+romper una hoja copiada de otro repo.
+
+## Probar el estado vacío
+
+Abre `demo-vitrina/?csv=datos/ofertas-sin-hoy.csv`. Ahí todo tiene
+`hoy=no` o `activo=no`: se ve el aviso de que hoy no hay ofertas.

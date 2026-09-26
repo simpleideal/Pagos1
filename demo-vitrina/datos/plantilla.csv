@@ -1,0 +1,6 @@
+producto,precio_normal,precio_oferta,hoy,activo,nota,foto,unidades,categoria
+Kuchen de manzana,8900,4500,si,si,Márcalo si para liquidar hoy. La foto es opcional.,,3,Horno
+Pie de limón,7200,3900,no,si,Activo pero hoy=no: no sale en la vitrina.,,2,Horno
+Mix de facturas (6 un.),5400,2900,si,si,Unidades vacío: se muestra sin cupo.,,,Salado dulce
+Berlín de manjar,1800,900,si,si,unidades=0 se ve Agotado.,,0,Salado dulce
+Torta de cumpleaños,24900,24900,no,no,activo=no: el cliente no lo ve nunca.,,1,Encargos

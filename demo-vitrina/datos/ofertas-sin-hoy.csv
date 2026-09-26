@@ -1,0 +1,4 @@
+producto,precio_normal,precio_oferta,hoy,activo,nota,foto,unidades,categoria
+Kuchen de manzana,8900,4500,no,si,"Hay stock, pero el local todavía no lo marcó para hoy.",fotos/kuchen.jpg,3,Horno
+Pie de limón,7200,3900,no,si,"Mismo caso: activo, pero hoy=no.",fotos/pie-limon.jpg,4,Horno
+Torta selva negra (entera),18900,12000,si,no,"Hoy=si, activo=no: tampoco se publica.",fotos/selva.jpg,1,Horno

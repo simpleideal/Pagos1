@@ -1,0 +1,10 @@
+producto,precio_normal,precio_oferta,hoy,activo,nota,foto,unidades,categoria
+Kuchen de manzana,8900,4500,si,si,"Lo que quedó del horno de la tarde. Porción grande.",fotos/kuchen.jpg,3,Horno
+Pie de limón,7200,3900,si,si,"Merengue tostado. Caja de 6 porciones chicas o 1 tradicional.",fotos/pie-limon.jpg,4,Horno
+Brazo de reina,6500,3500,si,si,"Bizcocho y manjar. Cortamos al momento.",fotos/brazo.jpg,2,Horno
+Mix de facturas (6 un.),5400,2900,si,si,"Medialunas, vigilantes y cañoncitos. Armamos con lo que hay.",fotos/facturas.jpg,5,Salado dulce
+Porción mil hojas,4200,2500,si,si,"Crema pastelera. Una porción.",fotos/milhojas.jpg,6,Horno
+Berlín de manjar,1800,900,si,si,"Fritos de la mañana. Se acabaron.",fotos/berlin.jpg,0,Salado dulce
+Galletas de avena (bolsa),3200,1800,si,si,"Bolsa de 8. Avena y pasas.",fotos/galletas.jpg,8,Para llevar
+Croissant de almendras,2500,1500,no,si,"Mañana sale otra tanda. Hoy no va a la vitrina.",fotos/croissant.jpg,12,Salado dulce
+Torta selva negra (entera),18900,12000,si,no,"La dejamos fuera a propósito: no se ofrece hoy.",fotos/selva.jpg,1,Horno

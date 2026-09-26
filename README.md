@@ -44,12 +44,18 @@ trabajos anteriores, no para cobrar ni para vender un menú.
 
 Páginas de **carta**, como en un restorán: se ofrecen productos o
 servicios para elegir. No van datos de transferencia ni de vehículos;
-eso es muestra 1. Las dos de abajo son **independientes**: no se
-fusionan entre sí.
+eso es muestra 1. Las de abajo son **independientes**: no se fusionan
+entre sí.
 
 - **Casa Fogón:** la carta que ya existía — `demo-carta/`
 - **Buen Bocado:** otra página, con inicio, menú y contacto
   (pinta de restorán con foto grande) — `demo-restaurante/`
+- **Huerto Dulce:** vitrina de **ofertas de hoy**, no menú completo.
+  El local marca en una hoja qué sobró. La página lee esa hoja (CSV
+  publicado o Google Sheets). Si la hoja no responde, usa
+  `demo-vitrina/datos/ofertas.csv`. La plantilla para Google Sheets es
+  `demo-vitrina/datos/plantilla-google-sheets.xlsx`. Cómo conectarla:
+  `demo-vitrina/HOJA.md`. — `demo-vitrina/`
 
 ## Abrir las muestras
 
@@ -59,6 +65,7 @@ fusionan entre sí.
 - [2 · Portafolio](https://simpleideal.github.io/Pagos1/demo-portafolio/)
 - [3 · Carta Fogón](https://simpleideal.github.io/Pagos1/demo-carta/)
 - [3 · Restorán Buen Bocado](https://simpleideal.github.io/Pagos1/demo-restaurante/)
+- [3 · Vitrina Huerto Dulce](https://simpleideal.github.io/Pagos1/demo-vitrina/)
 
 ```bash
 python3 -m http.server 8080 --bind 0.0.0.0
@@ -86,3 +93,14 @@ Muestra 3, Buen Bocado: en `demo-restaurante/index.html`. Es otra
 página, independiente de Fogón. El mapa usa un **punto GPS** (`lat`
 y `lng`), no una calle. Sirve cuando el local o la feria está en un
 parque amplio: se pega el pin de Maps y acerca a esa chincheta.
+
+Muestra 3, Huerto Dulce: en `demo-vitrina/index.html`, el bloque
+**DATOS DE LA VITRINA**. La muestra ya lee `datos/ofertas.csv`.
+Para un local real, Simple Ideal crea la hoja en su Drive, le pide
+solo un Gmail para invitarlo como editor, y pega el enlace en `hoja`.
+El local no edita GitHub ni da acceso a su Drive. Cada tarde cambia
+`hoy`, `precio_oferta` y `unidades`.
+En GitHub hay recetas de menú-con-hoja (sheet2web, opensheet, el
+Web App de Kevin Vaghasiya, el café Bill77). Ninguna es vitrina de
+sobras; el molde de acá toma esa tubería y deja fuera cobro y carta
+fija. Pasos: `demo-vitrina/HOJA.md`.
