@@ -137,17 +137,21 @@ blanco (eso es el truco de sheet2web).
 
 ## Columnas
 
+La hoja de Google se ve como planilla, no como CSV: fila 1 congelada,
+títulos en verde, menú `si`/`no` en Hoy y Activo, y una pestaña
+**Cómo usar**. El script `escribir_hoja.py` deja ese formato.
+
 | Columna | Qué va |
 | --- | --- |
-| `producto` | Nombre que ve el cliente |
-| `precio_normal` | Precio de vitrina, en pesos, sin `$` |
-| `precio_oferta` | Precio de hoy. Si va vacío, se muestra el normal |
-| `hoy` | `si` o `no`. Solo `si` sale en la vitrina |
-| `activo` | `si` o `no`. `no` = ni se publica |
-| `nota` | Una línea |
-| `foto` | URL `https://…` o ruta local (`fotos/kuchen.jpg`). Puede ir vacía |
-| `unidades` | Número. `0` = Agotado. Vacío = no se muestra el cupo |
-| `categoria` | Opcional. Si hay, agrupa (Horno, Para llevar…) |
+| Producto | Nombre que ve el cliente |
+| Precio normal | Precio de vitrina, en pesos, sin `$` |
+| Precio oferta | Precio de hoy. Si va vacío, se muestra el normal |
+| Hoy | `si` o `no`. Solo `si` sale en la vitrina |
+| Activo | `si` o `no`. `no` = ni se publica |
+| Nota | Una línea de pastelería, no de programación |
+| Foto | URL `https://…` o ruta local (`fotos/kuchen.jpg`). Puede ir vacía |
+| Unidades | Número. `0` = Agotado. Vacío = no se muestra el cupo |
+| Categoría | Opcional. Si hay, agrupa (Horno, Para llevar…) |
 
 La página también entiende encabezados de las plantillas de GitHub
 (`name`, `price`, `image`, `description`, `stok`, `category`) para no
