@@ -17,7 +17,8 @@ la cuenta de servicio:
 - Secreto de Cursor: `GOOGLE_SERVICE_ACCOUNT_JSON` (Runtime Secret,
   nunca en git)
 - Compartir la hoja con el `client_email` de ese JSON, como editor
-- Scripts: `demo-vitrina/datos/escribir_hoja.py` y
+- Scripts: `demo-vitrina/datos/escribir_hoja.py` (escribe y formatea
+  la plantilla: títulos en español, menú si/no, pestaña Cómo usar) y
   `demo-vitrina/datos/comprobar_acceso.py`
 - Pasos: `demo-vitrina/HOJA.md`
 
