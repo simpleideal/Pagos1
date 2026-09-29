@@ -149,7 +149,7 @@ títulos en verde, menú `si`/`no` en Hoy y Activo, y una pestaña
 | Hoy | `si` o `no`. Solo `si` sale en la vitrina |
 | Activo | `si` o `no`. `no` = ni se publica |
 | Nota | Una línea de pastelería, no de programación |
-| Foto | URL `https://…` o ruta local (`fotos/kuchen.jpg`). Puede ir vacía |
+| Foto | Una o más rutas, separadas por coma: `fotos/kuchen-1.jpg, fotos/kuchen-2.jpg`. Si hay varias, rotan cada 4 segundos, como en la carta. Puede ir vacía. También se leen columnas `Foto 2`, `Foto 3`, … |
 | Unidades | Número. `0` = Agotado. Vacío = no se muestra el cupo |
 | Categoría | Opcional. Si hay, agrupa (Horno, Para llevar…) |
 

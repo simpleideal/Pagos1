@@ -33,7 +33,7 @@ AYUDA_CABECERA = [
     "si = sale en la vitrina de hoy. no = no sale.",
     "si = el producto existe. no = no se publica nunca.",
     "Una línea. Puede ir vacía.",
-    "Enlace https://… o vacío.",
+    "Una o más rutas, separadas por coma: fotos/kuchen-1.jpg, fotos/kuchen-2.jpg. Si hay varias, rotan solas. Puede ir vacía.",
     "Número. 0 = Agotado. Vacío = no se muestra el cupo.",
     "Opcional. Agrupa: Horno, Para llevar…",
 ]
@@ -50,7 +50,7 @@ USO = [
     [""],
     ["No cambies la fila 1 (los títulos verdes)."],
     ["No pongas $ en los precios. Solo el número: 4500."],
-    ["Foto puede ir vacía."],
+    ["Foto: una ruta por imagen, separadas por coma. Si hay dos o más, rotan solas. Puede ir vacía."],
     [""],
     ["Hoy y Activo tienen un menú: elige si o no. No hace falta escribir."],
 ]
