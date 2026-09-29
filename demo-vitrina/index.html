@@ -199,12 +199,39 @@
             background: #e8dcc8;
         }
 
-        .foto img {
-            width: 100%;
+        .pista {
+            display: flex;
             height: 100%;
+            transition: transform 0.45s ease;
+        }
+
+        .pista img {
+            width: var(--foto);
+            height: var(--foto);
             object-fit: cover;
+            flex-shrink: 0;
             display: block;
         }
+
+        .puntos {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 6px;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            z-index: 1;
+        }
+
+        .puntos span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.45);
+        }
+
+        .puntos span.activo { background: #ffffff; }
 
         .sello {
             position: absolute;
@@ -567,6 +594,59 @@
             return !u.startsWith('//');
         }
 
+        const INTERVALO_FOTOS = 4000;
+        let carruselTimer = null;
+
+        function partesFoto(texto) {
+            return String(texto || '')
+                .split(/[,;\n]+/)
+                .map(function (s) { return s.trim(); })
+                .filter(fotoValida);
+        }
+
+        function fotosDe(fila) {
+            const fotos = [];
+            Object.keys(fila).forEach(function (k) {
+                if (k !== 'foto' && !/^foto_\d+$/.test(k)) return;
+                partesFoto(fila[k]).forEach(function (url) {
+                    if (fotos.indexOf(url) === -1) fotos.push(url);
+                });
+            });
+            return fotos;
+        }
+
+        function mostrarFoto(pista, puntos, indice) {
+            const ancho = pista.parentElement.clientWidth || 108;
+            pista.dataset.indice = String(indice);
+            pista.style.transform = 'translateX(-' + (indice * ancho) + 'px)';
+            if (!puntos) return;
+            Array.prototype.forEach.call(puntos.children, function (punto, i) {
+                punto.classList.toggle('activo', i === indice);
+            });
+        }
+
+        function arrancarCarruseles() {
+            if (carruselTimer) {
+                clearInterval(carruselTimer);
+                carruselTimer = null;
+            }
+            const pistas = document.querySelectorAll('.pista');
+            const hayVarias = Array.prototype.some.call(pistas, function (pista) {
+                return pista.children.length > 1;
+            });
+            if (!hayVarias) return;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            carruselTimer = setInterval(function () {
+                document.querySelectorAll('.pista').forEach(function (pista) {
+                    const n = pista.children.length;
+                    if (n < 2) return;
+                    const actual = Number(pista.dataset.indice || 0);
+                    const siguiente = (actual + 1) % n;
+                    mostrarFoto(pista, pista.parentElement.querySelector('.puntos'), siguiente);
+                });
+            }, INTERVALO_FOTOS);
+        }
+
         function descuento(fila) {
             const normal = numero(fila.precio_normal);
             const oferta = numero(fila.precio_oferta) || normal;
@@ -617,7 +697,7 @@
             const antesN = numero(fila.precio_normal);
             const dto = descuento(fila);
             const cupo = unidadesDe(fila);
-            const fotoOk = fotoValida(fila.foto);
+            const fotos = fotosDe(fila);
             let html = '<article' + (agotado ? ' class="agotado"' : '') + '>';
             html += '<div class="cuerpo">';
             html += '<h3>' + esc(fila.producto) + '</h3>';
@@ -634,8 +714,19 @@
             html += '</div></div>';
             html += '<div class="foto">';
             if (agotado) html += '<span class="sello">Agotado</span>';
-            if (fotoOk) {
-                html += '<img src="' + esc(fila.foto) + '" alt="" width="108" height="108">';
+            if (fotos.length) {
+                html += '<div class="pista" data-indice="0">';
+                fotos.forEach(function (src) {
+                    html += '<img src="' + esc(src) + '" alt="" width="108" height="108">';
+                });
+                html += '</div>';
+                if (fotos.length > 1) {
+                    html += '<div class="puntos">';
+                    fotos.forEach(function (_, i) {
+                        html += '<span' + (i === 0 ? ' class="activo"' : '') + '></span>';
+                    });
+                    html += '</div>';
+                }
             }
             html += '</div></article>';
             return html;
@@ -650,6 +741,7 @@
                     '<h2>Hoy no hay ofertas</h2>' +
                     '<p>El local todavía no marcó sobras en la hoja, o se acabaron. Vuelve más tarde o escribe por WhatsApp.</p>' +
                     '</div>';
+                arrancarCarruseles();
                 return;
             }
             const categorias = [];
@@ -670,6 +762,7 @@
                 });
             }
             caja.innerHTML = html;
+            arrancarCarruseles();
         }
 
         function pintarCabecera(origen) {
