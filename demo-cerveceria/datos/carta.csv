@@ -1,0 +1,9 @@
+nombre,estilo,abv,ibu,formato,precio,precio_oferta,disponible,destacada,foto,descripcion
+Pilsen del Lago,Lager,4.6,18,schop,3900,,si,no,,"Lager clara de muestra, para la primera pinta."
+Ámbar del Rahue,Amber ale,5.2,28,schop,4500,3800,si,si,,"Ámbar de muestra, con nota a caramelo. Hoy va con descuento."
+IPA de los Canelos,IPA,6.4,62,schop,5200,,no,no,,"IPA de muestra, amarga y cítrica. En la hoja figura agotada."
+Negra del Volcán,Stout,6.1,35,schop,4900,,si,no,,"Stout de muestra, tostada, con un punto de café."
+Trigo de Puyehue,Weiss,4.8,,botella,4300,,si,no,,"Weiss de muestra, turbia, con cáscara de naranja. Sin IBU a propósito."
+Roja del Pilmaiquén,Red ale,5.6,30,lata,3700,,si,no,,"Red ale de muestra, malta y un poco de caramelo."
+Session del Ranco,Session IPA,4.2,38,lata,3400,,si,no,,"Session IPA de muestra, liviana, pensada para repetir."
+Porter de la Cordillera,Porter,6.8,40,botella,5100,,no,no,,Porter de muestra. En la hoja figura agotada.
