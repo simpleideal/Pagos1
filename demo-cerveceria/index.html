@@ -916,10 +916,421 @@
         </footer>
 
         <!-- ========== #tour-360 ==========
-             Contenedor opcional, sin interfaz.
-             Un compañero puede implementar aquí un recorrido 360
-             del local, o dejar este bloque sin usar. -->
-        <div id="tour-360"></div>
+             Recorrido de muestra. Fotos públicas de Pannellum,
+             no del local. El plano es un dibujo. -->
+        <div id="tour-360" class="seccion" role="region" aria-labelledby="tour-titulo">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.css">
+            <style>
+                #tour-360 { scroll-margin-top: 64px; }
+
+                #tour-360 .tour-aviso {
+                    margin: 0 0 16px;
+                    padding: 12px 14px;
+                    border-radius: 14px;
+                    border: 1px solid rgba(226, 160, 74, 0.55);
+                    background: rgba(226, 160, 74, 0.12);
+                    color: var(--cream);
+                    font-weight: 700;
+                    line-height: 1.45;
+                }
+
+                #tour-360 .tour-cuerpo {
+                    display: grid;
+                    gap: 14px;
+                }
+
+                #tour-360 .tour-visor {
+                    width: 100%;
+                    height: clamp(260px, 62vw, 440px);
+                    border-radius: 18px;
+                    overflow: hidden;
+                    border: 1px solid var(--line);
+                    background: #140e0b;
+                }
+
+                #tour-360 .tour-ahora {
+                    margin-top: 10px;
+                    color: var(--cream-soft);
+                    font-size: 0.92rem;
+                    font-weight: 700;
+                }
+
+                #tour-360 .tour-fallo {
+                    margin: 0;
+                    padding: 28px 16px;
+                    color: var(--cream-soft);
+                    text-align: center;
+                    line-height: 1.45;
+                }
+
+                #tour-360 .tour-plano-ayuda {
+                    margin: 0 0 10px;
+                    color: var(--muted);
+                    font-size: 0.9rem;
+                    line-height: 1.4;
+                }
+
+                #tour-360 .tour-plano-caja {
+                    position: relative;
+                    border-radius: 18px;
+                    border: 1px solid var(--line);
+                    background: var(--panel);
+                }
+
+                #tour-360 .tour-plano-caja svg {
+                    display: block;
+                    width: 100%;
+                    height: auto;
+                }
+
+                #tour-360 .tour-punto {
+                    position: absolute;
+                    transform: translate(-50%, -50%);
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    min-height: 44px;
+                    padding: 6px 12px 6px 8px;
+                    border-radius: 999px;
+                    border: 1px solid var(--line);
+                    background: rgba(16, 12, 9, 0.88);
+                    color: var(--cream);
+                    font: inherit;
+                    font-size: 0.92rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    white-space: nowrap;
+                }
+
+                #tour-360 .tour-punto-dot {
+                    width: 16px;
+                    height: 16px;
+                    flex: 0 0 auto;
+                    border-radius: 50%;
+                    background: var(--cream);
+                    box-shadow: 0 0 0 3px var(--amber-deep);
+                }
+
+                #tour-360 .tour-punto[aria-pressed="true"] {
+                    border-color: var(--amber);
+                    color: #1a120e;
+                    background: var(--amber);
+                }
+
+                #tour-360 .tour-punto[aria-pressed="true"] .tour-punto-dot {
+                    background: #1a120e;
+                    box-shadow: 0 0 0 3px rgba(26, 18, 14, 0.35);
+                }
+
+                #tour-360 .pnlm-container {
+                    background: #140e0b;
+                    font-family: Outfit, sans-serif;
+                }
+
+                #tour-360 .pnlm-controls {
+                    background-color: var(--cream);
+                    border-color: transparent;
+                    border-radius: 8px;
+                }
+
+                #tour-360 .pnlm-zoom-out {
+                    border-top-color: rgba(28, 19, 14, 0.16);
+                }
+
+                #tour-360 .pnlm-hotspot-base.tour-marca {
+                    width: 16px;
+                    height: 16px;
+                    background: none;
+                }
+
+                #tour-360 .tour-marca-punto {
+                    display: block;
+                    width: 16px;
+                    height: 16px;
+                    border-radius: 50%;
+                    background: var(--amber);
+                    box-shadow: 0 0 0 3px var(--cream), 0 0 0 7px rgba(226, 160, 74, 0.45);
+                }
+
+                #tour-360 .tour-marca-texto {
+                    position: absolute;
+                    left: 26px;
+                    top: 8px;
+                    transform: translateY(-50%);
+                    padding: 5px 10px;
+                    border-radius: 999px;
+                    border: 1px solid rgba(226, 160, 74, 0.8);
+                    background: rgba(16, 12, 9, 0.9);
+                    color: var(--cream);
+                    font-family: Outfit, sans-serif;
+                    font-size: 0.84rem;
+                    font-weight: 700;
+                    line-height: 1.2;
+                    white-space: nowrap;
+                    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+                    pointer-events: none;
+                }
+
+                @media (hover: hover) {
+                    #tour-360 .tour-punto:hover { border-color: var(--amber); }
+                }
+
+                @media (min-width: 880px) {
+                    #tour-360 .tour-cuerpo {
+                        grid-template-columns: minmax(0, 1fr) 280px;
+                        align-items: start;
+                        gap: 18px;
+                    }
+                }
+            </style>
+
+            <p class="oficio">Datos de muestra</p>
+            <h2 id="tour-titulo">Recorrido 360</h2>
+            <p class="tour-aviso">Datos de muestra. Estas fotos no son del local: son panoramas públicos de ejemplo.</p>
+            <p class="seccion-texto">Arrastra la foto para mirar alrededor. En el teléfono, desliza con el dedo. Con teclado, usa las flechas dentro de la foto.</p>
+
+            <div class="tour-cuerpo">
+                <div class="tour-vista">
+                    <div id="tour-visor" class="tour-visor" aria-label="Foto 360 de muestra. Arrastra o usa las flechas para mirar."></div>
+                    <p class="tour-ahora" id="tour-ahora" aria-live="polite">Mirando desde la barra.</p>
+                </div>
+
+                <div class="tour-plano" id="tour-plano">
+                    <p class="ficha-etiqueta">Plano de muestra</p>
+                    <p class="tour-plano-ayuda">Elige un punto para empezar ahí.</p>
+                    <div class="tour-plano-caja" role="group" aria-label="Plano de muestra. Barra o mesas.">
+                        <svg viewBox="0 0 280 300" aria-hidden="true" focusable="false">
+                            <rect width="280" height="300" rx="18" fill="#1c130e"/>
+                            <rect x="16" y="16" width="248" height="268" rx="16" fill="#271910" stroke="rgba(246,239,227,0.28)" stroke-width="2"/>
+                            <g stroke="rgba(246,239,227,0.06)" stroke-width="1">
+                                <path d="M16 78H264M16 132H264M16 186H264"/>
+                            </g>
+                            <g fill="#140e0b" stroke="#e7dccb" stroke-width="1.6">
+                                <rect x="36" y="36" width="78" height="44" rx="10"/>
+                                <rect x="166" y="36" width="78" height="44" rx="10"/>
+                                <rect x="36" y="100" width="78" height="44" rx="10"/>
+                                <rect x="166" y="100" width="78" height="44" rx="10"/>
+                            </g>
+                            <g fill="#cfc3b6">
+                                <circle cx="32" cy="58" r="4"/>
+                                <circle cx="118" cy="58" r="4"/>
+                                <circle cx="162" cy="58" r="4"/>
+                                <circle cx="248" cy="58" r="4"/>
+                                <circle cx="32" cy="122" r="4"/>
+                                <circle cx="118" cy="122" r="4"/>
+                                <circle cx="162" cy="122" r="4"/>
+                                <circle cx="248" cy="122" r="4"/>
+                            </g>
+                            <rect x="36" y="178" width="208" height="56" rx="14" fill="#c47d2a"/>
+                            <rect x="50" y="190" width="180" height="12" rx="6" fill="#e2a04a"/>
+                            <g fill="#1a120e">
+                                <circle cx="74" cy="216" r="6.5"/>
+                                <circle cx="108" cy="216" r="6.5"/>
+                                <circle cx="142" cy="216" r="6.5"/>
+                                <circle cx="176" cy="216" r="6.5"/>
+                                <circle cx="210" cy="216" r="6.5"/>
+                            </g>
+                            <rect x="118" y="278" width="44" height="10" fill="#100c09"/>
+                            <path d="M118 284a22 22 0 0 1 22-22" fill="none" stroke="#e7dccb" stroke-width="1.4"/>
+                            <text x="140" y="262" text-anchor="middle" fill="#cfc3b6" font-family="Outfit, sans-serif" font-size="11" font-weight="600">entrada</text>
+                        </svg>
+                        <button type="button" class="tour-punto" data-escena="mesas" aria-pressed="false" style="left:50%;top:30%">
+                            <span class="tour-punto-dot" aria-hidden="true"></span>
+                            Mesas
+                        </button>
+                        <button type="button" class="tour-punto" data-escena="barra" aria-pressed="true" style="left:50%;top:69%">
+                            <span class="tour-punto-dot" aria-hidden="true"></span>
+                            Barra
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js"></script>
+            <script>
+                (function () {
+                    var FOTOS = {
+                        barra: 'https://pannellum.org/images/alma.jpg',
+                        mesas: 'https://pannellum.org/images/cerro-toco-0.jpg'
+                    };
+                    var VISTAS = {
+                        barra: { pitch: -4, yaw: 117, hfov: 105 },
+                        mesas: { pitch: 2, yaw: 20, hfov: 105 }
+                    };
+                    var NOMBRES = { barra: 'la barra', mesas: 'las mesas' };
+                    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                    var escenaPedida = 'barra';
+                    var visor = null;
+                    var arrancado = false;
+
+                    function marca(pitch, yaw, texto) {
+                        return {
+                            pitch: pitch,
+                            yaw: yaw,
+                            cssClass: 'tour-marca',
+                            createTooltipFunc: function (div, nombre) {
+                                var punto = document.createElement('span');
+                                punto.className = 'tour-marca-punto';
+                                var etiqueta = document.createElement('span');
+                                etiqueta.className = 'tour-marca-texto';
+                                etiqueta.textContent = nombre;
+                                div.appendChild(punto);
+                                div.appendChild(etiqueta);
+                            },
+                            createTooltipArgs: texto
+                        };
+                    }
+
+                    function pintarPlano(id) {
+                        if (!NOMBRES[id]) return;
+                        escenaPedida = id;
+                        Array.prototype.forEach.call(document.querySelectorAll('#tour-plano .tour-punto'), function (boton) {
+                            var activo = boton.getAttribute('data-escena') === id;
+                            boton.setAttribute('aria-pressed', activo ? 'true' : 'false');
+                        });
+                        document.getElementById('tour-ahora').textContent = 'Mirando desde ' + NOMBRES[id] + '.';
+                    }
+
+                    function irA(id) {
+                        if (!VISTAS[id]) return;
+                        pintarPlano(id);
+                        if (!visor || !visor.loadScene) return;
+                        var vista = VISTAS[id];
+                        var misma = false;
+                        try { misma = visor.getScene() === id; } catch (error) {}
+                        if (misma) visor.lookAt(vista.pitch, vista.yaw, vista.hfov, reduce ? 0 : 800);
+                        else visor.loadScene(id, vista.pitch, vista.yaw, vista.hfov);
+                    }
+
+                    function alTeclado(evento) {
+                        if (!visor) return;
+                        var yaw = visor.getYaw();
+                        var pitch = visor.getPitch();
+                        var hfov = visor.getHfov();
+                        var paso = evento.shiftKey ? 24 : 12;
+                        if (evento.key === 'ArrowLeft') yaw -= paso;
+                        else if (evento.key === 'ArrowRight') yaw += paso;
+                        else if (evento.key === 'ArrowUp') pitch += paso;
+                        else if (evento.key === 'ArrowDown') pitch -= paso;
+                        else if (evento.key === '+' || evento.key === '=') hfov -= 8;
+                        else if (evento.key === '-' || evento.key === '_') hfov += 8;
+                        else return;
+                        evento.preventDefault();
+                        visor.stopAutoRotate();
+                        visor.lookAt(pitch, yaw, hfov, 0);
+                    }
+
+                    function configDe(escena) {
+                        var vista = VISTAS[escena] || VISTAS.barra;
+                        return {
+                            default: {
+                                firstScene: VISTAS[escena] ? escena : 'barra',
+                                autoLoad: true,
+                                sceneFadeDuration: reduce ? 0 : 700,
+                                autoRotate: reduce ? 0 : -2,
+                                showZoomCtrl: true,
+                                showFullscreenCtrl: true,
+                                disableKeyboardCtrl: true,
+                                compass: false,
+                                hfov: vista.hfov,
+                                minHfov: 50,
+                                maxHfov: 120,
+                                strings: {
+                                    loadButtonLabel: 'Cargar recorrido',
+                                    loadingLabel: 'Cargando…',
+                                    bylineLabel: 'por %s',
+                                    noPanoramaError: 'No se indicó la foto.',
+                                    fileAccessError: 'No se pudo abrir la foto de muestra.',
+                                    malformedURLError: 'La dirección de la foto no sirve.',
+                                    iOS8WebGLError: 'Este navegador no muestra fotos 360.',
+                                    genericWebGLError: 'Este navegador no puede mostrar el recorrido.',
+                                    textureSizeError: 'Esta foto es demasiado grande para el aparato.',
+                                    unknownError: 'No se pudo abrir el recorrido.'
+                                }
+                            },
+                            scenes: {
+                                barra: {
+                                    type: 'equirectangular',
+                                    panorama: FOTOS.barra,
+                                    pitch: VISTAS.barra.pitch,
+                                    yaw: VISTAS.barra.yaw,
+                                    hfov: VISTAS.barra.hfov,
+                                    hotSpots: [
+                                        marca(-9, 102, 'Barra'),
+                                        marca(-2, 214, 'Mesas')
+                                    ]
+                                },
+                                mesas: {
+                                    type: 'equirectangular',
+                                    panorama: FOTOS.mesas,
+                                    pitch: VISTAS.mesas.pitch,
+                                    yaw: VISTAS.mesas.yaw,
+                                    hfov: VISTAS.mesas.hfov,
+                                    hotSpots: [
+                                        marca(-7, 8, 'Mesas'),
+                                        marca(3, 156, 'Barra')
+                                    ]
+                                }
+                            }
+                        };
+                    }
+
+                    function montar() {
+                        if (visor) return true;
+                        var caja = document.getElementById('tour-visor');
+                        if (caja.offsetWidth < 20) return false;
+                        if (typeof pannellum === 'undefined') {
+                            caja.innerHTML = '<p class="tour-fallo">No se pudo cargar el visor 360.</p>';
+                            visor = { fallo: true };
+                            return true;
+                        }
+                        try {
+                            visor = pannellum.viewer(caja, configDe(escenaPedida));
+                        } catch (error) {
+                            caja.innerHTML = '<p class="tour-fallo">Este navegador no puede mostrar el recorrido.</p>';
+                            visor = { fallo: true };
+                            return true;
+                        }
+                        visor.on('scenechange', pintarPlano);
+                        caja.addEventListener('keydown', alTeclado);
+                        return true;
+                    }
+
+                    function crear() {
+                        if (arrancado) return;
+                        arrancado = true;
+                        if (montar()) return;
+                        if (typeof ResizeObserver === 'undefined') return;
+                        var caja = document.getElementById('tour-visor');
+                        var aviso = new ResizeObserver(function () {
+                            if (!montar()) return;
+                            aviso.disconnect();
+                        });
+                        aviso.observe(caja);
+                    }
+
+                    document.getElementById('tour-plano').addEventListener('click', function (evento) {
+                        var boton = evento.target.closest('button');
+                        if (!boton) return;
+                        irA(boton.getAttribute('data-escena'));
+                    });
+
+                    if (document.documentElement.classList.contains('ya-mayor')) {
+                        requestAnimationFrame(crear);
+                        return;
+                    }
+                    var obs = new MutationObserver(function () {
+                        if (!document.documentElement.classList.contains('ya-mayor')) return;
+                        obs.disconnect();
+                        requestAnimationFrame(crear);
+                    });
+                    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+                })();
+            </script>
+            <noscript>
+                <p class="tour-aviso">Activa JavaScript para ver el recorrido 360. Datos de muestra.</p>
+            </noscript>
+        </div>
     </div>
 
     <script>
