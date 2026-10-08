@@ -312,6 +312,206 @@
 
         .estado.agotada { color: var(--muted); }
 
+        .happy {
+            margin: 0 0 14px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid var(--line);
+            background: var(--panel);
+        }
+
+        .happy.ahora {
+            background: var(--amber);
+            color: #1a120e;
+            border-color: var(--amber);
+        }
+
+        .happy-titulo {
+            font-family: Fraunces, Georgia, serif;
+            font-size: clamp(1.35rem, 4.4vw, 1.75rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .happy-cuenta {
+            margin-top: 4px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .happy-cuenta:empty { display: none; }
+
+        .happy-horario {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .happy.ahora .happy-horario { color: rgba(26, 18, 14, 0.78); }
+
+        .oferta-dia {
+            margin: 0 0 16px;
+            padding: 16px;
+            border-radius: 18px;
+            border: 1.5px solid var(--amber);
+            background:
+                linear-gradient(180deg, rgba(226, 160, 74, 0.18), rgba(39, 25, 16, 0.92));
+        }
+
+        .oferta-dia[hidden] { display: none; }
+
+        .oferta-layout {
+            display: grid;
+            grid-template-columns: 76px minmax(0, 1fr);
+            gap: 12px 14px;
+            align-items: center;
+        }
+
+        .oferta-dia .oficio { margin-bottom: 0; }
+
+        .oferta-dia h3 {
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin: 2px 0 6px;
+            overflow-wrap: anywhere;
+        }
+
+        .oferta-compra { grid-column: 1 / -1; }
+
+        .precios-oferta {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 8px 10px;
+            margin: 10px 0 12px;
+        }
+
+        .precio-antes {
+            color: var(--muted);
+            font-weight: 600;
+            text-decoration: line-through;
+            font-size: 0.95rem;
+        }
+
+        .precio-ahora {
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            color: var(--amber);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .oferta-compra .btn { width: 100%; }
+
+        .filtros { margin: 2px 0 14px; }
+
+        .filtro-nombre {
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin: 10px 0 6px;
+        }
+
+        .filtro-fila {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            flex: 0 0 auto;
+            min-height: 40px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--cream-soft);
+            font: inherit;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .chip.activo {
+            background: var(--cream);
+            color: #1c130e;
+            border-color: var(--cream);
+        }
+
+        .foto-trigo {
+            color: #f2e2a8;
+            background: linear-gradient(180deg, #6a5a28, #1a160e);
+        }
+
+        .foto { position: relative; overflow: hidden; }
+
+        .foto img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cerveza.agotada .foto { filter: grayscale(0.75); }
+
+        .desc {
+            color: var(--muted);
+            font-size: 0.86rem;
+            line-height: 1.35;
+            margin-top: 4px;
+        }
+
+        .carta-espera,
+        .carta-vacia {
+            color: var(--muted);
+            line-height: 1.45;
+            padding: 6px 0 8px;
+        }
+
+        .carta-nota {
+            margin-top: 14px;
+            color: var(--muted);
+            font-size: 0.78rem;
+            line-height: 1.4;
+        }
+
+        @media (hover: hover) {
+            .chip:hover { border-color: var(--amber); }
+            .chip.activo:hover { border-color: var(--cream); }
+        }
+
+        @media (min-width: 720px) {
+            .oferta-layout {
+                grid-template-columns: 96px minmax(0, 1fr) auto;
+                align-items: center;
+                gap: 8px 20px;
+            }
+
+            .oferta-dia .foto { width: 96px; height: 120px; }
+
+            .oferta-compra {
+                grid-column: auto;
+                justify-self: end;
+                text-align: right;
+                min-width: 220px;
+            }
+
+            .precios-oferta { justify-content: flex-end; margin-top: 0; }
+            .oferta-compra .btn { width: auto; min-width: 220px; }
+        }
+
         .redes-lista {
             display: grid;
             gap: 10px;
@@ -630,59 +830,28 @@
             </section>
 
             <!-- ========== #carta ==========
-                 TODO: otro compañero agrega la carta (lista de cervezas
-                 desde una hoja de Google Sheets: estilo, ABV, precio,
-                 disponibilidad y foto), más el happy hour y la oferta
-                 del día.
-                 Las tarjetas de abajo son ejemplo estático para que la
-                 sección no quede vacía. El marcado es simple para
-                 poder reemplazarlo entero. -->
+                 Lista, happy hour y oferta del día, leídos de un CSV.
+                 PEGA LA URL publicada en FUENTE.carta (en el script,
+                 busca "PEGA LA URL"). Vacía o con error: datos/carta.csv.
+                 Happy hour: datos/happy-hour.csv o las constantes HAPPY. -->
             <section class="seccion" id="carta" aria-labelledby="carta-titulo">
                 <p class="oficio">De barril</p>
                 <h2 id="carta-titulo">Carta</h2>
-                <p class="seccion-texto">Pintas de la casa.</p>
-                <div class="cervezas" id="cervezas">
-                    <article class="cerveza">
-                        <div class="foto foto-ambar" aria-hidden="true">
-                            <svg viewBox="0 0 48 72"><path fill="currentColor" d="M14 8h20l-2.2 46.2C31.2 60.6 27.8 64 24 64s-7.2-3.4-7.8-9.8L14 8z"/><ellipse cx="24" cy="10" rx="9" ry="3.2" fill="#f6efe3"/></svg>
-                        </div>
-                        <div class="cuerpo">
-                            <h3>Ámbar del Rahue</h3>
-                            <p class="estilo">Amber ale · 5,2 % ABV</p>
-                            <p class="linea"><span class="precio">$4.500</span><span class="estado">En barra</span></p>
-                        </div>
-                    </article>
-                    <article class="cerveza">
-                        <div class="foto foto-stout" aria-hidden="true">
-                            <svg viewBox="0 0 48 72"><path fill="currentColor" d="M14 8h20l-2.2 46.2C31.2 60.6 27.8 64 24 64s-7.2-3.4-7.8-9.8L14 8z"/><ellipse cx="24" cy="10" rx="9" ry="3.2" fill="#f6efe3"/></svg>
-                        </div>
-                        <div class="cuerpo">
-                            <h3>Negra del Volcán</h3>
-                            <p class="estilo">Stout · 6,1 % ABV</p>
-                            <p class="linea"><span class="precio">$4.900</span><span class="estado">En barra</span></p>
-                        </div>
-                    </article>
-                    <article class="cerveza">
-                        <div class="foto foto-lager" aria-hidden="true">
-                            <svg viewBox="0 0 48 72"><path fill="currentColor" d="M14 8h20l-2.2 46.2C31.2 60.6 27.8 64 24 64s-7.2-3.4-7.8-9.8L14 8z"/><ellipse cx="24" cy="10" rx="9" ry="3.2" fill="#f6efe3"/></svg>
-                        </div>
-                        <div class="cuerpo">
-                            <h3>Pilsen del Lago</h3>
-                            <p class="estilo">Lager · 4,6 % ABV</p>
-                            <p class="linea"><span class="precio">$3.900</span><span class="estado">En barra</span></p>
-                        </div>
-                    </article>
-                    <article class="cerveza agotada">
-                        <div class="foto foto-ipa" aria-hidden="true">
-                            <svg viewBox="0 0 48 72"><path fill="currentColor" d="M14 8h20l-2.2 46.2C31.2 60.6 27.8 64 24 64s-7.2-3.4-7.8-9.8L14 8z"/><ellipse cx="24" cy="10" rx="9" ry="3.2" fill="#f6efe3"/></svg>
-                        </div>
-                        <div class="cuerpo">
-                            <h3>IPA de los Canelos</h3>
-                            <p class="estilo">IPA · 6,4 % ABV</p>
-                            <p class="linea"><span class="precio">$5.200</span><span class="estado agotada">Agotada</span></p>
-                        </div>
-                    </article>
+                <p class="seccion-texto">Pintas, botellas y latas. Lo agotado sigue en la lista, marcado.</p>
+                <div class="happy" id="happy">
+                    <p class="happy-titulo" id="happy-titulo">Revisando el horario…</p>
+                    <p class="happy-cuenta" id="happy-cuenta"></p>
+                    <p class="happy-horario" id="happy-horario"></p>
                 </div>
+                <article class="oferta-dia" id="oferta" hidden></article>
+                <div class="filtros" id="filtros"></div>
+                <div class="cervezas" id="cervezas" aria-label="Cervezas">
+                    <p class="carta-espera">Cargando la carta…</p>
+                </div>
+                <p class="carta-nota" id="carta-origen"></p>
+                <noscript>
+                    <p class="carta-vacia">Activa JavaScript para ver la carta.</p>
+                </noscript>
             </section>
 
             <!-- ========== #redes · redes sociales ==========
@@ -761,9 +930,8 @@
            El mapa usa lat y lng, no la calle. En un punto amplio se pega
            el pin y Maps acerca a esa chincheta.
 
-           #carta, #redes, #ubicacion, #pie y #tour-360 están en el HTML.
-           La carta viva (hoja), el happy hour y la oferta del día
-           se agregan en #carta.
+           #carta lee FUENTE.carta (CSV): lista, happy hour y oferta.
+           #redes, #ubicacion, #pie y #tour-360 están en el HTML.
            ================================================================== */
 
         var CLAVE_EDAD = 'bruma-mayor-18';
@@ -867,6 +1035,899 @@
         });
 
         aplicarContacto();
+
+        /* ==================================================================
+           CARTA — Google Sheets publicado como CSV
+
+           PEGA LA URL del CSV en FUENTE.carta (la de "Publicar en la web"
+           → valores separados por comas). Si queda vacía, o la hoja no
+           responde, la página usa datos/carta.csv.
+
+           Columnas: nombre, estilo, abv, ibu (opcional), formato
+           (schop, botella o lata), precio, precio_oferta (opcional; es
+           el "ahora" de la oferta), disponible (si/no), destacada (si/no),
+           foto (URL opcional), descripcion.
+           La primera fila con destacada=si sale como oferta del día.
+           También vale una columna oferta con si, o con el precio nuevo.
+
+           Happy hour, hora de Chile (America/Santiago), reloj del
+           dispositivo. Se lee datos/happy-hour.csv (dias, inicio, fin).
+           Otra hoja: pega su CSV en FUENTE.happy. Si ninguna responde,
+           se usan las constantes HAPPY.
+
+           Para mirar los dos estados sin esperar la hora:
+           ?hh=ahora  y  ?hh=no
+           ================================================================== */
+
+        var FUENTE = {
+            carta: '',
+            happy: '',
+            csvLocal: 'datos/carta.csv',
+            happyLocal: 'datos/happy-hour.csv'
+        };
+
+        var HAPPY = {
+            dias: [1, 2, 3, 4],
+            inicio: '18:00',
+            fin: '20:00',
+            zona: 'America/Santiago'
+        };
+
+        var ALIAS_CARTA = {
+            nombre: ['nombre', 'cerveza', 'producto', 'name', 'titulo', 'title'],
+            estilo: ['estilo', 'style', 'tipo'],
+            abv: ['abv', 'alcohol', 'grados'],
+            ibu: ['ibu', 'amargor'],
+            formato: ['formato', 'format', 'presentacion', 'envase'],
+            precio: ['precio', 'price', 'precio_normal', 'precio_lista'],
+            precio_oferta: ['precio_oferta', 'preciooferta', 'precio_ahora', 'oferta_precio'],
+            disponible: ['disponible', 'available', 'stock', 'en_barra'],
+            destacada: ['destacada', 'destacado', 'oferta_del_dia', 'oferta_dia', 'del_dia'],
+            oferta: ['oferta', 'promo'],
+            foto: ['foto', 'imagen', 'image', 'image_url', 'photo'],
+            descripcion: ['descripcion', 'description', 'nota', 'detalle'],
+            dias: ['dias', 'dia', 'days'],
+            inicio: ['inicio', 'desde', 'start', 'abre'],
+            fin: ['fin', 'hasta', 'end', 'cierra'],
+            zona: ['zona', 'timezone', 'tz']
+        };
+
+        var CANON_CARTA = {};
+        Object.keys(ALIAS_CARTA).forEach(function (canon) {
+            ALIAS_CARTA[canon].forEach(function (alias) { CANON_CARTA[alias] = canon; });
+        });
+
+        var DIA_INDICE = {
+            dom: 0, domingo: 0, sun: 0,
+            lun: 1, lunes: 1, mon: 1,
+            mar: 2, martes: 2, tue: 2,
+            mie: 3, miercoles: 3, wed: 3,
+            jue: 4, jueves: 4, thu: 4,
+            vie: 5, viernes: 5, fri: 5,
+            sab: 6, sabado: 6, sat: 6
+        };
+
+        var DIAS_LARGO = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+
+        var VASO = '<svg viewBox="0 0 48 72" aria-hidden="true"><path fill="currentColor" d="M14 8h20l-2.2 46.2C31.2 60.6 27.8 64 24 64s-7.2-3.4-7.8-9.8L14 8z"/><ellipse cx="24" cy="10" rx="9" ry="3.2" fill="#f6efe3"/></svg>';
+
+        var ICONO_WA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm.01 1.67c2.2 0 4.26.86 5.82 2.42a8.22 8.22 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.39-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.23 8.23 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24zM8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.85-.87 2.07 0 1.22.89 2.39 1.01 2.56.12.17 1.73 2.78 4.27 3.79 2.11.85 2.54.68 3 .64.46-.05 1.48-.6 1.69-1.18.21-.58.21-1.07.15-1.18-.06-.1-.22-.17-.46-.3-.24-.13-1.47-.73-1.7-.81-.22-.08-.39-.13-.56.13-.17.25-.65.81-.8.97-.15.17-.29.19-.53.06-.24-.13-1.03-.38-1.96-1.21-.72-.64-1.21-1.44-1.35-1.68-.14-.25-.02-.38.11-.51.11-.11.24-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.76-1.84-.2-.48-.4-.42-.56-.42z"/></svg>';
+
+        var cervezasCarta = [];
+        var origenCarta = '';
+        var tramosHappy = [];
+        var zonaHappy = HAPPY.zona;
+        var filtroFormato = '';
+        var filtroEstilo = '';
+        var anclaForzada = null;
+        var marcaForzada = 0;
+        var relojTimer = null;
+
+        function claveCarta(texto) {
+            var limpio = String(texto || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '_')
+                .replace(/^_|_$/g, '');
+            return CANON_CARTA[limpio] || limpio;
+        }
+
+        function quitarTildes(texto) {
+            return String(texto || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function esc(texto) {
+            return String(texto)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function esSi(valor) {
+            var s = quitarTildes(String(valor || '').trim());
+            return s === 'si' || s === 'true' || s === '1' || s === 'yes' || s === 'x';
+        }
+
+        function esNo(valor) {
+            var s = quitarTildes(String(valor || '').trim());
+            return s === 'no' || s === 'false' || s === '0';
+        }
+
+        function esAgotada(valor) {
+            var s = quitarTildes(String(valor || '').trim());
+            return s === 'no' || s === 'false' || s === '0' || s === 'agotada' || s === 'agotado';
+        }
+
+        function numero(n) {
+            var x = Number(String(n == null ? '' : n).replace(/[^\d]/g, ''));
+            return x || 0;
+        }
+
+        function pesos(n) {
+            var x = numero(n);
+            if (!x) return '';
+            return '$' + x.toLocaleString('es-CL');
+        }
+
+        function parsearCsv(texto) {
+            var filas = [];
+            var fila = [];
+            var celda = '';
+            var enComillas = false;
+            var s = String(texto || '').replace(/^\uFEFF/, '');
+            var i, c, n;
+            for (i = 0; i < s.length; i += 1) {
+                c = s[i];
+                n = s[i + 1];
+                if (enComillas) {
+                    if (c === '"' && n === '"') { celda += '"'; i += 1; }
+                    else if (c === '"') enComillas = false;
+                    else celda += c;
+                } else if (c === '"') {
+                    enComillas = true;
+                } else if (c === ',') {
+                    fila.push(celda);
+                    celda = '';
+                } else if (c === '\n' || (c === '\r' && n === '\n')) {
+                    if (c === '\r') i += 1;
+                    fila.push(celda);
+                    celda = '';
+                    if (fila.some(function (x) { return String(x).trim() !== ''; })) filas.push(fila);
+                    fila = [];
+                } else if (c !== '\r') {
+                    celda += c;
+                }
+            }
+            fila.push(celda);
+            if (fila.some(function (x) { return String(x).trim() !== ''; })) filas.push(fila);
+            if (!filas.length) return [];
+            var keys = filas[0].map(claveCarta);
+            return filas.slice(1).map(function (cols) {
+                var o = {};
+                keys.forEach(function (k, idx) {
+                    if (k) o[k] = String(cols[idx] || '').trim();
+                });
+                return o;
+            });
+        }
+
+        function filasDesdeJson(data) {
+            if (!Array.isArray(data)) return [];
+            return data.map(function (row) {
+                var o = {};
+                Object.keys(row || {}).forEach(function (k) {
+                    o[claveCarta(k)] = String(row[k] == null ? '' : row[k]).trim();
+                });
+                return o;
+            });
+        }
+
+        function resolverFuente(entrada, respaldo) {
+            var t = String(entrada || '').trim();
+            if (!t) return { tipo: 'csv', url: respaldo, etiqueta: 'CSV local de muestra' };
+            if (/opensheet\.(elk\.sh|vercel\.app)/i.test(t)) {
+                return { tipo: 'json', url: t, etiqueta: 'Hoja (opensheet)' };
+            }
+            if (/\.csv(\?|$)/i.test(t) || /output=csv/i.test(t) || /tqx=out:csv/i.test(t)) {
+                return { tipo: 'csv', url: t, etiqueta: 'CSV de la hoja' };
+            }
+            var pub = t.match(/\/spreadsheets\/d\/e\/([^/]+)/);
+            if (pub) {
+                return {
+                    tipo: 'csv',
+                    url: 'https://docs.google.com/spreadsheets/d/e/' + pub[1] + '/pub?output=csv',
+                    etiqueta: 'Hoja publicada'
+                };
+            }
+            var id = t.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+            if (id) {
+                var gid = (t.match(/[?&#]gid=([0-9]+)/) || [])[1];
+                var pestana = (t.match(/[?&#]sheet=([^&#]+)/) || [])[1];
+                var url = 'https://docs.google.com/spreadsheets/d/' + id[1] + '/gviz/tq?tqx=out:csv';
+                if (gid) url += '&gid=' + gid;
+                else if (pestana) {
+                    try { pestana = decodeURIComponent(pestana); } catch (error) {}
+                    url += '&sheet=' + encodeURIComponent(pestana);
+                }
+                return { tipo: 'csv', url: url, etiqueta: 'Hoja de Google' };
+            }
+            if (/^[a-zA-Z0-9-_]{20,}$/.test(t)) {
+                return {
+                    tipo: 'json',
+                    url: 'https://opensheet.elk.sh/' + t + '/1',
+                    etiqueta: 'Hoja (opensheet)'
+                };
+            }
+            return { tipo: 'csv', url: t, etiqueta: 'CSV' };
+        }
+
+        function cargarTexto(url) {
+            return fetch(url, { cache: 'no-store' }).then(function (res) {
+                if (!res.ok) throw new Error('http ' + res.status);
+                return res.text();
+            });
+        }
+
+        function cargarFilas(fuente) {
+            if (fuente.tipo === 'json') {
+                return fetch(fuente.url, { cache: 'no-store' }).then(function (res) {
+                    if (!res.ok) throw new Error('http ' + res.status);
+                    return res.json();
+                }).then(filasDesdeJson);
+            }
+            return cargarTexto(fuente.url).then(parsearCsv);
+        }
+
+        function fotoValida(url) {
+            var u = String(url || '').trim();
+            if (!u) return '';
+            if (/^https?:\/\//i.test(u)) return u;
+            if (/^[a-z][a-z0-9+.-]*:/i.test(u)) return '';
+            if (u.indexOf('//') === 0) return '';
+            return u;
+        }
+
+        function claseFoto(estilo) {
+            var e = quitarTildes(estilo);
+            if (/stout|porter|negra|black/.test(e)) return 'foto-stout';
+            if (/ipa|pale/.test(e)) return 'foto-ipa';
+            if (/lager|pils|pilsen|helles|kolsch/.test(e)) return 'foto-lager';
+            if (/weiss|trigo|wheat|blanca|wit|saison|sour/.test(e)) return 'foto-trigo';
+            return 'foto-ambar';
+        }
+
+        function etiquetaFormato(valor) {
+            var s = quitarTildes(valor).trim();
+            var mapa = { schop: 'Schop', botella: 'Botella', lata: 'Lata', pinta: 'Pinta', growler: 'Growler' };
+            if (!s) return '';
+            if (mapa[s]) return mapa[s];
+            var bruto = String(valor).trim();
+            return bruto.charAt(0).toUpperCase() + bruto.slice(1);
+        }
+
+        function textoAbv(valor) {
+            var s = String(valor || '').trim();
+            if (!s) return '';
+            s = s.replace(/abv/ig, '').replace(/%/g, '').trim().replace('.', ',');
+            if (!s) return '';
+            return s + ' % ABV';
+        }
+
+        function textoIbu(valor) {
+            var s = String(valor || '').trim();
+            if (!s) return '';
+            s = s.replace(/ibu/ig, '').trim().replace('.', ',');
+            if (!s) return '';
+            return s + ' IBU';
+        }
+
+        function cervezaDe(fila) {
+            var nombre = fila.nombre || '';
+            if (!nombre) return null;
+            var precioOferta = numero(fila.precio_oferta);
+            var destacada = esSi(fila.destacada);
+            var oferta = String(fila.oferta || '').trim();
+            if (oferta) {
+                if (esSi(oferta)) destacada = true;
+                else if (!esNo(oferta) && numero(oferta)) {
+                    if (!precioOferta) precioOferta = numero(oferta);
+                    destacada = true;
+                }
+            }
+            var marcaDisponible = String(fila.disponible || '').trim();
+            return {
+                nombre: nombre,
+                estilo: fila.estilo || '',
+                abv: fila.abv || '',
+                ibu: fila.ibu || '',
+                formato: fila.formato || '',
+                precio: numero(fila.precio),
+                precioOferta: precioOferta,
+                disponible: !(marcaDisponible && esAgotada(marcaDisponible)),
+                destacada: destacada,
+                foto: fotoValida(fila.foto),
+                descripcion: fila.descripcion || ''
+            };
+        }
+
+        function preciosDe(cerveza) {
+            var antes = cerveza.precio || 0;
+            var oferta = cerveza.precioOferta || 0;
+            var hayOferta = Boolean(antes && oferta && oferta < antes);
+            return {
+                antes: antes,
+                ahora: hayOferta ? oferta : (antes || oferta),
+                hayOferta: hayOferta
+            };
+        }
+
+        function lineaEstilo(cerveza) {
+            var partes = [];
+            if (cerveza.estilo) partes.push(cerveza.estilo);
+            var formato = etiquetaFormato(cerveza.formato);
+            if (formato) partes.push(formato);
+            var abv = textoAbv(cerveza.abv);
+            if (abv) partes.push(abv);
+            var ibu = textoIbu(cerveza.ibu);
+            if (ibu) partes.push(ibu);
+            return partes.join(' · ');
+        }
+
+        function htmlVaso(cerveza) {
+            var html = '<div class="foto ' + claseFoto(cerveza.estilo) + '">';
+            if (cerveza.foto) {
+                html += '<img src="' + esc(cerveza.foto) + '" alt="" width="76" height="96">';
+            }
+            html += VASO + '</div>';
+            return html;
+        }
+
+        function htmlPrecioLista(cerveza) {
+            var precios = preciosDe(cerveza);
+            if (!precios.ahora) return '<span class="precio"></span>';
+            if (precios.hayOferta) {
+                return '<span class="precio"><s class="precio-antes">' + esc(pesos(precios.antes)) +
+                    '</s> ' + esc(pesos(precios.ahora)) + '</span>';
+            }
+            return '<span class="precio">' + esc(pesos(precios.ahora)) + '</span>';
+        }
+
+        function mensajeReserva(cerveza) {
+            var que = cerveza.nombre;
+            var formato = etiquetaFormato(cerveza.formato);
+            if (formato) que += ' (' + formato + ')';
+            return 'Hola, quiero reservar ' + que + ' en ' + LOCAL.nombre + '.';
+        }
+
+        function urlReserva(cerveza) {
+            var numero = String(CONTACTO.whatsappReservas || '').replace(/\D/g, '');
+            return 'https://wa.me/' + numero + '?text=' + encodeURIComponent(mensajeReserva(cerveza));
+        }
+
+        function elegirOferta(lista) {
+            var destacadas = lista.filter(function (cerveza) { return cerveza.destacada; });
+            var i;
+            for (i = 0; i < destacadas.length; i += 1) {
+                if (destacadas[i].disponible) return destacadas[i];
+            }
+            return destacadas[0] || null;
+        }
+
+        function pintarOferta() {
+            var caja = document.getElementById('oferta');
+            var cerveza = elegirOferta(cervezasCarta);
+            if (!cerveza) {
+                caja.hidden = true;
+                caja.innerHTML = '';
+                return;
+            }
+            var precios = preciosDe(cerveza);
+            var html = '<div class="oferta-layout">';
+            html += htmlVaso(cerveza);
+            html += '<div class="oferta-texto"><p class="oficio">Oferta del día</p>';
+            html += '<h3>' + esc(cerveza.nombre) + '</h3>';
+            html += '<p class="estilo">' + esc(lineaEstilo(cerveza)) + '</p>';
+            if (cerveza.descripcion) html += '<p class="desc">' + esc(cerveza.descripcion) + '</p>';
+            html += '</div><div class="oferta-compra"><p class="precios-oferta">';
+            if (precios.hayOferta) html += '<span class="precio-antes">' + esc(pesos(precios.antes)) + '</span>';
+            if (precios.ahora) html += '<span class="precio-ahora">' + esc(pesos(precios.ahora)) + '</span>';
+            html += '</p>';
+            if (cerveza.disponible) {
+                html += '<a class="btn btn-wa" target="_blank" rel="noopener noreferrer" href="' +
+                    esc(urlReserva(cerveza)) + '">' + ICONO_WA + 'Reservar por WhatsApp</a>';
+            } else {
+                html += '<p class="estado agotada">Agotada</p>';
+            }
+            html += '</div></div>';
+            caja.innerHTML = html;
+            caja.hidden = false;
+            enlazarFotos(caja);
+        }
+
+        function chipFiltro(grupo, valor, texto, activo) {
+            return '<button type="button" class="chip' + (activo ? ' activo' : '') +
+                '" data-grupo="' + grupo + '" data-valor="' + esc(valor) +
+                '" aria-pressed="' + (activo ? 'true' : 'false') + '">' + esc(texto) + '</button>';
+        }
+
+        function opcionesFiltro(campo) {
+            var vistos = {};
+            var salida = [];
+            cervezasCarta.forEach(function (cerveza) {
+                var bruto = cerveza[campo];
+                var clave = quitarTildes(bruto).trim();
+                if (!clave || vistos[clave]) return;
+                vistos[clave] = true;
+                salida.push({
+                    clave: clave,
+                    texto: campo === 'formato' ? etiquetaFormato(bruto) : bruto
+                });
+            });
+            if (campo === 'formato') {
+                var orden = { schop: 0, botella: 1, lata: 2 };
+                salida.sort(function (a, b) {
+                    var ia = orden[a.clave] === undefined ? 9 : orden[a.clave];
+                    var ib = orden[b.clave] === undefined ? 9 : orden[b.clave];
+                    if (ia !== ib) return ia - ib;
+                    return a.texto.localeCompare(b.texto, 'es');
+                });
+            }
+            return salida;
+        }
+
+        function pintarFiltros() {
+            var caja = document.getElementById('filtros');
+            if (cervezasCarta.length < 2) {
+                caja.innerHTML = '';
+                return;
+            }
+            var html = '';
+            [['formato', 'Formato', filtroFormato], ['estilo', 'Estilo', filtroEstilo]].forEach(function (def) {
+                var items = opcionesFiltro(def[0]);
+                if (items.length < 2) return;
+                html += '<p class="filtro-nombre">' + def[1] + '</p>';
+                html += '<div class="filtro-fila" role="group" aria-label="' + def[1] + '">';
+                html += chipFiltro(def[0], '', 'Todos', def[2] === '');
+                items.forEach(function (item) {
+                    html += chipFiltro(def[0], item.clave, item.texto, def[2] === item.clave);
+                });
+                html += '</div>';
+            });
+            caja.innerHTML = html;
+        }
+
+        function cervezasVisibles() {
+            return cervezasCarta.filter(function (cerveza) {
+                if (filtroFormato && quitarTildes(cerveza.formato).trim() !== filtroFormato) return false;
+                if (filtroEstilo && quitarTildes(cerveza.estilo).trim() !== filtroEstilo) return false;
+                return true;
+            });
+        }
+
+        function pintarCervezas() {
+            var caja = document.getElementById('cervezas');
+            if (!cervezasCarta.length) {
+                caja.innerHTML = '<p class="carta-vacia">La carta no tiene cervezas.</p>';
+                return;
+            }
+            var visibles = cervezasVisibles();
+            if (!visibles.length) {
+                caja.innerHTML = '<p class="carta-vacia">Ninguna cerveza coincide con ese filtro.</p>';
+                return;
+            }
+            caja.innerHTML = visibles.map(function (cerveza) {
+                var html = '<article class="cerveza' + (cerveza.disponible ? '' : ' agotada') + '">';
+                html += htmlVaso(cerveza);
+                html += '<div class="cuerpo"><h3>' + esc(cerveza.nombre) + '</h3>';
+                html += '<p class="estilo">' + esc(lineaEstilo(cerveza)) + '</p>';
+                if (cerveza.descripcion) html += '<p class="desc">' + esc(cerveza.descripcion) + '</p>';
+                html += '<p class="linea">' + htmlPrecioLista(cerveza);
+                html += cerveza.disponible
+                    ? '<span class="estado">Disponible</span>'
+                    : '<span class="estado agotada">Agotada</span>';
+                html += '</p></div></article>';
+                return html;
+            }).join('');
+            enlazarFotos(caja);
+        }
+
+        function enlazarFotos(raiz) {
+            Array.prototype.forEach.call(raiz.querySelectorAll('.foto img'), function (img) {
+                img.addEventListener('error', function () { img.remove(); });
+            });
+        }
+
+        function aSegundos(hora) {
+            var m = String(hora || '').trim().match(/^(\d{1,2}):(\d{2})/);
+            if (!m) return null;
+            var h = Number(m[1]);
+            var min = Number(m[2]);
+            if (h > 23 || min > 59) return null;
+            return h * 3600 + min * 60;
+        }
+
+        function normalizarHora(valor) {
+            var seg = aSegundos(valor);
+            if (seg == null) return '';
+            var h = Math.floor(seg / 3600);
+            var min = Math.floor((seg % 3600) / 60);
+            return (h < 10 ? '0' : '') + h + ':' + (min < 10 ? '0' : '') + min;
+        }
+
+        function indiceDia(token) {
+            var t = quitarTildes(token).replace(/[^a-z0-9]/g, '');
+            if (Object.prototype.hasOwnProperty.call(DIA_INDICE, t)) return DIA_INDICE[t];
+            if (/^[0-6]$/.test(t)) return Number(t);
+            return null;
+        }
+
+        function parsearDias(texto) {
+            var s = quitarTildes(texto).trim();
+            var dias = [];
+            if (!s) return dias;
+            function agregar(n) {
+                if (n == null || dias.indexOf(n) !== -1) return;
+                dias.push(n);
+            }
+            s.split(/\s*(?:,|;|\/|\sy\s)\s*/).forEach(function (parte) {
+                parte = parte.trim();
+                if (!parte) return;
+                var rango = parte.split(/\s*(?:-|–|—)\s*|\s+a\s+/);
+                if (rango.length === 2) {
+                    var desde = indiceDia(rango[0]);
+                    var hasta = indiceDia(rango[1]);
+                    if (desde != null && hasta != null) {
+                        var i = desde;
+                        var guard = 0;
+                        while (guard < 7) {
+                            agregar(i);
+                            if (i === hasta) return;
+                            i = (i + 1) % 7;
+                            guard += 1;
+                        }
+                        return;
+                    }
+                }
+                agregar(indiceDia(parte));
+            });
+            return dias;
+        }
+
+        function capitalizar(texto) {
+            if (!texto) return '';
+            return texto.charAt(0).toUpperCase() + texto.slice(1);
+        }
+
+        function textoDias(dias) {
+            var orden = dias.slice().sort(function (a, b) { return a - b; });
+            var seguido = orden.length > 1 && orden.every(function (dia, i) {
+                return i === 0 || dia === orden[i - 1] + 1;
+            });
+            if (seguido) return capitalizar(DIAS_LARGO[orden[0]]) + ' a ' + DIAS_LARGO[orden[orden.length - 1]];
+            var nombres = orden.map(function (dia) { return DIAS_LARGO[dia]; });
+            if (nombres.length === 1) return capitalizar(nombres[0]);
+            if (nombres.length === 2) return capitalizar(nombres[0]) + ' y ' + nombres[1];
+            return capitalizar(nombres.slice(0, -1).join(', ') + ' y ' + nombres[nombres.length - 1]);
+        }
+
+        function textoHorario(tramos) {
+            return tramos.map(function (tramo) {
+                return textoDias(tramo.dias) + ' · ' + tramo.inicio + ' a ' + tramo.fin;
+            }).join(' · ');
+        }
+
+        function dentro(seg, inicio, fin) {
+            if (inicio === fin) return false;
+            if (inicio < fin) return seg >= inicio && seg < fin;
+            return seg >= inicio || seg < fin;
+        }
+
+        function partesZona(fecha, zona) {
+            var fmt = new Intl.DateTimeFormat('en-US', {
+                timeZone: zona,
+                weekday: 'short',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hourCycle: 'h23'
+            });
+            var p = {};
+            fmt.formatToParts(fecha).forEach(function (parte) {
+                if (parte.type !== 'literal') p[parte.type] = parte.value;
+            });
+            var dias = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+            var hora = Number(p.hour);
+            if (hora === 24) hora = 0;
+            return {
+                dia: dias[p.weekday],
+                year: Number(p.year),
+                month: Number(p.month),
+                day: Number(p.day),
+                h: hora,
+                m: Number(p.minute),
+                s: Number(p.second)
+            };
+        }
+
+        function fechaEnZona(year, month, day, hour, minute, zona) {
+            var utc = new Date(Date.UTC(year, month - 1, day, hour, minute, 0));
+            var p = partesZona(utc, zona);
+            var comoUtc = Date.UTC(p.year, p.month - 1, p.day, p.h, p.m, p.s);
+            return new Date(utc.getTime() - (comoUtc - utc.getTime()));
+        }
+
+        function fechaAhora() {
+            if (!anclaForzada) return new Date();
+            return new Date(anclaForzada.getTime() + (Date.now() - marcaForzada));
+        }
+
+        function tramoDelDia(tramos, dia) {
+            var i;
+            for (i = 0; i < tramos.length; i += 1) {
+                if (tramos[i].dias.indexOf(dia) !== -1) return tramos[i];
+            }
+            return null;
+        }
+
+        function segEnVentana(tramo, modo) {
+            var inicio = aSegundos(tramo.inicio);
+            var fin = aSegundos(tramo.fin);
+            if (modo === 'no') {
+                var antes = inicio - 3600;
+                if (antes < 0) antes = 0;
+                if (dentro(antes, inicio, fin)) antes = Math.max(0, inicio - 60);
+                return antes;
+            }
+            var prueba = inicio + 20 * 60;
+            if (prueba >= 24 * 3600) prueba -= 24 * 3600;
+            if (!dentro(prueba, inicio, fin)) {
+                var duracion = inicio < fin ? fin - inicio : (24 * 3600 - inicio) + fin;
+                prueba = (inicio + Math.max(60, Math.floor(duracion / 2))) % (24 * 3600);
+            }
+            return prueba;
+        }
+
+        function anclarModo(hh, tramos, zona) {
+            anclaForzada = null;
+            var modo = String(hh || '').trim();
+            if (!modo || !tramos.length) return;
+            var iso = modo.match(/^(\d{4})-(\d{2})-(\d{2})[Tt](\d{2}):(\d{2})/);
+            if (iso) {
+                anclaForzada = fechaEnZona(+iso[1], +iso[2], +iso[3], +iso[4], +iso[5], zona);
+                marcaForzada = Date.now();
+                return;
+            }
+            modo = modo.toLowerCase();
+            if (modo === 'si' || modo === '1') modo = 'ahora';
+            if (modo === 'espera' || modo === '0') modo = 'no';
+            if (modo !== 'ahora' && modo !== 'no') return;
+            var i, cuando, partes, tramo, seg;
+            for (i = 0; i < 8; i += 1) {
+                cuando = new Date(Date.now() + i * 24 * 3600 * 1000);
+                partes = partesZona(cuando, zona);
+                tramo = tramoDelDia(tramos, partes.dia);
+                if (!tramo) continue;
+                seg = segEnVentana(tramo, modo);
+                if (modo === 'no' && dentro(seg, aSegundos(tramo.inicio), aSegundos(tramo.fin))) continue;
+                anclaForzada = fechaEnZona(
+                    partes.year, partes.month, partes.day,
+                    Math.floor(seg / 3600), Math.floor((seg % 3600) / 60),
+                    zona
+                );
+                marcaForzada = Date.now();
+                return;
+            }
+        }
+
+        function buscarProximo(reloj, seg, tramos) {
+            var mejor = null;
+            var d, i, dia, tramo, inicio, peso;
+            for (d = 0; d < 8; d += 1) {
+                dia = (reloj.dia + d) % 7;
+                for (i = 0; i < tramos.length; i += 1) {
+                    tramo = tramos[i];
+                    if (tramo.dias.indexOf(dia) === -1) continue;
+                    inicio = aSegundos(tramo.inicio);
+                    if (inicio == null) continue;
+                    if (d === 0 && inicio <= seg) continue;
+                    peso = d * 100000 + inicio;
+                    if (!mejor || peso < mejor.peso) {
+                        mejor = { peso: peso, diasHasta: d, dia: dia, inicio: tramo.inicio };
+                    }
+                }
+            }
+            return mejor;
+        }
+
+        function textoCuando(diasHasta, dia, inicio) {
+            if (diasHasta === 0) return 'hoy a las ' + inicio;
+            if (diasHasta === 1) return 'mañana a las ' + inicio;
+            return 'el ' + DIAS_LARGO[dia] + ' a las ' + inicio;
+        }
+
+        function dosDigitos(n) {
+            return (n < 10 ? '0' : '') + n;
+        }
+
+        function textoCuenta(total) {
+            var seg = Math.max(0, Math.floor(total));
+            var h = Math.floor(seg / 3600);
+            var m = Math.floor((seg % 3600) / 60);
+            var s = seg % 60;
+            return 'Quedan ' + h + ':' + dosDigitos(m) + ':' + dosDigitos(s);
+        }
+
+        function faltaSiActivo(tramo, dia, seg) {
+            var inicio = aSegundos(tramo.inicio);
+            var fin = aSegundos(tramo.fin);
+            if (inicio == null || fin == null || inicio === fin) return null;
+            if (inicio < fin) {
+                if (tramo.dias.indexOf(dia) === -1) return null;
+                if (seg >= inicio && seg < fin) return fin - seg;
+                return null;
+            }
+            if (tramo.dias.indexOf(dia) !== -1 && seg >= inicio) {
+                return (24 * 3600 - seg) + fin;
+            }
+            var ayer = (dia + 6) % 7;
+            if (tramo.dias.indexOf(ayer) !== -1 && seg < fin) return fin - seg;
+            return null;
+        }
+
+        function estadoHappy(fecha, tramos, zona) {
+            var reloj = partesZona(fecha, zona);
+            var seg = reloj.h * 3600 + reloj.m * 60 + reloj.s;
+            var i, falta;
+            for (i = 0; i < tramos.length; i += 1) {
+                falta = faltaSiActivo(tramos[i], reloj.dia, seg);
+                if (falta != null) {
+                    return { ahora: true, falta: falta, horario: textoHorario(tramos) };
+                }
+            }
+            var proximo = buscarProximo(reloj, seg, tramos);
+            var frase = 'Próximo happy hour';
+            if (proximo) frase = 'Próximo happy hour: ' + textoCuando(proximo.diasHasta, proximo.dia, proximo.inicio);
+            return { ahora: false, frase: frase, horario: textoHorario(tramos) };
+        }
+
+        function pintarHappy() {
+            var caja = document.getElementById('happy');
+            if (!tramosHappy.length) {
+                caja.hidden = true;
+                return;
+            }
+            caja.hidden = false;
+            var estado = estadoHappy(fechaAhora(), tramosHappy, zonaHappy);
+            caja.classList.toggle('ahora', Boolean(estado.ahora));
+            document.getElementById('happy-horario').textContent = estado.horario;
+            if (estado.ahora) {
+                document.getElementById('happy-titulo').textContent = 'Happy hour AHORA';
+                document.getElementById('happy-cuenta').textContent = textoCuenta(estado.falta);
+            } else {
+                document.getElementById('happy-titulo').textContent = estado.frase;
+                document.getElementById('happy-cuenta').textContent = '';
+            }
+        }
+
+        function arrancarReloj() {
+            pintarHappy();
+            if (relojTimer) clearInterval(relojTimer);
+            relojTimer = setInterval(pintarHappy, 1000);
+        }
+
+        function tramosDesdeFilas(filas) {
+            var lista = [];
+            filas.forEach(function (fila) {
+                var dias = parsearDias(fila.dias || '');
+                var inicio = normalizarHora(fila.inicio || '');
+                var fin = normalizarHora(fila.fin || '');
+                if (!dias.length || !inicio || !fin) return;
+                lista.push({
+                    dias: dias,
+                    inicio: inicio,
+                    fin: fin,
+                    zona: String(fila.zona || '').trim()
+                });
+            });
+            return lista;
+        }
+
+        function cargarHappy(urlPedida) {
+            var respaldo = {
+                tramos: [{
+                    dias: HAPPY.dias.slice(),
+                    inicio: normalizarHora(HAPPY.inicio),
+                    fin: normalizarHora(HAPPY.fin)
+                }],
+                zona: HAPPY.zona
+            };
+            var fuente = urlPedida
+                ? { tipo: 'csv', url: urlPedida, etiqueta: 'CSV de prueba' }
+                : resolverFuente(FUENTE.happy, FUENTE.happyLocal);
+            return cargarFilas(fuente).then(function (filas) {
+                var tramos = tramosDesdeFilas(filas);
+                if (!tramos.length) return respaldo;
+                return { tramos: tramos, zona: tramos[0].zona || HAPPY.zona };
+            }).catch(function (err) {
+                console.warn('Happy hour: se usan las constantes.', err);
+                return respaldo;
+            });
+        }
+
+        function textoOrigen(etiqueta, usoRespaldo) {
+            if (usoRespaldo === 'vacia') return 'La hoja está vacía. Se muestran los datos de muestra.';
+            if (usoRespaldo === 'error') return 'La hoja no respondió. Se muestran los datos de muestra.';
+            if (etiqueta === 'CSV de prueba') return 'CSV de prueba';
+            if (etiqueta === 'CSV local de muestra') return 'Datos de muestra';
+            return 'Datos de la hoja publicada';
+        }
+
+        function cargarCarta(csvPedido) {
+            var pedida = csvPedido
+                ? { tipo: 'csv', url: csvPedido, etiqueta: 'CSV de prueba' }
+                : resolverFuente(FUENTE.carta, FUENTE.csvLocal);
+            function aItems(filas) {
+                return filas.map(cervezaDe).filter(Boolean);
+            }
+            return cargarFilas(pedida).then(function (filas) {
+                var items = aItems(filas);
+                if (items.length || csvPedido || pedida.url === FUENTE.csvLocal) {
+                    return { items: items, origen: textoOrigen(pedida.etiqueta) };
+                }
+                return cargarFilas({ tipo: 'csv', url: FUENTE.csvLocal }).then(function (local) {
+                    return { items: aItems(local), origen: textoOrigen(pedida.etiqueta, 'vacia') };
+                });
+            }).catch(function (err) {
+                console.warn('No se pudo leer la carta pedida.', err);
+                if (pedida.url === FUENTE.csvLocal) throw err;
+                return cargarFilas({ tipo: 'csv', url: FUENTE.csvLocal }).then(function (local) {
+                    return { items: aItems(local), origen: textoOrigen(pedida.etiqueta, 'error') };
+                });
+            });
+        }
+
+        function iniciarCarta() {
+            var q = new URLSearchParams(location.search);
+            document.getElementById('filtros').addEventListener('click', function (evento) {
+                var boton = evento.target.closest('button');
+                if (!boton || !boton.dataset.grupo) return;
+                if (boton.dataset.grupo === 'formato') filtroFormato = boton.dataset.valor || '';
+                else filtroEstilo = boton.dataset.valor || '';
+                pintarFiltros();
+                pintarCervezas();
+            });
+            cargarCarta(q.get('csv') || '').then(function (carta) {
+                cervezasCarta = carta.items;
+                origenCarta = carta.origen;
+                return cargarHappy(q.get('happy') || '');
+            }).then(function (happy) {
+                tramosHappy = happy.tramos;
+                zonaHappy = happy.zona || HAPPY.zona;
+                anclarModo(q.get('hh') || '', tramosHappy, zonaHappy);
+                document.getElementById('carta-origen').textContent = origenCarta;
+                pintarFiltros();
+                pintarCervezas();
+                pintarOferta();
+                arrancarReloj();
+            }).catch(function (err) {
+                console.warn(err);
+                document.getElementById('cervezas').innerHTML =
+                    '<p class="carta-vacia">No se pudo cargar la carta. Revisa el enlace del CSV.</p>';
+                document.getElementById('happy').hidden = true;
+                document.getElementById('oferta').hidden = true;
+            });
+        }
+
+        iniciarCarta();
+
 
         if (document.documentElement.classList.contains('edad-no')) {
             document.getElementById('edad').setAttribute('aria-labelledby', 'edad-titulo-no');
