@@ -56,6 +56,9 @@ entre sí.
   `demo-vitrina/datos/ofertas.csv`. La plantilla para Google Sheets es
   `demo-vitrina/datos/plantilla-google-sheets.xlsx`. Cómo conectarla:
   `demo-vitrina/HOJA.md`. — `demo-vitrina/`
+- **Cervecería Bruma:** otra página, para un bar que vende alcohol.
+  Confirmación de +18 al entrar, carta de ejemplo, redes, mapa en
+  Osorno y aviso de consumo responsable. — `demo-cerveceria/`
 
 ## Abrir las muestras
 
@@ -66,6 +69,7 @@ entre sí.
 - [3 · Carta Fogón](https://simpleideal.github.io/Pagos1/demo-carta/)
 - [3 · Restorán Buen Bocado](https://simpleideal.github.io/Pagos1/demo-restaurante/)
 - [3 · Vitrina Huerto Dulce](https://simpleideal.github.io/Pagos1/demo-vitrina/)
+- [3 · Cervecería Bruma](https://simpleideal.github.io/Pagos1/demo-cerveceria/)
 
 ```bash
 python3 -m http.server 8080 --bind 0.0.0.0
@@ -104,3 +108,12 @@ En GitHub hay recetas de menú-con-hoja (sheet2web, opensheet, el
 Web App de Kevin Vaghasiya, el café Bill77). Ninguna es vitrina de
 sobras; el molde de acá toma esa tubería y deja fuera cobro y carta
 fija. Pasos: `demo-vitrina/HOJA.md`.
+
+Muestra 3, Cervecería Bruma: en `demo-cerveceria/index.html`, el
+bloque **DATOS DEL LOCAL**. La puerta de edad es `#edad` (se recuerda
+en el navegador). El hero es `#inicio`. La carta de ejemplo está en
+`#carta`: otro compañero conecta ahí la hoja (estilo, ABV, precio,
+disponibilidad, foto), el happy hour y la oferta del día. Redes en
+`#redes`. El mapa, en `#ubicacion`, usa un punto GPS (`lat` y `lng`)
+en Osorno, igual que Buen Bocado. El pie es `#pie`. `#tour-360` queda
+vacío a propósito.
