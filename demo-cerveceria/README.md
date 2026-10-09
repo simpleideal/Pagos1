@@ -1,6 +1,6 @@
 # Cervecería Bruma
 
-La página tiene cuatro pantallas: Inicio, Carta, Recorrido y Contacto.
+La página tiene tres pestañas: Inicio, Carta y Recorrido y reserva.
 La portada (`img/fachada.jpg`) es la fachada del bar Sixty Four en NOMO,
 Bacoor, Cavite — foto de UndueMarmot, [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/deed.es).
 Solo se achicó (2000×1500). El nombre «Cervecería Bruma» va encima, con un degradado.
@@ -10,7 +10,7 @@ La carta y el happy hour siguen leyendo `datos/carta.csv` y
 `datos/happy-hour.csv` (o la URL de `FUENTE`). Al entrar se ven la oferta
 del día y cuatro cervezas; el resto se abre con «Ver carta completa».
 
-El mapa y los botones para compartir la ubicación están en Inicio.
+En el inicio, el mapa es un cuadro chico junto a la dirección y el horario.
 Carta, recorrido y contacto usan de fondo `img/fachada-fondo.jpg`
 (la misma fachada, más chica, una sola vez).
 
