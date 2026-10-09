@@ -1,3 +1,15 @@
+# Cervecería Bruma
+
+La página tiene cuatro pantallas: Inicio, Carta, Recorrido y Contacto.
+La portada (`img/fachada.jpg`) es la fachada del bar Sixty Four en NOMO,
+Bacoor, Cavite — foto de UndueMarmot, [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/deed.es).
+Solo se achicó (2000×1500). El nombre «Cervecería Bruma» va encima, con un degradado.
+No es el local.
+
+La carta y el happy hour siguen leyendo `datos/carta.csv` y
+`datos/happy-hour.csv` (o la URL de `FUENTE`). Al entrar se ven la oferta
+del día y cuatro cervezas; el resto se abre con «Ver carta completa».
+
 # Recorrido 360
 
 La sección `#tour-360` de la muestra usa fotos de ejemplo, no del local.
