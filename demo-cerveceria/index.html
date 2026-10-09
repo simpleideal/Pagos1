@@ -1070,16 +1070,30 @@
         }
 
         @media (max-width: 560px) {
-            .marca { font-size: 1.05rem; }
-            .pestanias {
-                flex: 1 1 100%;
-                justify-content: space-between;
+            .barra {
+                flex-wrap: nowrap;
                 gap: 8px;
+                min-height: 52px;
+                padding: 8px 12px;
             }
-            .pestanias button { font-size: 0.8rem; }
+            .marca {
+                flex: 0 0 auto;
+                font-size: 1.05rem;
+            }
+            .pestanias {
+                flex: 1 1 auto;
+                flex-wrap: nowrap;
+                justify-content: flex-end;
+                gap: 8px 10px;
+                min-width: 0;
+            }
+            .pestanias button {
+                font-size: 0.76rem;
+                white-space: nowrap;
+            }
             .portada {
-                /* La barra pasa a dos filas (~74px) y la portada llena el resto. */
-                min-height: calc(100svh - 74px);
+                /* La barra queda en una fila (~52px) y la portada llena el resto. */
+                min-height: calc(100svh - 52px);
                 padding: 16px 16px 40px;
                 justify-content: center;
             }
@@ -1125,7 +1139,7 @@
             <nav class="pestanias" aria-label="Secciones">
                 <button type="button" data-vista="inicio" class="activa" aria-current="page">Inicio</button>
                 <button type="button" data-vista="carta">Carta</button>
-                <button type="button" data-vista="recorrido">Recorrido y reserva</button>
+                <button type="button" data-vista="recorrido">Reserva</button>
             </nav>
         </header>
 
@@ -1290,8 +1304,7 @@
                     margin: 0 0 10px;
                 }
 
-                #tour-360 .tour-modo,
-                #tour-360 .tour-orientacion {
+                #tour-360 .tour-modo {
                     min-height: 44px;
                     padding: 8px 2px;
                     border-radius: 0;
@@ -1305,11 +1318,36 @@
                     cursor: pointer;
                 }
 
-                #tour-360 .tour-modo[aria-pressed="true"],
-                #tour-360 .tour-orientacion[aria-pressed="true"] {
+                /* Dentro del marco de la foto, para que no salga de la escena. */
+                #tour-360 .tour-marco .tour-orientacion {
+                    position: absolute;
+                    z-index: 5;
+                    right: 10px;
+                    bottom: 10px;
+                    max-width: calc(100% - 20px);
+                    min-height: 36px;
+                    padding: 6px 10px;
+                    border-radius: 999px;
+                    border: 1px solid rgba(246, 239, 227, 0.45);
+                    background: rgba(16, 12, 9, 0.78);
+                    color: var(--cream);
+                    font: inherit;
+                    font-size: 0.78rem;
+                    font-weight: 700;
+                    line-height: 1.2;
+                    cursor: pointer;
+                }
+
+                #tour-360 .tour-modo[aria-pressed="true"] {
                     background: none;
                     color: var(--cream);
                     border-bottom-color: rgba(246, 239, 227, 0.7);
+                }
+
+                #tour-360 .tour-marco .tour-orientacion[aria-pressed="true"] {
+                    color: #1a120e;
+                    background: var(--cream);
+                    border-color: transparent;
                 }
 
                 #tour-360 .tour-simula {
@@ -1658,8 +1696,7 @@
 
                 @media (hover: hover) {
                     #tour-360 .tour-punto:hover,
-                    #tour-360 .tour-modo:hover,
-                    #tour-360 .tour-orientacion:hover { color: var(--cream); }
+                    #tour-360 .tour-modo:hover { color: var(--cream); }
                 }
 
                 @media (min-width: 880px) {
@@ -1672,13 +1709,12 @@
             </style>
 
             <p class="oficio">Datos de muestra</p>
-            <h2 id="tour-titulo">Recorrido 360</h2>
+            <h2 id="tour-titulo">Reserva</h2>
             <p class="tour-aviso">Datos de muestra. Estas fotos no son del local: son panoramas públicos de ejemplo.</p>
             <p class="seccion-texto">Arrastra la foto para mirar alrededor. En el teléfono, desliza con el dedo. Con teclado, usa las flechas dentro de la foto.</p>
             <div class="tour-modos" role="group" aria-label="Tipo de foto de las mesas">
                 <button type="button" class="tour-modo" id="tour-modo-360" aria-pressed="true">360° completo</button>
                 <button type="button" class="tour-modo" id="tour-modo-pano" aria-pressed="false">Panorámica de teléfono</button>
-                <button type="button" class="tour-orientacion" id="tour-orientacion" hidden aria-pressed="false">Mover con el teléfono</button>
             </div>
             <p class="tour-simula" id="tour-simula" hidden>Panorámica real (otro local, de muestra).</p>
 
@@ -1688,6 +1724,7 @@
                         <div id="tour-visor" class="tour-visor" aria-label="Foto 360 de muestra. Arrastra o usa las flechas para mirar."></div>
                         <p class="tour-carga" id="tour-carga" role="status">Cargando la foto…</p>
                         <p class="tour-ahora" id="tour-ahora" aria-live="polite">Mirando desde la barra.</p>
+                        <button type="button" class="tour-orientacion" id="tour-orientacion" hidden aria-pressed="false">Mover con el teléfono</button>
                     </div>
                 </div>
 
@@ -2739,7 +2776,7 @@
 
            #carta lee FUENTE.carta (CSV): lista, happy hour y oferta.
            El mapa y los botones para compartir están en #inicio.
-           Tour, contacto y redes están en la pestaña Recorrido y reserva.
+           Tour, contacto y redes están en la pestaña Reserva.
            Las mesas del recorrido llegan en window.BRUMA_MESAS.
            ================================================================== */
 
