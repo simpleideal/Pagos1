@@ -1069,8 +1069,6 @@
             .oferta-compra .btn { width: 100%; }
         }
 
-        .pestania-corta { display: none; }
-
         @media (max-width: 560px) {
             .barra {
                 flex-wrap: nowrap;
@@ -1099,14 +1097,6 @@
                 padding: 16px 16px 40px;
                 justify-content: center;
             }
-        }
-
-        @media (max-width: 390px) {
-            .barra { padding: 8px 10px; gap: 6px; }
-            .pestanias { gap: 6px 8px; }
-            .pestanias button { font-size: 0.72rem; }
-            .pestania-larga { display: none; }
-            .pestania-corta { display: inline; }
         }
     </style>
     <script>
@@ -1149,7 +1139,7 @@
             <nav class="pestanias" aria-label="Secciones">
                 <button type="button" data-vista="inicio" class="activa" aria-current="page">Inicio</button>
                 <button type="button" data-vista="carta">Carta</button>
-                <button type="button" data-vista="recorrido" aria-label="Recorrido y reserva"><span class="pestania-larga">Recorrido y reserva</span><span class="pestania-corta">Reserva</span></button>
+                <button type="button" data-vista="recorrido">Reserva</button>
             </nav>
         </header>
 
@@ -1719,7 +1709,7 @@
             </style>
 
             <p class="oficio">Datos de muestra</p>
-            <h2 id="tour-titulo">Recorrido 360</h2>
+            <h2 id="tour-titulo">Reserva</h2>
             <p class="tour-aviso">Datos de muestra. Estas fotos no son del local: son panoramas públicos de ejemplo.</p>
             <p class="seccion-texto">Arrastra la foto para mirar alrededor. En el teléfono, desliza con el dedo. Con teclado, usa las flechas dentro de la foto.</p>
             <div class="tour-modos" role="group" aria-label="Tipo de foto de las mesas">
@@ -2786,7 +2776,7 @@
 
            #carta lee FUENTE.carta (CSV): lista, happy hour y oferta.
            El mapa y los botones para compartir están en #inicio.
-           Tour, contacto y redes están en la pestaña Recorrido y reserva.
+           Tour, contacto y redes están en la pestaña Reserva.
            Las mesas del recorrido llegan en window.BRUMA_MESAS.
            ================================================================== */
 
