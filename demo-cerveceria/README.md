@@ -99,3 +99,47 @@ CC BY-SA 4.0). Es un panorama real de teléfono, no un recorte del 360.
 También solo se achica. El vertical estimado es 58°, y el horizontal
 sale del aspecto (cerca de 257°). La etiqueta cae sobre una mesa. No es
 una zona nueva del plano.
+
+## Mesas para reservar
+
+Los datos están en `datos/mesas.csv`. Los lee `js/mesas.js`. El visor
+todavía no dibuja los puntos, y `#reservar-mesa` sigue vacío.
+
+Columnas, en este orden:
+
+`mesa`, `zona`, `capacidad`, `estado`, `yaw`, `pitch`, `nota`
+
+`zona` usa el id de la escena de Pannellum: `barra`, `mesas` o
+`terraza`. Esos tres están en el plano. `mesas-pano` no es una zona.
+
+`estado` es `libre` o `reservada`.
+
+`yaw` y `pitch` son grados de Pannellum en esa foto. En la muestra
+están aproximados, cerca de la vista inicial de cada escena y fuera
+de la etiqueta que ya marca el lugar (barra en yaw 0 / pitch −18,
+mesas en −30 / −12, terraza en −27 / −18). Se pueden corregir en la
+hoja.
+
+### Desde el teléfono del dueño
+
+1. En Drive, abre la hoja de las mesas.
+2. Busca la fila de la mesa.
+3. En `estado`, escribe `reservada`. Para dejarla libre de nuevo,
+   escribe `libre`.
+4. No hace falta volver a publicar: al recargar la página se lee el
+   CSV otra vez.
+
+La primera vez, la hoja se publica como CSV (**Archivo → Compartir →
+Publicar en la web → Valores separados por comas**) y esa URL se pega
+en `FUENTE.mesas`, en `index.html`, donde dice **PEGA LA URL**. Si
+queda vacía, o la hoja no responde, se usan las 8 mesas de muestra.
+
+### Para conectar los puntos
+
+Cuando los datos están listos, `window.BRUMA_MESAS` es un arreglo y
+la página dispara `bruma:mesas` con ese arreglo en `detail`. Cada
+objeto trae `mesa` (texto), `zona` (`barra`, `mesas` o `terraza`),
+`capacidad` (número), `estado` (`libre` o `reservada`), `yaw` y
+`pitch` (números, o `null` si la celda iba vacía) y `nota` (texto).
+El punto de una mesa va en la escena de su `zona`, en ese `yaw` y
+`pitch`.

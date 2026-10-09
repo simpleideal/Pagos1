@@ -2113,11 +2113,16 @@
 
            Para mirar los dos estados sin esperar la hora:
            ?hh=ahora  y  ?hh=no
+
+           Mesas: PEGA LA URL del CSV en FUENTE.mesas (Publicar en la
+           web → valores separados por comas). Si queda vacía, o la
+           hoja no responde, js/mesas.js usa datos/mesas.csv.
            ================================================================== */
 
         var FUENTE = {
             carta: '',
             happy: '',
+            mesas: '',
             csvLocal: 'datos/carta.csv',
             happyLocal: 'datos/happy-hour.csv'
         };
@@ -3060,5 +3065,6 @@
             document.getElementById('edad-si').focus();
         }
     </script>
+    <script src="js/mesas.js"></script>
 </body>
 </html>
