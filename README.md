@@ -59,6 +59,10 @@ entre sí.
 - **Cervecería Bruma:** otra página, para un bar que vende alcohol.
   Confirmación de +18 al entrar, carta de ejemplo, redes, mapa en
   Osorno y aviso de consumo responsable. — `demo-cerveceria/`
+- **Fogón del Lago:** carta aparte, con Español, English y Português,
+  y lectura en voz alta. Si no hay hoja, usa
+  `demo-carta-idiomas/datos/carta.csv`. Cómo publicar la hoja y
+  `GOOGLETRANSLATE`: `demo-carta-idiomas/HOJA.md`. — `demo-carta-idiomas/`
 
 ## Abrir las muestras
 
@@ -70,6 +74,7 @@ entre sí.
 - [3 · Restorán Buen Bocado](https://simpleideal.github.io/Pagos1/demo-restaurante/)
 - [3 · Vitrina Huerto Dulce](https://simpleideal.github.io/Pagos1/demo-vitrina/)
 - [3 · Cervecería Bruma](https://simpleideal.github.io/Pagos1/demo-cerveceria/)
+- [3 · Carta Fogón del Lago](https://simpleideal.github.io/Pagos1/demo-carta-idiomas/)
 
 ```bash
 python3 -m http.server 8080 --bind 0.0.0.0
@@ -117,3 +122,9 @@ disponibilidad, foto), el happy hour y la oferta del día. Redes en
 `#redes`. El mapa, en `#ubicacion`, usa un punto GPS (`lat` y `lng`)
 en Osorno, igual que Buen Bocado. El pie es `#pie`. `#tour-360` queda
 vacío a propósito.
+
+Muestra 3, Fogón del Lago: en `demo-carta-idiomas/index.html`, el
+bloque **CARTA**. Es otra página, solo la carta, con idioma y voz.
+El botón 🔊 busca primero un MP3 (`pastel-de-choclo.es.mp3`) y, si
+no está, usa la voz del navegador. `FUENTE.carta` queda vacío hasta
+pegar el CSV publicado. Pasos: `demo-carta-idiomas/HOJA.md`.

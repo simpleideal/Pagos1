@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta · Fogón del Lago</title>
+    <meta name="description" content="Carta de muestra de Fogón del Lago, en Osorno. Español, inglés y portugués. Datos inventados.">
+    <meta name="theme-color" content="#100c09">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #100c09;
+            --panel: #271910;
+            --cream: #f6efe3;
+            --cream-soft: #e7dccb;
+            --amber: #e2a04a;
+            --muted: #cfc3b6;
+            --line: rgba(246, 239, 227, 0.14);
+            --wa: #25d366;
+            --wa-ink: #062816;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; color-scheme: dark; }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Outfit, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--cream);
+            background:
+                radial-gradient(900px 420px at 50% -12%, rgba(196, 125, 42, 0.28), transparent 58%),
+                var(--ink);
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--amber);
+            outline-offset: 3px;
+        }
+
+        .barra {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px 12px;
+            flex-wrap: wrap;
+            min-height: 58px;
+            padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px;
+            background: rgba(16, 12, 9, 0.92);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(10px);
+        }
+
+        .marca {
+            color: var(--cream);
+            text-decoration: none;
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+
+        .marca small {
+            display: block;
+            font-family: Outfit, sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--amber);
+        }
+
+        .idiomas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .idioma {
+            min-height: 40px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--cream-soft);
+            font: inherit;
+            font-size: 0.84rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .idioma.activo {
+            background: var(--cream);
+            color: #1c130e;
+            border-color: var(--cream);
+        }
+
+        main {
+            width: min(1040px, 100%);
+            margin: 0 auto;
+            padding: 28px 20px 20px;
+        }
+
+        .oficio {
+            color: var(--amber);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        h1, h2 {
+            font-family: Fraunces, Georgia, serif;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+
+        h1 {
+            font-size: clamp(2.4rem, 10vw, 4.2rem);
+            line-height: 1.02;
+            margin-bottom: 12px;
+        }
+
+        h1::after {
+            content: "";
+            display: block;
+            width: 42px;
+            height: 2px;
+            margin-top: 12px;
+            background: var(--amber);
+        }
+
+        .bajada {
+            max-width: 40ch;
+            color: var(--cream-soft);
+            font-size: 1.05rem;
+            line-height: 1.45;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 48px;
+            padding: 12px 18px;
+            border-radius: 999px;
+            border: 1.5px solid transparent;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
+
+        .btn-wa {
+            width: 100%;
+            margin-top: 18px;
+            background: var(--wa);
+            color: var(--wa-ink);
+        }
+
+        .btn:active { transform: scale(0.98); }
+
+        .filtros { margin: 18px 0 8px; }
+
+        .filtro-nombre {
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin: 0 0 6px;
+        }
+
+        .filtro-fila {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            flex: 0 0 auto;
+            min-height: 40px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--cream-soft);
+            font: inherit;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .chip.activo {
+            background: var(--cream);
+            color: #1c130e;
+            border-color: var(--cream);
+        }
+
+        .lista { display: grid; gap: 10px; margin-top: 8px; }
+
+        .grupo {
+            font-size: 1.35rem;
+            line-height: 1.15;
+            margin: 12px 0 0;
+        }
+
+        .plato {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            min-width: 0;
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid var(--line);
+            background: var(--panel);
+        }
+
+        .plato.agotada { opacity: 0.72; }
+
+        .foto {
+            width: 72px;
+            height: 72px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .foto svg { width: 42px; height: 42px; }
+        .foto-platos { color: #e2a04a; background: linear-gradient(180deg, #4a2c12, #1a100c); }
+        .foto-bebidas { color: #f0d48a; background: linear-gradient(180deg, #3a4a28, #14160e); }
+        .foto-postres { color: #f0c2a0; background: linear-gradient(180deg, #5a3028, #1a100e); }
+
+        .foto img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .plato.agotada .foto { filter: grayscale(0.75); }
+
+        .cuerpo { min-width: 0; flex: 1; }
+
+        .cabeza {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .plato h3 {
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            overflow-wrap: anywhere;
+        }
+
+        .voz {
+            flex: 0 0 auto;
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: transparent;
+            font-size: 1.15rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .voz.activa {
+            background: var(--amber);
+            border-color: var(--amber);
+        }
+
+        .estilo {
+            color: var(--muted);
+            font-size: 0.88rem;
+            line-height: 1.35;
+            margin-top: 4px;
+            overflow-wrap: anywhere;
+        }
+
+        .desc {
+            color: var(--cream-soft);
+            font-size: 0.92rem;
+            line-height: 1.4;
+            margin-top: 6px;
+            overflow-wrap: anywhere;
+        }
+
+        .linea {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .precio {
+            color: var(--amber);
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            font-size: 1.02rem;
+        }
+
+        .estado {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--amber);
+        }
+
+        .estado.agotada { color: var(--muted); }
+
+        .carta-espera,
+        .carta-vacia {
+            color: var(--muted);
+            line-height: 1.45;
+            padding: 8px 0;
+        }
+
+        .carta-nota {
+            margin-top: 16px;
+            color: var(--muted);
+            font-size: 0.78rem;
+            line-height: 1.4;
+        }
+
+        .pie {
+            width: min(1040px, 100%);
+            margin: 0 auto;
+            padding: 8px 20px calc(28px + env(safe-area-inset-bottom, 0px));
+            color: var(--muted);
+            font-size: 0.8rem;
+            line-height: 1.45;
+            text-align: center;
+        }
+
+        @media (hover: hover) {
+            .chip:hover, .idioma:hover { border-color: var(--amber); }
+            .chip.activo:hover, .idioma.activo:hover { border-color: var(--cream); }
+        }
+
+        @media (min-width: 720px) {
+            .barra { padding-left: 32px; padding-right: 32px; }
+            main { padding: 40px 32px 16px; }
+            .btn-wa { width: auto; }
+            .lista { grid-template-columns: 1fr 1fr; }
+            .grupo { grid-column: 1 / -1; }
+            .pie { padding-left: 32px; padding-right: 32px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="barra">
+        <a class="marca" href="#carta">Fogón del Lago <small id="marca-lugar">Osorno</small></a>
+        <div class="idiomas" id="idiomas" role="group" aria-label="Idioma">
+            <button type="button" class="idioma activo" data-idioma="es" aria-pressed="true">Español</button>
+            <button type="button" class="idioma" data-idioma="en" aria-pressed="false">English</button>
+            <button type="button" class="idioma" data-idioma="pt" aria-pressed="false">Português</button>
+        </div>
+    </header>
+
+    <main id="carta">
+        <p class="oficio" id="oficio">Cocina chilena · Osorno</p>
+        <h1 id="carta-titulo">Carta</h1>
+        <p class="bajada" id="bajada">Platos, bebidas y postres de muestra. Lo agotado sigue en la lista, marcado.</p>
+        <a class="btn btn-wa" id="pedir" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm.01 1.67c2.2 0 4.26.86 5.82 2.42a8.22 8.22 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.39-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.23 8.23 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24zM8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.85-.87 2.07 0 1.22.89 2.39 1.01 2.56.12.17 1.73 2.78 4.27 3.79 2.11.85 2.54.68 3 .64.46-.05 1.48-.6 1.69-1.18.21-.58.21-1.07.15-1.18-.06-.1-.22-.17-.46-.3-.24-.13-1.47-.73-1.7-.81-.22-.08-.39-.13-.56.13-.17.25-.65.81-.8.97-.15.17-.29.19-.53.06-.24-.13-1.03-.38-1.96-1.21-.72-.64-1.21-1.44-1.35-1.68-.14-.25-.02-.38.11-.51.11-.11.24-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.76-1.84-.2-.48-.4-.42-.56-.42z"/></svg>
+            <span id="pedir-texto">Reservar por WhatsApp</span>
+        </a>
+        <div class="filtros" id="filtros"></div>
+        <div class="lista" id="lista" aria-label="Carta">
+            <p class="carta-espera" id="espera">Cargando la carta…</p>
+        </div>
+        <p class="carta-nota" id="origen"></p>
+        <noscript><p class="carta-vacia">Activa JavaScript para ver la carta.</p></noscript>
+    </main>
+    <p class="pie" id="pie">Muestra de Simple Ideal. Nombres, precios y el teléfono son ficticios.</p>
+
+    <script>
+        /* ==================================================================
+           CARTA — Google Sheets publicado como CSV
+
+           PEGA LA URL del CSV en FUENTE.carta (Archivo → Compartir →
+           Publicar en la web → valores separados por comas). Si queda
+           vacía, o la hoja no responde, se usa datos/carta.csv.
+           Pasos y fórmulas: demo-carta-idiomas/HOJA.md
+
+           Columnas: nombre, estilo, categoria (platos, bebidas, postres),
+           precio, disponible (si/no), descripcion, foto (opcional).
+           Idioma, opcionales. Si faltan o van vacías, se muestra el español:
+           nombre_en, estilo_en, descripcion_en, nombre_pt, estilo_pt,
+           descripcion_pt.
+           En la hoja (fórmulas en español, con punto y coma):
+           =GOOGLETRANSLATE(A2;"es";"en")
+           =GOOGLETRANSLATE(A2;"es";"pt")
+           Si la hoja separa con coma: =GOOGLETRANSLATE(A2,"es","en")
+
+           Audio opcional: audio_es, audio_en, audio_pt. Una URL https
+           o una ruta dentro de audio/. Si la celda va vacía, se busca
+           audio/<nombre-sin-tildes>.<idioma>.mp3
+           (Pastel de choclo → audio/pastel-de-choclo.es.mp3).
+           Minúsculas, sin tildes, ñ pasa a n, espacios a guiones.
+           Si ese archivo no está o falla, se usa la voz del navegador
+           y no se muestra un error. Los MP3 pueden salir de VibeVoice
+           en Colab o de otra voz neuronal. Ver HOJA.md.
+
+           El mensaje de WhatsApp queda en español: lo lee el local.
+           ================================================================== */
+
+        var LOCAL = {
+            nombre: 'Fogón del Lago',
+            lugar: 'Osorno'
+        };
+
+        var CONTACTO = {
+            whatsapp: '56955554433',
+            mensaje: 'Hola, quiero reservar una mesa en Fogón del Lago.'
+        };
+
+        var FUENTE = {
+            carta: '',
+            csvLocal: 'datos/carta.csv'
+        };
+
+        var CLAVE_IDIOMA = 'fogon-lago-idioma';
+
+        var TEXTOS = {
+            es: {
+                html: 'es',
+                voz: 'es-CL',
+                tituloPagina: 'Carta · Fogón del Lago',
+                oficio: 'Cocina chilena · Osorno',
+                titulo: 'Carta',
+                bajada: 'Platos, bebidas y postres de muestra. Lo agotado sigue en la lista, marcado.',
+                reservar: 'Reservar por WhatsApp',
+                categoria: 'Categoría',
+                todos: 'Todos',
+                disponible: 'Disponible',
+                agotada: 'Agotada',
+                escuchar: 'Escuchar {nombre}',
+                detener: 'Detener la lectura de {nombre}',
+                vacia: 'La carta no tiene platos.',
+                filtro: 'Ningún plato coincide con ese filtro.',
+                error: 'No se pudo cargar la carta. Revisa el enlace del CSV.',
+                espera: 'Cargando la carta…',
+                origenMuestra: 'Datos de muestra',
+                origenHoja: 'Datos de la hoja publicada',
+                origenVacia: 'La hoja está vacía. Se muestran los datos de muestra.',
+                origenError: 'La hoja no respondió. Se muestran los datos de muestra.',
+                origenPrueba: 'CSV de prueba',
+                pie: 'Muestra de Simple Ideal. Nombres, precios y el teléfono son ficticios.',
+                idioma: 'Idioma',
+                lista: 'Carta',
+                cats: { platos: 'Platos', bebidas: 'Bebidas', postres: 'Postres' }
+            },
+            en: {
+                html: 'en',
+                voz: 'en-US',
+                tituloPagina: 'Menu · Fogón del Lago',
+                oficio: 'Chilean cooking · Osorno',
+                titulo: 'Menu',
+                bajada: 'Sample dishes, drinks and desserts. Sold-out items stay on the list, marked.',
+                reservar: 'Reserve on WhatsApp',
+                categoria: 'Category',
+                todos: 'All',
+                disponible: 'Available',
+                agotada: 'Sold out',
+                escuchar: 'Listen to {nombre}',
+                detener: 'Stop reading {nombre}',
+                vacia: 'The menu has no dishes.',
+                filtro: 'No dishes match that filter.',
+                error: 'The menu could not be loaded. Check the CSV link.',
+                espera: 'Loading the menu…',
+                origenMuestra: 'Sample data',
+                origenHoja: 'Data from the published sheet',
+                origenVacia: 'The sheet is empty. Sample data is shown.',
+                origenError: 'The sheet did not respond. Sample data is shown.',
+                origenPrueba: 'Test CSV',
+                pie: 'Simple Ideal sample. Names, prices and the phone number are made up.',
+                idioma: 'Language',
+                lista: 'Menu',
+                cats: { platos: 'Dishes', bebidas: 'Drinks', postres: 'Desserts' }
+            },
+            pt: {
+                html: 'pt',
+                voz: 'pt-BR',
+                tituloPagina: 'Cardápio · Fogón del Lago',
+                oficio: 'Cozinha chilena · Osorno',
+                titulo: 'Cardápio',
+                bajada: 'Pratos, bebidas e sobremesas de amostra. O que acabou continua na lista, marcado.',
+                reservar: 'Reservar no WhatsApp',
+                categoria: 'Categoria',
+                todos: 'Todos',
+                disponible: 'Disponível',
+                agotada: 'Esgotado',
+                escuchar: 'Ouvir {nombre}',
+                detener: 'Parar a leitura de {nombre}',
+                vacia: 'O cardápio não tem pratos.',
+                filtro: 'Nenhum prato combina com esse filtro.',
+                error: 'Não foi possível carregar o cardápio. Revise o link do CSV.',
+                espera: 'Carregando o cardápio…',
+                origenMuestra: 'Dados de amostra',
+                origenHoja: 'Dados da planilha publicada',
+                origenVacia: 'A planilha está vazia. Mostramos os dados de amostra.',
+                origenError: 'A planilha não respondeu. Mostramos os dados de amostra.',
+                origenPrueba: 'CSV de teste',
+                pie: 'Amostra da Simple Ideal. Nomes, preços e o telefone são fictícios.',
+                idioma: 'Idioma',
+                lista: 'Cardápio',
+                cats: { platos: 'Pratos', bebidas: 'Bebidas', postres: 'Sobremesas' }
+            }
+        };
+
+        var ALIAS = {
+            nombre: ['nombre', 'plato', 'producto', 'name', 'titulo', 'title'],
+            estilo: ['estilo', 'style', 'tipo'],
+            categoria: ['categoria', 'category', 'seccion', 'section'],
+            precio: ['precio', 'price', 'precio_normal', 'precio_lista'],
+            precio_oferta: ['precio_oferta', 'preciooferta', 'precio_ahora'],
+            disponible: ['disponible', 'available', 'stock'],
+            descripcion: ['descripcion', 'description', 'nota', 'detalle'],
+            foto: ['foto', 'imagen', 'image', 'image_url', 'photo'],
+            nombre_en: ['nombre_en', 'name_en', 'titulo_en'],
+            estilo_en: ['estilo_en', 'style_en'],
+            descripcion_en: ['descripcion_en', 'description_en'],
+            nombre_pt: ['nombre_pt', 'name_pt', 'titulo_pt'],
+            estilo_pt: ['estilo_pt', 'style_pt'],
+            descripcion_pt: ['descripcion_pt', 'description_pt'],
+            id: ['id', 'slug', 'codigo'],
+            audio_es: ['audio_es', 'mp3_es', 'audio'],
+            audio_en: ['audio_en', 'mp3_en'],
+            audio_pt: ['audio_pt', 'mp3_pt']
+        };
+
+        var CANON = {};
+        Object.keys(ALIAS).forEach(function (canon) {
+            ALIAS[canon].forEach(function (alias) { CANON[alias] = canon; });
+        });
+
+        var CATS = {
+            platos: 'platos', plato: 'platos', comida: 'platos', dishes: 'platos', pratos: 'platos',
+            bebidas: 'bebidas', bebida: 'bebidas', drinks: 'bebidas',
+            postres: 'postres', postre: 'postres', desserts: 'postres', sobremesas: 'postres'
+        };
+
+        var ORDEN_CAT = ['platos', 'bebidas', 'postres'];
+
+        var PLATO_SVG = '<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="42" rx="22" ry="8" fill="currentColor"/><path d="M16 40c1.5-14 8-20 16-20s14.5 6 16 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>';
+
+        var platos = [];
+        var origenClave = 'origenMuestra';
+        var idioma = 'es';
+        var filtroCat = '';
+        var botonLeyendo = null;
+        var audioActual = null;
+        var hayVoz = typeof window.speechSynthesis !== 'undefined' && typeof window.SpeechSynthesisUtterance === 'function';
+
+        function t() { return TEXTOS[idioma] || TEXTOS.es; }
+
+        function claveCampo(texto) {
+            var limpio = String(texto || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '_')
+                .replace(/^_|_$/g, '');
+            return CANON[limpio] || limpio;
+        }
+
+        function quitarTildes(texto) {
+            return String(texto || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function esc(texto) {
+            return String(texto)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function esSi(valor) {
+            var s = quitarTildes(String(valor || '').trim());
+            return s === 'si' || s === 'true' || s === '1' || s === 'yes' || s === 'x';
+        }
+
+        function esNo(valor) {
+            var s = quitarTildes(String(valor || '').trim());
+            return s === 'no' || s === 'false' || s === '0' || s === 'agotada' || s === 'agotado' || s === 'esgotado';
+        }
+
+        function numero(n) {
+            var x = Number(String(n == null ? '' : n).replace(/[^\d]/g, ''));
+            return x || 0;
+        }
+
+        function pesos(n) {
+            var x = numero(n);
+            if (!x) return '';
+            return '$' + x.toLocaleString('es-CL');
+        }
+
+        function parsearCsv(texto) {
+            var filas = [];
+            var fila = [];
+            var celda = '';
+            var enComillas = false;
+            var s = String(texto || '').replace(/^\uFEFF/, '');
+            var i, c, n;
+            for (i = 0; i < s.length; i += 1) {
+                c = s[i];
+                n = s[i + 1];
+                if (enComillas) {
+                    if (c === '"' && n === '"') { celda += '"'; i += 1; }
+                    else if (c === '"') enComillas = false;
+                    else celda += c;
+                } else if (c === '"') {
+                    enComillas = true;
+                } else if (c === ',') {
+                    fila.push(celda);
+                    celda = '';
+                } else if (c === '\n' || (c === '\r' && n === '\n')) {
+                    if (c === '\r') i += 1;
+                    fila.push(celda);
+                    celda = '';
+                    if (fila.some(function (x) { return String(x).trim() !== ''; })) filas.push(fila);
+                    fila = [];
+                } else if (c !== '\r') {
+                    celda += c;
+                }
+            }
+            fila.push(celda);
+            if (fila.some(function (x) { return String(x).trim() !== ''; })) filas.push(fila);
+            if (!filas.length) return [];
+            var keys = filas[0].map(claveCampo);
+            return filas.slice(1).map(function (cols) {
+                var o = {};
+                keys.forEach(function (k, idx) {
+                    if (k) o[k] = String(cols[idx] || '').trim();
+                });
+                return o;
+            });
+        }
+
+        function filasDesdeJson(data) {
+            if (!Array.isArray(data)) return [];
+            return data.map(function (row) {
+                var o = {};
+                Object.keys(row || {}).forEach(function (k) {
+                    o[claveCampo(k)] = String(row[k] == null ? '' : row[k]).trim();
+                });
+                return o;
+            });
+        }
+
+        function resolverFuente(entrada, respaldo) {
+            var valor = String(entrada || '').trim();
+            if (!valor) return { tipo: 'csv', url: respaldo, etiqueta: 'CSV local de muestra' };
+            if (/opensheet\.(elk\.sh|vercel\.app)/i.test(valor)) {
+                return { tipo: 'json', url: valor, etiqueta: 'Hoja (opensheet)' };
+            }
+            if (/\.csv(\?|$)/i.test(valor) || /output=csv/i.test(valor) || /tqx=out:csv/i.test(valor)) {
+                return { tipo: 'csv', url: valor, etiqueta: 'CSV de la hoja' };
+            }
+            var pub = valor.match(/\/spreadsheets\/d\/e\/([^/]+)/);
+            if (pub) {
+                return {
+                    tipo: 'csv',
+                    url: 'https://docs.google.com/spreadsheets/d/e/' + pub[1] + '/pub?output=csv',
+                    etiqueta: 'Hoja publicada'
+                };
+            }
+            var id = valor.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+            if (id) {
+                var gid = (valor.match(/[?&#]gid=([0-9]+)/) || [])[1];
+                var url = 'https://docs.google.com/spreadsheets/d/' + id[1] + '/gviz/tq?tqx=out:csv';
+                if (gid) url += '&gid=' + gid;
+                return { tipo: 'csv', url: url, etiqueta: 'Hoja de Google' };
+            }
+            return { tipo: 'csv', url: valor, etiqueta: 'CSV' };
+        }
+
+        function cargarFilas(fuente) {
+            if (fuente.tipo === 'json') {
+                return fetch(fuente.url, { cache: 'no-store' }).then(function (res) {
+                    if (!res.ok) throw new Error('http ' + res.status);
+                    return res.json();
+                }).then(filasDesdeJson);
+            }
+            return fetch(fuente.url, { cache: 'no-store' }).then(function (res) {
+                if (!res.ok) throw new Error('http ' + res.status);
+                return res.text();
+            }).then(parsearCsv);
+        }
+
+        function fotoValida(url) {
+            var u = String(url || '').trim();
+            if (!u) return '';
+            if (/^https?:\/\//i.test(u)) return u;
+            if (/^[a-z][a-z0-9+.-]*:/i.test(u)) return '';
+            if (u.indexOf('//') === 0) return '';
+            return u;
+        }
+
+        function categoriaDe(valor) {
+            var s = quitarTildes(valor).trim();
+            if (!s) return 'platos';
+            return CATS[s] || s;
+        }
+
+        function platoDe(fila) {
+            var nombre = fila.nombre || '';
+            if (!nombre) return null;
+            var marca = String(fila.disponible || '').trim();
+            return {
+                nombre: nombre,
+                nombre_en: fila.nombre_en || '',
+                nombre_pt: fila.nombre_pt || '',
+                estilo: fila.estilo || '',
+                estilo_en: fila.estilo_en || '',
+                estilo_pt: fila.estilo_pt || '',
+                descripcion: fila.descripcion || '',
+                descripcion_en: fila.descripcion_en || '',
+                descripcion_pt: fila.descripcion_pt || '',
+                id: fila.id || '',
+                audio_es: fila.audio_es || '',
+                audio_en: fila.audio_en || '',
+                audio_pt: fila.audio_pt || '',
+                categoria: categoriaDe(fila.categoria),
+                precio: numero(fila.precio),
+                precioOferta: numero(fila.precio_oferta),
+                disponible: !(marca && esNo(marca)),
+                foto: fotoValida(fila.foto)
+            };
+        }
+
+        function textoDe(plato, campo) {
+            if (idioma === 'es') return plato[campo] || '';
+            return plato[campo + '_' + idioma] || plato[campo] || '';
+        }
+
+        function nombreCat(clave) {
+            return (t().cats && t().cats[clave]) || clave;
+        }
+
+        function claseFoto(cat) {
+            if (cat === 'bebidas') return 'foto-bebidas';
+            if (cat === 'postres') return 'foto-postres';
+            return 'foto-platos';
+        }
+
+        function preciosDe(plato) {
+            var antes = plato.precio || 0;
+            var oferta = plato.precioOferta || 0;
+            var hay = Boolean(antes && oferta && oferta < antes);
+            return { antes: antes, ahora: hay ? oferta : (antes || oferta), hay: hay };
+        }
+
+        function htmlPrecio(plato) {
+            var p = preciosDe(plato);
+            if (!p.ahora) return '';
+            if (p.hay) {
+                return '<span class="precio"><s>' + esc(pesos(p.antes)) + '</s> ' + esc(pesos(p.ahora)) + '</span>';
+            }
+            return '<span class="precio">' + esc(pesos(p.ahora)) + '</span>';
+        }
+
+        function lecturaDe(plato) {
+            return [textoDe(plato, 'nombre'), textoDe(plato, 'estilo'), textoDe(plato, 'descripcion')]
+                .filter(function (parte) { return String(parte || '').trim(); })
+                .join('. ');
+        }
+
+        function guardarIdioma(codigo) {
+            try { localStorage.setItem(CLAVE_IDIOMA, codigo); }
+            catch (error) {}
+        }
+
+        function leerIdiomaGuardado() {
+            try { return localStorage.getItem(CLAVE_IDIOMA) || ''; }
+            catch (error) { return ''; }
+        }
+
+        function idiomaValido(codigo) {
+            return codigo === 'es' || codigo === 'en' || codigo === 'pt';
+        }
+
+        function aplicarIdioma(codigo, guardar) {
+            if (!idiomaValido(codigo)) codigo = 'es';
+            idioma = codigo;
+            if (guardar) guardarIdioma(codigo);
+            detenerLectura();
+            var textos = t();
+            document.documentElement.lang = textos.html;
+            document.title = textos.tituloPagina;
+            document.getElementById('oficio').textContent = textos.oficio;
+            document.getElementById('carta-titulo').textContent = textos.titulo;
+            document.getElementById('bajada').textContent = textos.bajada;
+            document.getElementById('pedir-texto').textContent = textos.reservar;
+            document.getElementById('pie').textContent = textos.pie;
+            document.getElementById('idiomas').setAttribute('aria-label', textos.idioma);
+            document.getElementById('lista').setAttribute('aria-label', textos.lista);
+            document.getElementById('origen').textContent = textos[origenClave] || '';
+            Array.prototype.forEach.call(document.querySelectorAll('.idioma'), function (boton) {
+                var activo = boton.getAttribute('data-idioma') === codigo;
+                boton.classList.toggle('activo', activo);
+                boton.setAttribute('aria-pressed', activo ? 'true' : 'false');
+            });
+            pintarFiltros();
+            pintarLista();
+        }
+
+        function urlWhatsapp() {
+            var numero = String(CONTACTO.whatsapp || '').replace(/\D/g, '');
+            return 'https://wa.me/' + numero + '?text=' + encodeURIComponent(CONTACTO.mensaje);
+        }
+
+        function pintarFiltros() {
+            var caja = document.getElementById('filtros');
+            var vistas = {};
+            var orden = [];
+            platos.forEach(function (plato) {
+                if (vistas[plato.categoria]) return;
+                vistas[plato.categoria] = true;
+                orden.push(plato.categoria);
+            });
+            orden.sort(function (a, b) {
+                var ia = ORDEN_CAT.indexOf(a);
+                var ib = ORDEN_CAT.indexOf(b);
+                if (ia < 0) ia = 9;
+                if (ib < 0) ib = 9;
+                return ia - ib;
+            });
+            if (orden.length < 2) {
+                caja.innerHTML = '';
+                return;
+            }
+            var textos = t();
+            var html = '<p class="filtro-nombre">' + esc(textos.categoria) + '</p>';
+            html += '<div class="filtro-fila" role="group" aria-label="' + esc(textos.categoria) + '">';
+            html += chip('', textos.todos, filtroCat === '');
+            orden.forEach(function (cat) {
+                html += chip(cat, nombreCat(cat), filtroCat === cat);
+            });
+            html += '</div>';
+            caja.innerHTML = html;
+        }
+
+        function chip(valor, texto, activo) {
+            return '<button type="button" class="chip' + (activo ? ' activo' : '') +
+                '" data-cat="' + esc(valor) + '" aria-pressed="' + (activo ? 'true' : 'false') +
+                '">' + esc(texto) + '</button>';
+        }
+
+        function visibles() {
+            return platos.filter(function (plato) {
+                return !filtroCat || plato.categoria === filtroCat;
+            });
+        }
+
+        function pintarLista() {
+            var caja = document.getElementById('lista');
+            var textos = t();
+            if (!platos.length) {
+                caja.innerHTML = '<p class="carta-vacia">' + esc(textos.vacia) + '</p>';
+                return;
+            }
+            var items = visibles();
+            if (!items.length) {
+                caja.innerHTML = '<p class="carta-vacia">' + esc(textos.filtro) + '</p>';
+                return;
+            }
+            var html = '';
+            var catActual = null;
+            items.forEach(function (plato) {
+                if (plato.categoria !== catActual) {
+                    catActual = plato.categoria;
+                    html += '<h2 class="grupo">' + esc(nombreCat(catActual)) + '</h2>';
+                }
+                html += htmlPlato(plato);
+            });
+            caja.innerHTML = html;
+            Array.prototype.forEach.call(caja.querySelectorAll('.foto img'), function (img) {
+                img.addEventListener('error', function () { img.remove(); });
+            });
+        }
+
+        function htmlPlato(plato) {
+            var textos = t();
+            var nombre = textoDe(plato, 'nombre');
+            var estilo = textoDe(plato, 'estilo');
+            var descripcion = textoDe(plato, 'descripcion');
+            var html = '<article class="plato' + (plato.disponible ? '' : ' agotada') + '">';
+            html += '<div class="foto ' + claseFoto(plato.categoria) + '">';
+            if (plato.foto) html += '<img src="' + esc(plato.foto) + '" alt="" width="72" height="72">';
+            html += PLATO_SVG + '</div>';
+            html += '<div class="cuerpo"><div class="cabeza"><h3>' + esc(nombre) + '</h3>';
+            html += '<button type="button" class="voz" data-leer="' + esc(lecturaDe(plato)) +
+                '" data-audio="' + esc(urlAudio(plato)) + '" data-nombre="' + esc(nombre) +
+                '" aria-pressed="false" aria-label="' +
+                esc(textos.escuchar.replace('{nombre}', nombre)) + '">🔊</button>';
+            html += '</div>';
+            if (estilo) html += '<p class="estilo">' + esc(estilo) + '</p>';
+            if (descripcion) html += '<p class="desc">' + esc(descripcion) + '</p>';
+            html += '<p class="linea">' + htmlPrecio(plato);
+            html += plato.disponible
+                ? '<span class="estado">' + esc(textos.disponible) + '</span>'
+                : '<span class="estado agotada">' + esc(textos.agotada) + '</span>';
+            html += '</p></div></article>';
+            return html;
+        }
+
+        function marcarVoz(boton, activo) {
+            if (!boton) return;
+            var nombre = boton.getAttribute('data-nombre') || '';
+            var textos = t();
+            boton.classList.toggle('activa', activo);
+            boton.setAttribute('aria-pressed', activo ? 'true' : 'false');
+            boton.setAttribute('aria-label', (activo ? textos.detener : textos.escuchar).replace('{nombre}', nombre));
+        }
+
+        /* Pastel de choclo → pastel-de-choclo. Minúsculas, sin tildes, ñ → n. */
+        function slugDe(texto) {
+            return quitarTildes(texto).trim()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+
+        function rutaAudio(dado) {
+            var u = String(dado || '').trim();
+            if (!u) return '';
+            if (/^https?:\/\//i.test(u)) return u;
+            if (/^[a-z][a-z0-9+.-]*:/i.test(u) || u.indexOf('//') === 0) return '';
+            if (u.indexOf('audio/') === 0 || u.indexOf('./audio/') === 0) return u.replace(/^\.\//, '');
+            if (u.indexOf('/') === -1) return 'audio/' + u;
+            return u.replace(/^\.\//, '');
+        }
+
+        function urlAudio(plato) {
+            var puesto = rutaAudio(plato['audio_' + idioma]);
+            if (puesto) return puesto;
+            var slug = slugDe(plato.nombre);
+            if (!slug) return '';
+            return 'audio/' + slug + '.' + idioma + '.mp3';
+        }
+
+        function soltarAudio() {
+            var audio = audioActual;
+            audioActual = null;
+            if (!audio) return;
+            audio.onended = null;
+            audio.onerror = null;
+            try {
+                audio.pause();
+                audio.removeAttribute('src');
+                audio.load();
+            } catch (error) {}
+        }
+
+        function detenerLectura() {
+            soltarAudio();
+            if (hayVoz) {
+                try { window.speechSynthesis.cancel(); }
+                catch (error) {}
+            }
+            if (botonLeyendo) marcarVoz(botonLeyendo, false);
+            botonLeyendo = null;
+        }
+
+        function vozDelIdioma() {
+            var voces = [];
+            try { voces = window.speechSynthesis.getVoices() || []; }
+            catch (error) { return null; }
+            var prefijos = idioma === 'en'
+                ? ['en-us', 'en-gb', 'en']
+                : idioma === 'pt'
+                    ? ['pt-br', 'pt-pt', 'pt']
+                    : ['es-cl', 'es-419', 'es-mx', 'es-es', 'es'];
+            var i, j, lang;
+            for (i = 0; i < prefijos.length; i += 1) {
+                for (j = 0; j < voces.length; j += 1) {
+                    lang = String(voces[j].lang || '').toLowerCase().replace('_', '-');
+                    if (lang === prefijos[i] || lang.indexOf(prefijos[i]) === 0) return voces[j];
+                }
+            }
+            return null;
+        }
+
+        function cerrarLectura(boton) {
+            if (botonLeyendo !== boton) return;
+            marcarVoz(boton, false);
+            botonLeyendo = null;
+        }
+
+        function hablar(boton) {
+            var texto = boton.getAttribute('data-leer') || '';
+            if (!hayVoz || !texto) {
+                cerrarLectura(boton);
+                return;
+            }
+            var frase = new SpeechSynthesisUtterance(texto);
+            frase.lang = t().voz;
+            var voz = vozDelIdioma();
+            if (voz) frase.voice = voz;
+            frase.onend = function () { cerrarLectura(boton); };
+            frase.onerror = function () { cerrarLectura(boton); };
+            try { window.speechSynthesis.speak(frase); }
+            catch (error) { cerrarLectura(boton); }
+        }
+
+        function intentarAudio(boton, src) {
+            var audio = new Audio();
+            var pasado = false;
+            audioActual = audio;
+            function alHabla() {
+                if (pasado || botonLeyendo !== boton || audioActual !== audio) return;
+                pasado = true;
+                soltarAudio();
+                hablar(boton);
+            }
+            audio.addEventListener('error', alHabla);
+            audio.addEventListener('ended', function () {
+                if (botonLeyendo !== boton || audioActual !== audio) return;
+                soltarAudio();
+                cerrarLectura(boton);
+            });
+            audio.src = src;
+            var juego = audio.play();
+            if (juego && typeof juego.catch === 'function') juego.catch(alHabla);
+        }
+
+        function alternarLectura(boton) {
+            if (botonLeyendo === boton) {
+                detenerLectura();
+                return;
+            }
+            detenerLectura();
+            botonLeyendo = boton;
+            marcarVoz(boton, true);
+            var src = boton.getAttribute('data-audio') || '';
+            if (src) {
+                intentarAudio(boton, src);
+                return;
+            }
+            hablar(boton);
+        }
+
+        function textoOrigen(etiqueta, uso) {
+            if (uso === 'vacia') return 'origenVacia';
+            if (uso === 'error') return 'origenError';
+            if (etiqueta === 'CSV de prueba') return 'origenPrueba';
+            if (etiqueta === 'CSV local de muestra') return 'origenMuestra';
+            return 'origenHoja';
+        }
+
+        function cargarCarta(csvPedido) {
+            var pedida = csvPedido
+                ? { tipo: 'csv', url: csvPedido, etiqueta: 'CSV de prueba' }
+                : resolverFuente(FUENTE.carta, FUENTE.csvLocal);
+            function items(filas) {
+                return filas.map(platoDe).filter(Boolean);
+            }
+            return cargarFilas(pedida).then(function (filas) {
+                var lista = items(filas);
+                if (lista.length || csvPedido || pedida.url === FUENTE.csvLocal) {
+                    return { items: lista, origen: textoOrigen(pedida.etiqueta) };
+                }
+                return cargarFilas({ tipo: 'csv', url: FUENTE.csvLocal }).then(function (local) {
+                    return { items: items(local), origen: textoOrigen(pedida.etiqueta, 'vacia') };
+                });
+            }).catch(function (err) {
+                console.warn('No se pudo leer la carta pedida.', err);
+                if (pedida.url === FUENTE.csvLocal) throw err;
+                return cargarFilas({ tipo: 'csv', url: FUENTE.csvLocal }).then(function (local) {
+                    return { items: items(local), origen: textoOrigen(pedida.etiqueta, 'error') };
+                });
+            });
+        }
+
+        function elegirIdiomaInicial() {
+            var q = new URLSearchParams(location.search).get('lang') || '';
+            if (idiomaValido(q)) return q;
+            var guardado = leerIdiomaGuardado();
+            if (idiomaValido(guardado)) return guardado;
+            return 'es';
+        }
+
+        function iniciar() {
+            document.getElementById('pedir').href = urlWhatsapp();
+            document.getElementById('idiomas').addEventListener('click', function (evento) {
+                var boton = evento.target.closest('[data-idioma]');
+                if (!boton) return;
+                aplicarIdioma(boton.getAttribute('data-idioma'), true);
+            });
+            document.getElementById('filtros').addEventListener('click', function (evento) {
+                var boton = evento.target.closest('[data-cat]');
+                if (!boton) return;
+                filtroCat = boton.getAttribute('data-cat') || '';
+                pintarFiltros();
+                pintarLista();
+            });
+            document.getElementById('lista').addEventListener('click', function (evento) {
+                var boton = evento.target.closest('.voz');
+                if (!boton) return;
+                alternarLectura(boton);
+            });
+            if (hayVoz) {
+                try { window.speechSynthesis.addEventListener('voiceschanged', function () {}); }
+                catch (error) {}
+            }
+            var q = new URLSearchParams(location.search);
+            cargarCarta(q.get('csv') || '').then(function (carta) {
+                platos = carta.items;
+                origenClave = carta.origen;
+                aplicarIdioma(elegirIdiomaInicial(), idiomaValido(q.get('lang') || ''));
+            }).catch(function (err) {
+                console.warn(err);
+                document.getElementById('lista').innerHTML =
+                    '<p class="carta-vacia">' + esc(t().error) + '</p>';
+            });
+        }
+
+        iniciar();
+    </script>
+</body>
+</html>
