@@ -916,8 +916,9 @@
         </footer>
 
         <!-- ========== #tour-360 ==========
-             Recorrido de muestra. Fotos públicas de Pannellum,
-             no del local. El plano es un dibujo. -->
+             Recorrido de muestra, no del local. Barra: panorama
+             CC BY-SA de Wikimedia. Mesas y terraza: Poly Haven (CC0).
+             El plano es un dibujo. -->
         <div id="tour-360" class="seccion" role="region" aria-labelledby="tour-titulo">
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.css">
             <style>
@@ -939,8 +940,8 @@
                     gap: 14px;
                 }
 
-                #tour-360 .tour-visor {
-                    width: 100%;
+                #tour-360 .tour-marco {
+                    position: relative;
                     height: clamp(260px, 62vw, 440px);
                     border-radius: 18px;
                     overflow: hidden;
@@ -948,12 +949,99 @@
                     background: #140e0b;
                 }
 
+                #tour-360 .tour-visor {
+                    width: 100%;
+                    height: 100%;
+                }
+
                 #tour-360 .tour-ahora {
-                    margin-top: 10px;
-                    color: var(--cream-soft);
+                    position: absolute;
+                    z-index: 5;
+                    left: 12px;
+                    bottom: 12px;
+                    margin: 0;
+                    max-width: calc(100% - 24px);
+                    padding: 7px 12px;
+                    border-radius: 999px;
+                    border: 1px solid rgba(226, 160, 74, 0.75);
+                    background: rgba(16, 12, 9, 0.9);
+                    color: var(--cream);
                     font-size: 0.92rem;
                     font-weight: 700;
+                    line-height: 1.2;
+                    pointer-events: none;
                 }
+
+                #tour-360 .tour-carga {
+                    position: absolute;
+                    inset: 0;
+                    z-index: 6;
+                    display: grid;
+                    place-items: center;
+                    margin: 0;
+                    padding: 16px;
+                    background: rgba(16, 12, 9, 0.62);
+                    color: var(--cream);
+                    font-size: 1rem;
+                    font-weight: 700;
+                    text-align: center;
+                }
+
+                #tour-360 .tour-carga[hidden] { display: none !important; }
+
+                #tour-360 .tour-credito {
+                    margin: 14px 0 0;
+                    color: var(--muted);
+                    font-size: 0.78rem;
+                    line-height: 1.45;
+                }
+
+                #tour-360 .tour-credito a {
+                    color: var(--cream);
+                    font-weight: 700;
+                    text-underline-offset: 2px;
+                }
+
+                #tour-360 .tour-modos {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                    margin: 0 0 10px;
+                }
+
+                #tour-360 .tour-modo,
+                #tour-360 .tour-orientacion {
+                    min-height: 44px;
+                    padding: 8px 14px;
+                    border-radius: 999px;
+                    border: 1px solid var(--line);
+                    background: transparent;
+                    color: var(--cream-soft);
+                    font: inherit;
+                    font-size: 0.88rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                }
+
+                #tour-360 .tour-modo[aria-pressed="true"],
+                #tour-360 .tour-orientacion[aria-pressed="true"] {
+                    background: var(--cream);
+                    color: #1c130e;
+                    border-color: var(--cream);
+                }
+
+                #tour-360 .tour-simula {
+                    margin: 0 0 12px;
+                    color: var(--amber);
+                    font-size: 0.88rem;
+                    font-weight: 700;
+                    line-height: 1.4;
+                }
+
+                #tour-360 .tour-simula[hidden],
+                #tour-360 .tour-orientacion[hidden] { display: none !important; }
+
+                #tour-360 .pnlm-orientation-button { display: none !important; }
 
                 #tour-360 .tour-fallo {
                     margin: 0;
@@ -1072,7 +1160,9 @@
                 }
 
                 @media (hover: hover) {
-                    #tour-360 .tour-punto:hover { border-color: var(--amber); }
+                    #tour-360 .tour-punto:hover,
+                    #tour-360 .tour-modo:hover,
+                    #tour-360 .tour-orientacion:hover { border-color: var(--amber); }
                 }
 
                 @media (min-width: 880px) {
@@ -1088,85 +1178,205 @@
             <h2 id="tour-titulo">Recorrido 360</h2>
             <p class="tour-aviso">Datos de muestra. Estas fotos no son del local: son panoramas públicos de ejemplo.</p>
             <p class="seccion-texto">Arrastra la foto para mirar alrededor. En el teléfono, desliza con el dedo. Con teclado, usa las flechas dentro de la foto.</p>
+            <div class="tour-modos" role="group" aria-label="Tipo de foto de las mesas">
+                <button type="button" class="tour-modo" id="tour-modo-360" aria-pressed="true">360° completo</button>
+                <button type="button" class="tour-modo" id="tour-modo-pano" aria-pressed="false">Panorámica de teléfono</button>
+                <button type="button" class="tour-orientacion" id="tour-orientacion" hidden aria-pressed="false">Mover con el teléfono</button>
+            </div>
+            <p class="tour-simula" id="tour-simula" hidden>Simulación de panorámica de teléfono (recorte de la foto 360).</p>
 
             <div class="tour-cuerpo">
                 <div class="tour-vista">
-                    <div id="tour-visor" class="tour-visor" aria-label="Foto 360 de muestra. Arrastra o usa las flechas para mirar."></div>
-                    <p class="tour-ahora" id="tour-ahora" aria-live="polite">Mirando desde la barra.</p>
+                    <div class="tour-marco">
+                        <div id="tour-visor" class="tour-visor" aria-label="Foto 360 de muestra. Arrastra o usa las flechas para mirar."></div>
+                        <p class="tour-carga" id="tour-carga" role="status">Cargando la foto…</p>
+                        <p class="tour-ahora" id="tour-ahora" aria-live="polite">Mirando desde la barra.</p>
+                    </div>
                 </div>
 
                 <div class="tour-plano" id="tour-plano">
                     <p class="ficha-etiqueta">Plano de muestra</p>
                     <p class="tour-plano-ayuda">Elige un punto para empezar ahí.</p>
-                    <div class="tour-plano-caja" role="group" aria-label="Plano de muestra. Barra o mesas.">
-                        <svg viewBox="0 0 280 300" aria-hidden="true" focusable="false">
-                            <rect width="280" height="300" rx="18" fill="#1c130e"/>
-                            <rect x="16" y="16" width="248" height="268" rx="16" fill="#271910" stroke="rgba(246,239,227,0.28)" stroke-width="2"/>
+                    <div class="tour-plano-caja" role="group" aria-label="Plano de muestra. Terraza, mesas o barra.">
+                        <svg viewBox="0 0 280 360" aria-hidden="true" focusable="false">
+                            <rect width="280" height="360" rx="18" fill="#1c130e"/>
+                            <rect x="48" y="14" width="184" height="70" rx="14" fill="#3c2b1c" stroke="rgba(226,160,74,0.55)" stroke-width="2"/>
+                            <rect x="102" y="36" width="76" height="28" rx="8" fill="#140e0b" stroke="#e7dccb" stroke-width="1.5"/>
+                            <circle cx="94" cy="50" r="4" fill="#cfc3b6"/>
+                            <circle cx="186" cy="50" r="4" fill="#cfc3b6"/>
+                            <rect x="112" y="76" width="56" height="18" fill="#271910"/>
+                            <rect x="16" y="86" width="248" height="258" rx="16" fill="#271910" stroke="rgba(246,239,227,0.28)" stroke-width="2"/>
                             <g stroke="rgba(246,239,227,0.06)" stroke-width="1">
-                                <path d="M16 78H264M16 132H264M16 186H264"/>
+                                <path d="M16 150H264M16 210H264M16 270H264"/>
                             </g>
                             <g fill="#140e0b" stroke="#e7dccb" stroke-width="1.6">
-                                <rect x="36" y="36" width="78" height="44" rx="10"/>
-                                <rect x="166" y="36" width="78" height="44" rx="10"/>
-                                <rect x="36" y="100" width="78" height="44" rx="10"/>
-                                <rect x="166" y="100" width="78" height="44" rx="10"/>
+                                <rect x="36" y="108" width="78" height="40" rx="10"/>
+                                <rect x="166" y="108" width="78" height="40" rx="10"/>
+                                <rect x="36" y="162" width="78" height="40" rx="10"/>
+                                <rect x="166" y="162" width="78" height="40" rx="10"/>
                             </g>
                             <g fill="#cfc3b6">
-                                <circle cx="32" cy="58" r="4"/>
-                                <circle cx="118" cy="58" r="4"/>
-                                <circle cx="162" cy="58" r="4"/>
-                                <circle cx="248" cy="58" r="4"/>
-                                <circle cx="32" cy="122" r="4"/>
-                                <circle cx="118" cy="122" r="4"/>
-                                <circle cx="162" cy="122" r="4"/>
-                                <circle cx="248" cy="122" r="4"/>
+                                <circle cx="32" cy="128" r="4"/>
+                                <circle cx="118" cy="128" r="4"/>
+                                <circle cx="162" cy="128" r="4"/>
+                                <circle cx="248" cy="128" r="4"/>
+                                <circle cx="32" cy="182" r="4"/>
+                                <circle cx="118" cy="182" r="4"/>
+                                <circle cx="162" cy="182" r="4"/>
+                                <circle cx="248" cy="182" r="4"/>
                             </g>
-                            <rect x="36" y="178" width="208" height="56" rx="14" fill="#c47d2a"/>
-                            <rect x="50" y="190" width="180" height="12" rx="6" fill="#e2a04a"/>
+                            <rect x="36" y="236" width="208" height="54" rx="14" fill="#c47d2a"/>
+                            <rect x="50" y="248" width="180" height="11" rx="5.5" fill="#e2a04a"/>
                             <g fill="#1a120e">
-                                <circle cx="74" cy="216" r="6.5"/>
-                                <circle cx="108" cy="216" r="6.5"/>
-                                <circle cx="142" cy="216" r="6.5"/>
-                                <circle cx="176" cy="216" r="6.5"/>
-                                <circle cx="210" cy="216" r="6.5"/>
+                                <circle cx="74" cy="272" r="6"/>
+                                <circle cx="108" cy="272" r="6"/>
+                                <circle cx="142" cy="272" r="6"/>
+                                <circle cx="176" cy="272" r="6"/>
+                                <circle cx="210" cy="272" r="6"/>
                             </g>
-                            <rect x="118" y="278" width="44" height="10" fill="#100c09"/>
-                            <path d="M118 284a22 22 0 0 1 22-22" fill="none" stroke="#e7dccb" stroke-width="1.4"/>
-                            <text x="140" y="262" text-anchor="middle" fill="#cfc3b6" font-family="Outfit, sans-serif" font-size="11" font-weight="600">entrada</text>
+                            <rect x="118" y="338" width="44" height="10" fill="#100c09"/>
+                            <path d="M118 344a20 20 0 0 1 20-20" fill="none" stroke="#e7dccb" stroke-width="1.4"/>
+                            <text x="140" y="324" text-anchor="middle" fill="#cfc3b6" font-family="Outfit, sans-serif" font-size="11" font-weight="600">entrada</text>
                         </svg>
-                        <button type="button" class="tour-punto" data-escena="mesas" aria-pressed="false" style="left:50%;top:30%">
+                        <button type="button" class="tour-punto" data-escena="terraza" aria-pressed="false" style="left:50%;top:14%">
+                            <span class="tour-punto-dot" aria-hidden="true"></span>
+                            Terraza
+                        </button>
+                        <button type="button" class="tour-punto" data-escena="mesas" aria-pressed="false" style="left:50%;top:45%">
                             <span class="tour-punto-dot" aria-hidden="true"></span>
                             Mesas
                         </button>
-                        <button type="button" class="tour-punto" data-escena="barra" aria-pressed="true" style="left:50%;top:69%">
+                        <button type="button" class="tour-punto" data-escena="barra" aria-pressed="true" style="left:50%;top:76%">
                             <span class="tour-punto-dot" aria-hidden="true"></span>
                             Barra
                         </button>
                     </div>
                 </div>
             </div>
+            <p class="tour-credito">Fotos 360° de muestra: <a href="https://commons.wikimedia.org/wiki/File:Bier_macht_Sch%C3%B6n_%E2%80%93_Crafbeer_Shop_in_K%C3%B6ln_2019.jpg">Bier macht Schön, Colonia</a> — foto de Maximilian Schönherr, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Las otras: Poly Haven (CC0) — Greg Zaal y Jarod Guest; Dario Barresi.</p>
 
             <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js"></script>
             <script>
                 (function () {
-                    var FOTOS = {
-                        barra: 'https://pannellum.org/images/alma.jpg',
-                        mesas: 'https://pannellum.org/images/cerro-toco-0.jpg'
+                    /* ============================================================
+                       ESCENAS DEL RECORRIDO
+
+                       Cada escena es una foto en img/360/. En pantallas angostas
+                       (hasta 720px) se usa el archivo *-movil.jpg. Solo se baja
+                       la escena que se está mirando.
+
+                       Foto completa (360×180), sin tipo:
+                         archivo, yaw, pitch, hfov, etiqueta
+                       El punto (yaw, pitch) cae sobre el objeto. La vista inicial
+                       mira hacia ese punto.
+
+                       Panorámica de teléfono, parcial, no es 360×180:
+                         tipo: 'panoramica'
+                         vertical: ángulo vertical en grados (vaov). Típico 60–90.
+                         desfase: vOffset. 0 = horizonte en el centro de la foto.
+                       No se escribe haov a mano. Al abrir la foto:
+                         haov = vertical × (ancho / alto)
+                       Si haov < 360, el giro se detiene en los bordes
+                       (minYaw/maxYaw = ±haov/2) y el cabeceo también
+                       (minPitch/maxPitch = desfase ± vertical/2).
+
+                       La barra es el panorama completo de Wikimedia
+                       (Bier macht Schön, Colonia). Solo se achica: no se
+                       recorta. La tira mesas-pano es una simulación CC0:
+                       un recorte de la foto 360 de las mesas (~200° × 65°,
+                       centrado en una mesa). No es una cuarta escena del
+                       plano. Cómo sumar otra: demo-cerveceria/README.md
+                       ============================================================ */
+
+                    var HFOV = 100;
+                    var ESCENAS = {
+                        barra: {
+                            archivo: 'barra',
+                            etiqueta: 'Barra',
+                            frase: 'la barra',
+                            yaw: 0,
+                            pitch: -18,
+                            hfov: HFOV
+                        },
+                        mesas: {
+                            archivo: 'mesas',
+                            etiqueta: 'Mesas',
+                            frase: 'las mesas',
+                            yaw: -30,
+                            pitch: -12,
+                            hfov: HFOV
+                        },
+                        terraza: {
+                            archivo: 'terraza',
+                            etiqueta: 'Terraza',
+                            frase: 'la terraza',
+                            yaw: -27,
+                            pitch: -18,
+                            hfov: HFOV
+                        },
+                        'mesas-pano': {
+                            archivo: 'mesas-pano',
+                            etiqueta: 'Mesas',
+                            frase: 'las mesas',
+                            tipo: 'panoramica',
+                            vertical: 65,
+                            desfase: -12,
+                            yaw: 0,
+                            pitch: -12,
+                            hfov: 58
+                        }
                     };
-                    var VISTAS = {
-                        barra: { pitch: -4, yaw: 117, hfov: 105 },
-                        mesas: { pitch: 2, yaw: 20, hfov: 105 }
-                    };
-                    var NOMBRES = { barra: 'la barra', mesas: 'las mesas' };
+
                     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
                     var escenaPedida = 'barra';
+                    var modoPano = false;
                     var visor = null;
                     var arrancado = false;
+                    var montando = false;
+                    var pedido = 0;
+                    var cache = {};
+                    var anadidas = {};
 
-                    function marca(pitch, yaw, texto) {
+                    function esMovil() {
+                        return window.matchMedia('(max-width: 720px)').matches;
+                    }
+
+                    function idDe(idPlano) {
+                        if (idPlano === 'mesas' && modoPano) return 'mesas-pano';
+                        return idPlano;
+                    }
+
+                    function defDe(id) {
+                        return ESCENAS[id] || null;
+                    }
+
+                    function urlDe(def) {
+                        return 'img/360/' + def.archivo + (esMovil() ? '-movil' : '') + '.jpg';
+                    }
+
+                    function tamanoJpeg(buffer) {
+                        var v = new DataView(buffer);
+                        if (v.byteLength < 4 || v.getUint16(0) !== 0xFFD8) return null;
+                        var o = 2;
+                        while (o + 9 < v.byteLength) {
+                            var m = v.getUint16(o);
+                            if ((m >= 0xFFC0 && m <= 0xFFC3) || (m >= 0xFFC5 && m <= 0xFFC7) ||
+                                (m >= 0xFFC9 && m <= 0xFFCB) || (m >= 0xFFCD && m <= 0xFFCF)) {
+                                return { alto: v.getUint16(o + 5), ancho: v.getUint16(o + 7) };
+                            }
+                            if (m === 0xFFD8 || m === 0xFFD9) break;
+                            if (m === 0xFF01 || (m >= 0xFFD0 && m <= 0xFFD7)) { o += 2; continue; }
+                            var largo = v.getUint16(o + 2);
+                            if (largo < 2) break;
+                            o += 2 + largo;
+                        }
+                        return null;
+                    }
+
+                    function marca(def) {
                         return {
-                            pitch: pitch,
-                            yaw: yaw,
+                            pitch: def.pitch,
+                            yaw: def.yaw,
                             cssClass: 'tour-marca',
                             createTooltipFunc: function (div, nombre) {
                                 var punto = document.createElement('span');
@@ -1177,33 +1387,166 @@
                                 div.appendChild(punto);
                                 div.appendChild(etiqueta);
                             },
-                            createTooltipArgs: texto
+                            createTooltipArgs: def.etiqueta
                         };
                     }
 
-                    function pintarPlano(id) {
-                        if (!NOMBRES[id]) return;
-                        escenaPedida = id;
-                        Array.prototype.forEach.call(document.querySelectorAll('#tour-plano .tour-punto'), function (boton) {
-                            var activo = boton.getAttribute('data-escena') === id;
-                            boton.setAttribute('aria-pressed', activo ? 'true' : 'false');
-                        });
-                        document.getElementById('tour-ahora').textContent = 'Mirando desde ' + NOMBRES[id] + '.';
+                    function limitesPanoramica(def, tam) {
+                        var vertical = Number(def.vertical);
+                        var desfase = Number(def.desfase) || 0;
+                        var haov = vertical * (tam.ancho / tam.alto);
+                        var cfg = {
+                            haov: haov,
+                            vaov: vertical,
+                            vOffset: desfase
+                        };
+                        if (haov < 360) {
+                            cfg.minYaw = -haov / 2;
+                            cfg.maxYaw = haov / 2;
+                        }
+                        cfg.minPitch = Math.max(-90, desfase - vertical / 2);
+                        cfg.maxPitch = Math.min(90, desfase + vertical / 2);
+                        return cfg;
                     }
 
-                    function irA(id) {
-                        if (!VISTAS[id]) return;
-                        pintarPlano(id);
+                    function configEscena(def, tam, url) {
+                        var parcial = def.tipo === 'panoramica';
+                        var cfg = {
+                            type: 'equirectangular',
+                            panorama: url,
+                            pitch: def.pitch,
+                            yaw: def.yaw,
+                            hfov: def.hfov,
+                            minHfov: parcial ? 40 : 50,
+                            maxHfov: parcial ? 90 : 120,
+                            autoRotate: (esMovil() || reduce || parcial) ? 0 : -1.2,
+                            hotSpots: [marca(def)]
+                        };
+                        if (parcial) {
+                            var limites = limitesPanoramica(def, tam);
+                            Object.keys(limites).forEach(function (clave) {
+                                cfg[clave] = limites[clave];
+                            });
+                        }
+                        return cfg;
+                    }
+
+                    function traer(id) {
+                        if (cache[id]) return cache[id];
+                        var def = defDe(id);
+                        cache[id] = fetch(urlDe(def)).then(function (res) {
+                            if (!res.ok) throw new Error('http');
+                            return res.arrayBuffer();
+                        }).then(function (buffer) {
+                            var tam = tamanoJpeg(buffer);
+                            if (!tam) throw new Error('jpeg');
+                            var url = URL.createObjectURL(new Blob([buffer], { type: 'image/jpeg' }));
+                            return configEscena(def, tam, url);
+                        });
+                        cache[id].catch(function () { delete cache[id]; });
+                        return cache[id];
+                    }
+
+                    function asegurar(id, cfg) {
+                        if (anadidas[id]) return;
+                        visor.addScene(id, cfg);
+                        anadidas[id] = true;
+                    }
+
+                    function cadenas() {
+                        return {
+                            loadButtonLabel: 'Cargar recorrido',
+                            loadingLabel: 'Cargando la foto…',
+                            bylineLabel: 'por %s',
+                            noPanoramaError: 'No se indicó la foto.',
+                            fileAccessError: 'No se pudo abrir la foto de muestra.',
+                            malformedURLError: 'La dirección de la foto no sirve.',
+                            iOS8WebGLError: 'Este navegador no muestra fotos 360.',
+                            genericWebGLError: 'Este navegador no puede mostrar el recorrido.',
+                            textureSizeError: 'Esta foto es demasiado grande para el aparato.',
+                            unknownError: 'No se pudo abrir el recorrido.'
+                        };
+                    }
+
+                    function configVisor(id, cfg) {
+                        var def = defDe(id);
+                        var movil = esMovil();
+                        var scenes = {};
+                        scenes[id] = cfg;
+                        return {
+                            default: {
+                                firstScene: id,
+                                autoLoad: true,
+                                sceneFadeDuration: (reduce || movil) ? 0 : 500,
+                                autoRotate: (reduce || movil || def.tipo === 'panoramica') ? 0 : -1.2,
+                                showZoomCtrl: true,
+                                showFullscreenCtrl: true,
+                                disableKeyboardCtrl: true,
+                                orientationOnByDefault: false,
+                                compass: false,
+                                hfov: def.hfov,
+                                minHfov: def.tipo === 'panoramica' ? 40 : 50,
+                                maxHfov: def.tipo === 'panoramica' ? 90 : 120,
+                                strings: cadenas()
+                            },
+                            scenes: scenes
+                        };
+                    }
+
+                    function mostrarCarga() {
+                        var n = document.getElementById('tour-carga');
+                        n.textContent = 'Cargando la foto…';
+                        n.hidden = false;
+                    }
+
+                    function ocultarCarga() {
+                        document.getElementById('tour-carga').hidden = true;
+                    }
+
+                    function pintarPlano(idPlano) {
+                        if (!ESCENAS[idPlano]) return;
+                        escenaPedida = idPlano;
+                        Array.prototype.forEach.call(document.querySelectorAll('#tour-plano .tour-punto'), function (boton) {
+                            var activo = boton.getAttribute('data-escena') === idPlano;
+                            boton.setAttribute('aria-pressed', activo ? 'true' : 'false');
+                        });
+                        document.getElementById('tour-ahora').textContent = 'Mirando desde ' + ESCENAS[idPlano].frase + '.';
+                    }
+
+                    function pintarModo() {
+                        document.getElementById('tour-modo-360').setAttribute('aria-pressed', modoPano ? 'false' : 'true');
+                        document.getElementById('tour-modo-pano').setAttribute('aria-pressed', modoPano ? 'true' : 'false');
+                        document.getElementById('tour-simula').hidden = !modoPano;
+                    }
+
+                    function irA(idPlano) {
+                        if (!ESCENAS[idPlano]) return;
+                        var token = ++pedido;
+                        var id = idDe(idPlano);
+                        var def = defDe(id);
+                        pintarPlano(idPlano);
                         if (!visor || !visor.loadScene) return;
-                        var vista = VISTAS[id];
-                        var misma = false;
-                        try { misma = visor.getScene() === id; } catch (error) {}
-                        if (misma) visor.lookAt(vista.pitch, vista.yaw, vista.hfov, reduce ? 0 : 800);
-                        else visor.loadScene(id, vista.pitch, vista.yaw, vista.hfov);
+                        var actual = '';
+                        try { actual = visor.getScene(); } catch (error) {}
+                        if (actual === id) {
+                            visor.lookAt(def.pitch, def.yaw, def.hfov, reduce ? 0 : 700);
+                            return;
+                        }
+                        mostrarCarga();
+                        traer(id).then(function (cfg) {
+                            if (token !== pedido || !visor) return;
+                            asegurar(id, cfg);
+                            visor.loadScene(id, def.pitch, def.yaw, def.hfov);
+                        }).catch(function () {
+                            if (token !== pedido) return;
+                            var n = document.getElementById('tour-carga');
+                            n.hidden = false;
+                            n.textContent = 'No se pudo abrir la foto.';
+                        });
                     }
 
                     function alTeclado(evento) {
-                        if (!visor) return;
+                        if (!visor || !visor.getYaw) return;
                         var yaw = visor.getYaw();
                         var pitch = visor.getPitch();
                         var hfov = visor.getHfov();
@@ -1220,63 +1563,44 @@
                         visor.lookAt(pitch, yaw, hfov, 0);
                     }
 
-                    function configDe(escena) {
-                        var vista = VISTAS[escena] || VISTAS.barra;
-                        return {
-                            default: {
-                                firstScene: VISTAS[escena] ? escena : 'barra',
-                                autoLoad: true,
-                                sceneFadeDuration: reduce ? 0 : 700,
-                                autoRotate: reduce ? 0 : -2,
-                                showZoomCtrl: true,
-                                showFullscreenCtrl: true,
-                                disableKeyboardCtrl: true,
-                                compass: false,
-                                hfov: vista.hfov,
-                                minHfov: 50,
-                                maxHfov: 120,
-                                strings: {
-                                    loadButtonLabel: 'Cargar recorrido',
-                                    loadingLabel: 'Cargando…',
-                                    bylineLabel: 'por %s',
-                                    noPanoramaError: 'No se indicó la foto.',
-                                    fileAccessError: 'No se pudo abrir la foto de muestra.',
-                                    malformedURLError: 'La dirección de la foto no sirve.',
-                                    iOS8WebGLError: 'Este navegador no muestra fotos 360.',
-                                    genericWebGLError: 'Este navegador no puede mostrar el recorrido.',
-                                    textureSizeError: 'Esta foto es demasiado grande para el aparato.',
-                                    unknownError: 'No se pudo abrir el recorrido.'
-                                }
-                            },
-                            scenes: {
-                                barra: {
-                                    type: 'equirectangular',
-                                    panorama: FOTOS.barra,
-                                    pitch: VISTAS.barra.pitch,
-                                    yaw: VISTAS.barra.yaw,
-                                    hfov: VISTAS.barra.hfov,
-                                    hotSpots: [
-                                        marca(-6, 90, 'Barra'),
-                                        marca(-2, 148, 'Mesas')
-                                    ]
-                                },
-                                mesas: {
-                                    type: 'equirectangular',
-                                    panorama: FOTOS.mesas,
-                                    pitch: VISTAS.mesas.pitch,
-                                    yaw: VISTAS.mesas.yaw,
-                                    hfov: VISTAS.mesas.hfov,
-                                    hotSpots: [
-                                        marca(-6, -8, 'Mesas'),
-                                        marca(-2, 48, 'Barra')
-                                    ]
-                                }
+                    function marcarOrientacion(activo) {
+                        var boton = document.getElementById('tour-orientacion');
+                        boton.setAttribute('aria-pressed', activo ? 'true' : 'false');
+                    }
+
+                    function alOrientacion() {
+                        if (!visor || !visor.startOrientation) return;
+                        if (visor.isOrientationActive && visor.isOrientationActive()) {
+                            visor.stopOrientation();
+                            marcarOrientacion(false);
+                            return;
+                        }
+                        var pedir = window.DeviceOrientationEvent &&
+                            typeof DeviceOrientationEvent.requestPermission === 'function';
+                        function arrancar() {
+                            var original = pedir ? DeviceOrientationEvent.requestPermission : null;
+                            if (original) {
+                                DeviceOrientationEvent.requestPermission = function () {
+                                    return Promise.resolve('granted');
+                                };
                             }
-                        };
+                            try { visor.startOrientation(); }
+                            finally {
+                                if (original) DeviceOrientationEvent.requestPermission = original;
+                            }
+                            marcarOrientacion(true);
+                        }
+                        if (pedir) {
+                            DeviceOrientationEvent.requestPermission().then(function (estado) {
+                                if (estado === 'granted') arrancar();
+                            }).catch(function () {});
+                            return;
+                        }
+                        arrancar();
                     }
 
                     function montar() {
-                        if (visor) return true;
+                        if (visor || montando) return true;
                         var caja = document.getElementById('tour-visor');
                         if (caja.offsetWidth < 20) return false;
                         if (typeof pannellum === 'undefined') {
@@ -1284,15 +1608,32 @@
                             visor = { fallo: true };
                             return true;
                         }
-                        try {
-                            visor = pannellum.viewer(caja, configDe(escenaPedida));
-                        } catch (error) {
-                            caja.innerHTML = '<p class="tour-fallo">Este navegador no puede mostrar el recorrido.</p>';
-                            visor = { fallo: true };
-                            return true;
-                        }
-                        visor.on('scenechange', pintarPlano);
-                        caja.addEventListener('keydown', alTeclado);
+                        montando = true;
+                        mostrarCarga();
+                        var id = idDe(escenaPedida);
+                        traer(id).then(function (cfg) {
+                            visor = pannellum.viewer(caja, configVisor(id, cfg));
+                            anadidas[id] = true;
+                            visor.on('load', ocultarCarga);
+                            visor.on('error', function () {
+                                var n = document.getElementById('tour-carga');
+                                n.hidden = false;
+                                n.textContent = 'No se pudo abrir la foto.';
+                            });
+                            visor.on('scenechange', function (sid) {
+                                pintarPlano(sid === 'mesas-pano' ? 'mesas' : sid);
+                            });
+                            caja.addEventListener('keydown', alTeclado);
+                            var orientacion = document.getElementById('tour-orientacion');
+                            if (visor.isOrientationSupported && visor.isOrientationSupported()) {
+                                orientacion.hidden = false;
+                            }
+                        }).catch(function () {
+                            montando = false;
+                            var n = document.getElementById('tour-carga');
+                            n.hidden = false;
+                            n.textContent = 'No se pudo abrir la foto.';
+                        });
                         return true;
                     }
 
@@ -1315,6 +1656,26 @@
                         irA(boton.getAttribute('data-escena'));
                     });
 
+                    document.getElementById('tour-modo-360').addEventListener('click', function () {
+                        if (!modoPano) {
+                            irA('mesas');
+                            return;
+                        }
+                        modoPano = false;
+                        pintarModo();
+                        irA('mesas');
+                    });
+                    document.getElementById('tour-modo-pano').addEventListener('click', function () {
+                        if (modoPano) {
+                            irA('mesas');
+                            return;
+                        }
+                        modoPano = true;
+                        pintarModo();
+                        irA('mesas');
+                    });
+                    document.getElementById('tour-orientacion').addEventListener('click', alOrientacion);
+
                     if (document.documentElement.classList.contains('ya-mayor')) {
                         requestAnimationFrame(crear);
                         return;
@@ -1327,6 +1688,7 @@
                     obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
                 })();
             </script>
+
             <noscript>
                 <p class="tour-aviso">Activa JavaScript para ver el recorrido 360. Datos de muestra.</p>
             </noscript>
