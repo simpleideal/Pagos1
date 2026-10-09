@@ -1457,7 +1457,8 @@
                     color: #1a120e;
                 }
 
-                #tour-360 .plano-mesa.redonda {
+                #tour-360 .plano-mesa.redonda,
+                #tour-360 .plano-mesa.barra {
                     width: 46px;
                     height: 46px;
                     border-radius: 50%;
@@ -1766,7 +1767,6 @@
             </div>
             <p class="tour-credito">Fotos de muestra: <a href="https://commons.wikimedia.org/wiki/File:Bier_macht_Sch%C3%B6n_%E2%80%93_Crafbeer_Shop_in_K%C3%B6ln_2019.jpg">Bier macht Schön, Colonia</a> — foto de Maximilian Schönherr, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Panorámica de las mesas: <a href="https://commons.wikimedia.org/wiki/File:Barbara%27s_Heritage_Restaurant_Intramuros_Interior_Panorama.jpg">Barbara's Heritage Restaurant, Intramuros</a> — foto de Ryomaandres, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Las otras: Poly Haven (CC0) — Greg Zaal y Jarod Guest; Dario Barresi.</p>
 
-            <script src="js/mesas-ejemplo.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js"></script>
             <script>
                 (function () {
@@ -1934,6 +1934,7 @@
                         if (forma === 'redonda' || forma === 'circulo' || forma === 'círculo' || forma === 'round' || forma === 'circular') return 'redonda';
                         if (forma === 'cuadrada' || forma === 'cuadrado' || forma === 'square') return 'cuadrada';
                         if (forma === 'alargada' || forma === 'larga' || forma === 'rectangular' || forma === 'rect') return 'alargada';
+                        if (forma === 'barra') return 'barra';
                         if (capacidad <= 2) return 'redonda';
                         if (capacidad <= 4) return 'cuadrada';
                         return 'alargada';
@@ -2097,29 +2098,50 @@
                         }
                     }
 
-                    /* Si la función pide mesa y hora, responde sí o no.
-                       Si pide solo la hora, devuelve ids, mesas o un mapa.
+                    /* js/mesas.js define BRUMA_MESAS_LIBRE_A(hora, fecha) y
+                       devuelve cada mesa con libre y ocupada. También vale
+                       un sí o no de funcion(mesa, hora), o una lista o un mapa.
                        Un fallo o un null no apaga la mesa. */
+                    function pareceLista(valor) {
+                        if (Array.isArray(valor)) return true;
+                        return !!valor && typeof valor === 'object';
+                    }
+
+                    function libreEnItem(item, id) {
+                        if (item && typeof item === 'object') {
+                            if (String(item.mesa) !== id) return null;
+                            if (typeof item.libre === 'boolean') return item.libre;
+                            if (typeof item.ocupada === 'boolean') return !item.ocupada;
+                            return true;
+                        }
+                        if (String(item) === id) return true;
+                        return null;
+                    }
+
                     function libreAEsaHora(mesa, hora) {
                         var fn = window.BRUMA_MESAS_LIBRE_A;
                         if (typeof fn !== 'function' || !hora) return true;
                         var fila = mesa.origen || mesa;
                         var respuesta;
                         try {
-                            respuesta = fn.length >= 2 ? fn(fila, hora) : fn(hora);
+                            if (fn.length >= 2) {
+                                var porHora = fn(hora);
+                                respuesta = pareceLista(porHora) ? porHora : fn(fila, hora);
+                            } else {
+                                respuesta = fn(hora);
+                            }
                         } catch (error) {
-                            return true;
+                            try { respuesta = fn(fila, hora); }
+                            catch (otro) { return true; }
                         }
                         if (respuesta == null) return true;
-                        if (fn.length >= 2) return !!respuesta;
+                        if (typeof respuesta === 'boolean') return respuesta;
                         if (Array.isArray(respuesta)) {
                             var id = String(mesa.mesa);
                             var i;
                             for (i = 0; i < respuesta.length; i += 1) {
-                                var item = respuesta[i];
-                                if (item && typeof item === 'object') {
-                                    if (String(item.mesa) === id) return true;
-                                } else if (String(item) === id) return true;
+                                var valor = libreEnItem(respuesta[i], id);
+                                if (valor !== null) return valor;
                             }
                             return false;
                         }
@@ -2935,11 +2957,16 @@
 
            Para mirar los dos estados sin esperar la hora:
            ?hh=ahora  y  ?hh=no
+
+           Mesas: PEGA LA URL del CSV en FUENTE.mesas (Publicar en la
+           web → valores separados por comas). Si queda vacía, o la
+           hoja no responde, js/mesas.js usa datos/mesas.csv.
            ================================================================== */
 
         var FUENTE = {
             carta: '',
             happy: '',
+            mesas: '',
             csvLocal: 'datos/carta.csv',
             happyLocal: 'datos/happy-hour.csv'
         };
@@ -4067,8 +4094,10 @@
             document.addEventListener('keydown', function (evento) {
                 if (evento.key === 'Escape' && !capa.hidden) capa.hidden = true;
             });
+            llenarCual();
             window.addEventListener('bruma:mesas', llenarCual);
         })();
     </script>
+    <script src="js/mesas.js"></script>
 </body>
 </html>

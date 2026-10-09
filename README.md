@@ -115,13 +115,11 @@ sobras; el molde de acá toma esa tubería y deja fuera cobro y carta
 fija. Pasos: `demo-vitrina/HOJA.md`.
 
 Muestra 3, Cervecería Bruma: en `demo-cerveceria/index.html`, el
-bloque **DATOS DEL LOCAL**. La puerta de edad es `#edad` (se recuerda
-en el navegador). El hero es `#inicio`. La carta de ejemplo está en
-`#carta`: otro compañero conecta ahí la hoja (estilo, ABV, precio,
-disponibilidad, foto), el happy hour y la oferta del día. Redes en
-`#redes`. El mapa, en `#ubicacion`, usa un punto GPS (`lat` y `lng`)
-en Osorno, igual que Buen Bocado. El pie es `#pie`. `#tour-360` queda
-vacío a propósito.
+bloque **DATOS DEL LOCAL**. La puerta de edad es `#edad`. La carta
+lee `FUENTE.carta` y el happy hour `FUENTE.happy`. Las mesas de la
+reserva leen `FUENTE.mesas` con `js/mesas.js`. El recorrido 360 y
+el cuadro de WhatsApp están en la pestaña Recorrido y reserva.
+Pasos para repetir el trabajo: `demo-cerveceria/README.md`.
 
 Muestra 3, Fogón del Lago: en `demo-carta-idiomas/index.html`, el
 bloque **CARTA**. Es otra página, solo la carta, con idioma y voz.
