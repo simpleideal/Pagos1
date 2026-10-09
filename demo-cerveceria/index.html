@@ -44,19 +44,31 @@
             background: transparent;
         }
 
-        /* Una sola copia liviana, detrás de carta, recorrido y contacto. */
-        body::before {
+        /* La misma fachada oscurecida de la portada, fija detrás de todo.
+           Foto y velo en capas distintas, para que el filtro no apague el degradado.
+           position: fixed, no background-attachment: en iPhone ese no se queda quieto. */
+        body::before,
+        body::after {
             content: "";
             position: fixed;
             inset: 0;
+            pointer-events: none;
+        }
+
+        body::before {
+            z-index: -2;
+            background: #120c09 url("img/fachada.jpg") center 42% / cover no-repeat;
+            filter: brightness(0.32) saturate(0.8);
+        }
+
+        body::after {
             z-index: -1;
-            background-color: #2a1a12;
-            background-image:
-                linear-gradient(180deg, rgba(42, 26, 18, 0.86), rgba(24, 14, 10, 0.9)),
-                url("img/fachada-fondo.jpg");
-            background-size: cover;
-            background-position: center top;
-            background-repeat: no-repeat;
+            background: linear-gradient(180deg,
+                rgba(8, 5, 3, 0.35) 0%,
+                rgba(8, 5, 3, 0.88) 14%,
+                rgba(8, 5, 3, 0.88) 50%,
+                rgba(8, 5, 3, 0.5) 68%,
+                rgba(8, 5, 3, 0.74) 100%);
         }
 
         :focus-visible {
@@ -216,8 +228,13 @@
         .ver-carta {
             display: block;
             width: 100%;
-            margin-top: 16px;
+            margin-top: 0;
             min-height: 44px;
+            background: none;
+            color: var(--cream);
+            border: 0;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
+            border-radius: 0;
         }
 
         .ficha-fila {
@@ -377,12 +394,12 @@
             display: block;
             width: 46%;
             height: 2px;
-            background: var(--amber);
+            background: rgba(246, 239, 227, 0.45);
             margin: 8px 0 0 auto;
         }
 
         .ficha-etiqueta {
-            color: var(--amber);
+            color: var(--cream-soft);
             font-size: 0.72rem;
             font-weight: 700;
             letter-spacing: 0.1em;
@@ -391,7 +408,7 @@
         }
 
         .oficio {
-            color: var(--amber);
+            color: var(--cream-soft);
             font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 0.12em;
@@ -412,26 +429,28 @@
         .panel {
             width: min(520px, 100%);
             margin: 28px auto 0;
-            background: rgba(61, 41, 24, 0.9);
+            background: rgba(0, 0, 0, 0.58);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
             color: var(--cream);
-            border-radius: 18px;
+            border-radius: 8px;
             padding: 22px 18px;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
         }
 
         .happy {
-            margin: 0 0 16px;
-            padding: 10px 14px;
-            border-radius: 999px;
-            background: rgba(20, 12, 8, 0.45);
-            border: 1px solid rgba(246, 239, 227, 0.18);
+            margin: 0 0 8px;
+            padding: 0 0 12px;
+            border: 0;
+            border-bottom: 1px solid rgba(246, 239, 227, 0.28);
+            border-radius: 0;
+            background: none;
             color: var(--cream);
             text-align: center;
         }
 
         .happy.ahora {
-            background: var(--amber);
-            color: #1a120e;
+            background: none;
+            color: var(--cream);
         }
 
         .happy-titulo {
@@ -444,11 +463,11 @@
         .happy-horario { display: none; }
 
         .oferta-dia {
-            margin: 0 0 16px;
-            padding: 16px;
-            border-radius: 18px;
-            border: 1.5px solid var(--amber);
-            background: rgba(20, 12, 8, 0.45);
+            margin: 4px 0 0;
+            padding: 12px 0 4px;
+            border: 0;
+            border-radius: 0;
+            background: none;
             color: var(--cream);
         }
 
@@ -525,11 +544,12 @@
         .chip {
             flex: 0 0 auto;
             min-height: 40px;
-            padding: 8px 14px;
-            border-radius: 999px;
-            border: 1px solid rgba(246, 239, 227, 0.28);
-            background: rgba(20, 12, 8, 0.45);
-            color: var(--cream);
+            padding: 8px 2px;
+            border: 0;
+            border-bottom: 1px solid transparent;
+            border-radius: 0;
+            background: none;
+            color: var(--cream-soft);
             font: inherit;
             font-size: 0.88rem;
             font-weight: 600;
@@ -537,19 +557,19 @@
         }
 
         .chip.activo {
-            background: var(--amber);
-            color: #1a120e;
-            border-color: var(--amber);
+            background: none;
+            color: var(--cream);
+            border-bottom-color: rgba(246, 239, 227, 0.7);
         }
 
-        .cervezas { display: grid; gap: 10px; }
+        .cervezas { display: grid; gap: 0; }
 
         .cerveza {
-            border-radius: 14px;
-            border: 1px solid rgba(246, 239, 227, 0.16);
-            background: rgba(20, 12, 8, 0.45);
+            border: 0;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
+            border-radius: 0;
+            background: none;
             color: var(--cream);
-            overflow: hidden;
         }
 
         .cerveza.agotada .cerveza-nombre,
@@ -634,7 +654,7 @@
             font-weight: 700;
             letter-spacing: 0.06em;
             text-transform: uppercase;
-            color: var(--amber);
+            color: var(--cream-soft);
         }
 
         .estado.agotada { color: #b7ada3; }
@@ -713,7 +733,7 @@
             line-height: 1.4;
         }
 
-        .dato b { color: var(--amber); min-width: 1.2rem; }
+        .dato b { color: var(--cream); min-width: 1.2rem; }
 
         .dato a {
             color: inherit;
@@ -724,7 +744,7 @@
         .panel h3 {
             font-family: Outfit, sans-serif;
             font-weight: 700;
-            color: var(--amber);
+            color: var(--cream);
             font-size: 1.05rem;
             margin: 18px 0 10px;
         }
@@ -745,7 +765,7 @@
             min-height: 44px;
         }
 
-        .red svg { width: 22px; height: 22px; fill: var(--amber); flex-shrink: 0; }
+        .red svg { width: 22px; height: 22px; fill: var(--cream); flex-shrink: 0; }
 
         .mapa-caja { margin-top: 16px; }
 
@@ -777,10 +797,11 @@
 
         .aviso-edad {
             margin-top: 18px;
-            padding: 12px 14px;
-            border-radius: 14px;
-            background: rgba(20, 12, 8, 0.45);
-            border: 1px solid rgba(246, 239, 227, 0.16);
+            padding: 12px 0 0;
+            border: 0;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
+            border-radius: 0;
+            background: none;
             color: var(--cream);
             font-weight: 700;
             font-size: 0.86rem;
@@ -906,14 +927,15 @@
             width: min(1040px, 100%);
             margin: 0 auto;
             padding: 22px 18px 28px;
-            background: rgba(61, 41, 24, 0.9);
+            background: rgba(0, 0, 0, 0.58);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
             color: var(--cream);
-            border-radius: 18px;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+            border-radius: 8px;
         }
 
         @media (hover: hover) {
-            .chip:hover { border-color: var(--amber); }
+            .chip:hover { color: var(--cream); }
         }
 
         @media (min-width: 720px) {
@@ -1064,11 +1086,11 @@
                 #tour-360 { scroll-margin-top: 64px; }
 
                 #tour-360 .tour-aviso {
-                    margin: 0 0 16px;
-                    padding: 12px 14px;
-                    border-radius: 14px;
-                    border: 1px solid rgba(196, 125, 42, 0.55);
-                    background: rgba(20, 12, 8, 0.45);
+                    margin: 0 0 12px;
+                    padding: 0;
+                    border: 0;
+                    border-radius: 0;
+                    background: none;
                     color: var(--cream);
                     font-weight: 700;
                     line-height: 1.45;
@@ -1151,11 +1173,12 @@
                 #tour-360 .tour-modo,
                 #tour-360 .tour-orientacion {
                     min-height: 44px;
-                    padding: 8px 14px;
-                    border-radius: 999px;
-                    border: 1px solid rgba(246, 239, 227, 0.28);
-                    background: rgba(20, 12, 8, 0.45);
-                    color: var(--cream);
+                    padding: 8px 2px;
+                    border-radius: 0;
+                    border: 0;
+                    border-bottom: 1px solid transparent;
+                    background: none;
+                    color: var(--cream-soft);
                     font: inherit;
                     font-size: 0.88rem;
                     font-weight: 700;
@@ -1164,14 +1187,14 @@
 
                 #tour-360 .tour-modo[aria-pressed="true"],
                 #tour-360 .tour-orientacion[aria-pressed="true"] {
-                    background: var(--amber);
-                    color: #1a120e;
-                    border-color: var(--amber);
+                    background: none;
+                    color: var(--cream);
+                    border-bottom-color: rgba(246, 239, 227, 0.7);
                 }
 
                 #tour-360 .tour-simula {
                     margin: 0 0 12px;
-                    color: var(--amber);
+                    color: var(--cream-soft);
                     font-size: 0.88rem;
                     font-weight: 700;
                     line-height: 1.4;
@@ -1239,9 +1262,9 @@
                 }
 
                 #tour-360 .tour-punto[aria-pressed="true"] {
-                    border-color: var(--amber);
+                    border-color: transparent;
                     color: #1a120e;
-                    background: var(--amber);
+                    background: var(--cream);
                 }
 
                 #tour-360 .tour-punto[aria-pressed="true"] .tour-punto-dot {
@@ -1301,7 +1324,7 @@
                 @media (hover: hover) {
                     #tour-360 .tour-punto:hover,
                     #tour-360 .tour-modo:hover,
-                    #tour-360 .tour-orientacion:hover { border-color: var(--amber); }
+                    #tour-360 .tour-orientacion:hover { color: var(--cream); }
                 }
 
                 @media (min-width: 880px) {

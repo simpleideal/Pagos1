@@ -11,11 +11,12 @@ La carta y el happy hour siguen leyendo `datos/carta.csv` y
 del día y cuatro cervezas; el resto se abre con «Ver carta completa».
 
 En el inicio, el mapa es un cuadro chico junto a la dirección y el horario.
-En Carta y en Recorrido y reserva, los bloques van en el café de la barra
-(al 90 %), con texto crema y precios en ámbar. Lo agotado se ve en gris
+La misma fachada oscurecida queda fija detrás de toda la página
+(`position: fixed` sobre `img/fachada.jpg`, sin `background-attachment`).
+Carta y Recorrido y reserva van en cuadros negros semitransparentes,
+con un desenfoque leve, como el horario de la portada. El ámbar es solo
+el precio. Las cervezas se separan con una línea. Lo agotado se ve en gris
 y con el precio tachado.
-Carta, recorrido y contacto usan de fondo `img/fachada-fondo.jpg`
-(la misma fachada, más chica, una sola vez).
 
 La pestaña «Recorrido y reserva» junta el tour y el contacto.
 `#reservar-mesa` queda vacío: el siguiente cambio pone ahí el botón,
