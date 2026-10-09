@@ -10,6 +10,14 @@ La carta y el happy hour siguen leyendo `datos/carta.csv` y
 `datos/happy-hour.csv` (o la URL de `FUENTE`). Al entrar se ven la oferta
 del día y cuatro cervezas; el resto se abre con «Ver carta completa».
 
+El mapa y los botones para compartir la ubicación están en Inicio.
+Carta, recorrido y contacto usan de fondo `img/fachada-fondo.jpg`
+(la misma fachada, más chica, una sola vez).
+
+La pestaña «Recorrido y reserva» junta el tour y el contacto.
+`#reservar-mesa` queda vacío: el siguiente cambio pone ahí el botón,
+cuando el 360 marque mesas y la reserva salga por WhatsApp.
+
 # Recorrido 360
 
 La sección `#tour-360` de la muestra usa fotos de ejemplo, no del local.
