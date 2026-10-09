@@ -33,10 +33,10 @@ Una foto del teléfono no cubre 360×180. No hay que estirarla: se declara
 como panorámica parcial.
 
 1. Guarda el archivo igual que arriba (`img/360/nombre.jpg` y `nombre-movil.jpg`).
-2. Mide el ángulo vertical de la toma, `vertical` (vaov). En el teléfono
-   suele estar entre 60° y 90°.
+2. Estima el ángulo vertical de la toma, `vertical` (vaov). En el teléfono
+   suele estar entre 50° y 70°.
 3. No escribas el ángulo horizontal. La página lo calcula con el aspecto
-   de la imagen:
+   de la imagen y no lo deja pasar de 360:
 
 ```text
 haov ≈ vertical × (ancho / alto)
@@ -63,13 +63,15 @@ la foto. Un valor negativo baja ese centro.
 
 Si `haov` sale menor que 360, el visor se detiene en los bordes:
 `minYaw`/`maxYaw` en ±haov/2 y `minPitch`/`maxPitch` en
-`desfase ± vertical/2`.
+`desfase ± vertical/2`. Si el producto pasa de 360, queda en 360.
 
 La barra de esta muestra (`barra.jpg`) es el panorama completo de
 Bier macht Schön, Colonia (Maximilian Schönherr, CC BY-SA 4.0). Solo se
 achica para la página: no se recorta.
 
-Las mesas tienen, además, una simulación: `mesas-pano.jpg` es un recorte
-CC0 de esa foto 360 (~200° de ancho por ~65° de alto, centrado en una
-mesa). El interruptor «Panorámica de teléfono» la carga en la escena
-Mesas. No es una zona nueva del plano.
+En las mesas, «Panorámica de teléfono» abre otra foto: `mesas-pano.jpg`,
+el interior de Barbara's Heritage Restaurant, Intramuros (Ryomaandres,
+CC BY-SA 4.0). Es un panorama real de teléfono, no un recorte del 360.
+También solo se achica. El vertical estimado es 58°, y el horizontal
+sale del aspecto (cerca de 257°). La etiqueta cae sobre una mesa. No es
+una zona nueva del plano.
