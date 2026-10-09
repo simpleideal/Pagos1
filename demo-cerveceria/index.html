@@ -369,7 +369,7 @@
             display: table;
             margin-left: auto;
             margin-right: auto;
-            color: var(--tinta);
+            color: var(--cream);
         }
 
         .vista h2::after {
@@ -382,7 +382,7 @@
         }
 
         .ficha-etiqueta {
-            color: var(--amber-deep);
+            color: var(--amber);
             font-size: 0.72rem;
             font-weight: 700;
             letter-spacing: 0.1em;
@@ -391,7 +391,7 @@
         }
 
         .oficio {
-            color: var(--amber-deep);
+            color: var(--amber);
             font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 0.12em;
@@ -401,7 +401,7 @@
         }
 
         .seccion-texto {
-            color: var(--muted);
+            color: var(--cream-soft);
             font-size: 0.95rem;
             line-height: 1.45;
             max-width: 42ch;
@@ -412,7 +412,8 @@
         .panel {
             width: min(520px, 100%);
             margin: 28px auto 0;
-            background: #fffdf8;
+            background: rgba(61, 41, 24, 0.9);
+            color: var(--cream);
             border-radius: 18px;
             padding: 22px 18px;
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
@@ -422,8 +423,9 @@
             margin: 0 0 16px;
             padding: 10px 14px;
             border-radius: 999px;
-            background: #fff;
-            border: 1px solid rgba(61, 41, 24, 0.12);
+            background: rgba(20, 12, 8, 0.45);
+            border: 1px solid rgba(246, 239, 227, 0.18);
+            color: var(--cream);
             text-align: center;
         }
 
@@ -446,7 +448,8 @@
             padding: 16px;
             border-radius: 18px;
             border: 1.5px solid var(--amber);
-            background: #fff;
+            background: rgba(20, 12, 8, 0.45);
+            color: var(--cream);
         }
 
         .oferta-dia[hidden] { display: none; }
@@ -483,7 +486,7 @@
         }
 
         .precio-antes {
-            color: var(--muted);
+            color: #cbbbaa;
             font-weight: 600;
             text-decoration: line-through;
             font-size: 0.95rem;
@@ -495,7 +498,7 @@
             font-weight: 700;
             letter-spacing: -0.03em;
             line-height: 1;
-            color: var(--amber-deep);
+            color: var(--amber);
             font-variant-numeric: tabular-nums;
         }
 
@@ -505,7 +508,7 @@
         .filtros[hidden] { display: none; }
 
         .filtro-nombre {
-            color: var(--muted);
+            color: var(--cream-soft);
             font-size: 0.72rem;
             font-weight: 700;
             letter-spacing: 0.08em;
@@ -524,9 +527,9 @@
             min-height: 40px;
             padding: 8px 14px;
             border-radius: 999px;
-            border: 1px solid rgba(61, 41, 24, 0.2);
-            background: #fffdf8;
-            color: var(--tinta);
+            border: 1px solid rgba(246, 239, 227, 0.28);
+            background: rgba(20, 12, 8, 0.45);
+            color: var(--cream);
             font: inherit;
             font-size: 0.88rem;
             font-weight: 600;
@@ -534,21 +537,34 @@
         }
 
         .chip.activo {
-            background: var(--madera);
-            color: var(--crema);
-            border-color: var(--madera);
+            background: var(--amber);
+            color: #1a120e;
+            border-color: var(--amber);
         }
 
         .cervezas { display: grid; gap: 10px; }
 
         .cerveza {
             border-radius: 14px;
-            border: 1px solid rgba(61, 41, 24, 0.18);
-            background: #fff;
+            border: 1px solid rgba(246, 239, 227, 0.16);
+            background: rgba(20, 12, 8, 0.45);
+            color: var(--cream);
             overflow: hidden;
         }
 
-        .cerveza.agotada { opacity: 1; }
+        .cerveza.agotada .cerveza-nombre,
+        .cerveza.agotada .estilo,
+        .cerveza.agotada .medidas,
+        .cerveza.agotada .desc,
+        .cerveza.agotada .estado {
+            color: #b7ada3;
+        }
+
+        .cerveza.agotada .precio {
+            color: #b7ada3;
+            text-decoration: line-through;
+            text-decoration-thickness: 1.5px;
+        }
 
         .cerveza-tope {
             display: grid;
@@ -594,13 +610,13 @@
         }
 
         .estilo {
-            color: var(--muted);
+            color: var(--cream-soft);
             font-size: 0.88rem;
             line-height: 1.35;
         }
 
         .precio {
-            color: #5c320c;
+            color: var(--amber);
             font-weight: 700;
             font-variant-numeric: tabular-nums;
             font-size: 1.02rem;
@@ -608,7 +624,7 @@
 
         .precio s,
         .precio .precio-antes {
-            color: var(--muted);
+            color: #cbbbaa;
             font-weight: 600;
             margin-right: 4px;
         }
@@ -618,10 +634,10 @@
             font-weight: 700;
             letter-spacing: 0.06em;
             text-transform: uppercase;
-            color: var(--amber-deep);
+            color: var(--amber);
         }
 
-        .estado.agotada { color: #2a2118; }
+        .estado.agotada { color: #b7ada3; }
 
         .cerveza-extra {
             padding: 0 14px 12px;
@@ -630,14 +646,14 @@
         .cerveza-extra[hidden] { display: none; }
 
         .medidas {
-            color: var(--tinta);
+            color: var(--cream);
             font-size: 0.88rem;
             font-weight: 700;
             line-height: 1.35;
         }
 
         .desc {
-            color: var(--muted);
+            color: var(--cream-soft);
             font-size: 0.86rem;
             line-height: 1.4;
             margin-top: 4px;
@@ -676,14 +692,14 @@
 
         .carta-espera,
         .carta-vacia {
-            color: var(--muted);
+            color: var(--cream-soft);
             line-height: 1.45;
             padding: 6px 0 8px;
         }
 
         .carta-nota {
             margin-top: 14px;
-            color: var(--muted);
+            color: var(--cream-soft);
             font-size: 0.78rem;
             line-height: 1.4;
         }
@@ -697,7 +713,7 @@
             line-height: 1.4;
         }
 
-        .dato b { color: var(--amber-deep); min-width: 1.2rem; }
+        .dato b { color: var(--amber); min-width: 1.2rem; }
 
         .dato a {
             color: inherit;
@@ -708,7 +724,7 @@
         .panel h3 {
             font-family: Outfit, sans-serif;
             font-weight: 700;
-            color: var(--amber-deep);
+            color: var(--amber);
             font-size: 1.05rem;
             margin: 18px 0 10px;
         }
@@ -723,13 +739,13 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: var(--madera);
+            color: var(--cream);
             text-decoration: none;
             font-weight: 700;
             min-height: 44px;
         }
 
-        .red svg { width: 22px; height: 22px; fill: var(--amber-deep); flex-shrink: 0; }
+        .red svg { width: 22px; height: 22px; fill: var(--amber); flex-shrink: 0; }
 
         .mapa-caja { margin-top: 16px; }
 
@@ -763,8 +779,9 @@
             margin-top: 18px;
             padding: 12px 14px;
             border-radius: 14px;
-            background: rgba(255, 253, 248, 0.72);
-            color: var(--tinta);
+            background: rgba(20, 12, 8, 0.45);
+            border: 1px solid rgba(246, 239, 227, 0.16);
+            color: var(--cream);
             font-weight: 700;
             font-size: 0.86rem;
             line-height: 1.45;
@@ -773,7 +790,7 @@
 
         .pie-muestra {
             margin-top: 12px;
-            color: var(--muted);
+            color: var(--cream-soft);
             font-size: 0.78rem;
             line-height: 1.45;
             text-align: center;
@@ -889,7 +906,8 @@
             width: min(1040px, 100%);
             margin: 0 auto;
             padding: 22px 18px 28px;
-            background: #fffdf8;
+            background: rgba(61, 41, 24, 0.9);
+            color: var(--cream);
             border-radius: 18px;
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
         }
@@ -1049,9 +1067,9 @@
                     margin: 0 0 16px;
                     padding: 12px 14px;
                     border-radius: 14px;
-                    border: 1px solid rgba(196, 125, 42, 0.45);
-                    background: rgba(255, 253, 248, 0.72);
-                    color: #3d2918;
+                    border: 1px solid rgba(196, 125, 42, 0.55);
+                    background: rgba(20, 12, 8, 0.45);
+                    color: var(--cream);
                     font-weight: 700;
                     line-height: 1.45;
                 }
@@ -1112,13 +1130,13 @@
 
                 #tour-360 .tour-credito {
                     margin: 14px 0 0;
-                    color: var(--muted);
+                    color: var(--cream-soft);
                     font-size: 0.78rem;
                     line-height: 1.45;
                 }
 
                 #tour-360 .tour-credito a {
-                    color: #3d2918;
+                    color: var(--cream);
                     font-weight: 700;
                     text-underline-offset: 2px;
                 }
@@ -1135,9 +1153,9 @@
                     min-height: 44px;
                     padding: 8px 14px;
                     border-radius: 999px;
-                    border: 1px solid rgba(61, 41, 24, 0.22);
-                    background: #fffdf8;
-                    color: #3d2918;
+                    border: 1px solid rgba(246, 239, 227, 0.28);
+                    background: rgba(20, 12, 8, 0.45);
+                    color: var(--cream);
                     font: inherit;
                     font-size: 0.88rem;
                     font-weight: 700;
@@ -1146,9 +1164,9 @@
 
                 #tour-360 .tour-modo[aria-pressed="true"],
                 #tour-360 .tour-orientacion[aria-pressed="true"] {
-                    background: #3d2918;
-                    color: #f6efe3;
-                    border-color: #3d2918;
+                    background: var(--amber);
+                    color: #1a120e;
+                    border-color: var(--amber);
                 }
 
                 #tour-360 .tour-simula {
@@ -1174,7 +1192,7 @@
 
                 #tour-360 .tour-plano-ayuda {
                     margin: 0 0 10px;
-                    color: var(--muted);
+                    color: var(--cream-soft);
                     font-size: 0.9rem;
                     line-height: 1.4;
                 }
