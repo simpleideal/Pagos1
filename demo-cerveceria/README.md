@@ -99,3 +99,14 @@ CC BY-SA 4.0). Es un panorama real de teléfono, no un recorte del 360.
 También solo se achica. El vertical estimado es 58°, y el horizontal
 sale del aspecto (cerca de 257°). La etiqueta cae sobre una mesa. No es
 una zona nueva del plano.
+
+## Reserva de mesas
+
+Los ids de escena son `barra`, `mesas`, `terraza` y `mesas-pano`.
+`mesas-pano` es la panorámica de las mesas. Una mesa con zona `mesas`
+se ve en esa foto y en el 360.
+
+Los datos no salen de un CSV de esta página. Llegan en `window.BRUMA_MESAS`
+(mesa, zona, capacidad, estado, yaw, pitch, nota) y con el evento
+`bruma:mesas`. `js/mesas-ejemplo.js` solo llena el arreglo si todavía
+no hay datos. El otro cambio lo reemplaza.
