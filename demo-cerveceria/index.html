@@ -262,6 +262,16 @@
 
         .ficha span { margin-right: 8px; }
 
+        .ficha .mesas-libres {
+            margin: 8px 0 0;
+            color: rgba(246, 239, 227, 0.72);
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0;
+        }
+
+        .ficha .mesas-libres[hidden] { display: none; }
+
         .credito-foto {
             position: absolute;
             z-index: 2;
@@ -1131,6 +1141,7 @@
                         <div class="ficha" aria-label="Horario y dirección">
                             <p><span>📍</span> <a id="heroLugar" href="#" target="_blank" rel="noopener noreferrer">Plaza de Armas, costado norte, Osorno</a></p>
                             <p><span>🕒</span> Mar a jueves: 17:00 a 00:00<br>Viernes y sábado: 17:00 a 02:00<br>Domingo y lunes: cerrado</p>
+                            <p class="mesas-libres" id="mesas-libres-inicio" hidden></p>
                         </div>
                         <div class="mapa-mini">
                             <div class="mapa-marco">
@@ -1342,8 +1353,172 @@
                     height: auto;
                 }
 
+                #tour-360 .plano-resumen,
+                #tour-360 .plano-frase {
+                    margin: 0 0 10px;
+                    color: rgba(246, 239, 227, 0.72);
+                    font-size: 0.84rem;
+                    line-height: 1.4;
+                }
+
+                #tour-360 .plano-frase { margin: 8px 0 0; }
+
+                #tour-360 .plano-frase strong {
+                    color: var(--cream);
+                    font-weight: 700;
+                }
+
+                #tour-360 .plano-resumen[hidden],
+                #tour-360 .plano-frase[hidden],
+                #tour-360 .plano-hora[hidden],
+                #tour-360 .plano-cono[hidden] { display: none !important; }
+
+                #tour-360 .plano-filtros {
+                    display: flex;
+                    gap: 8px;
+                    margin: 0 0 10px;
+                }
+
+                #tour-360 .plano-filtro {
+                    min-height: 36px;
+                    min-width: 44px;
+                    padding: 6px 12px;
+                    border-radius: 999px;
+                    border: 1px solid rgba(246, 239, 227, 0.28);
+                    background: transparent;
+                    color: var(--cream-soft);
+                    font: inherit;
+                    font-size: 0.88rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                }
+
+                #tour-360 .plano-filtro[aria-pressed="true"] {
+                    color: #1a120e;
+                    background: var(--cream);
+                    border-color: transparent;
+                }
+
+                #tour-360 .plano-hora {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin: 0 0 10px;
+                    color: var(--cream-soft);
+                    font-size: 0.84rem;
+                    font-weight: 700;
+                }
+
+                #tour-360 .plano-hora select {
+                    min-height: 36px;
+                    padding: 4px 8px;
+                    border-radius: 8px;
+                    border: 1px solid rgba(246, 239, 227, 0.28);
+                    background: rgba(0, 0, 0, 0.45);
+                    color: var(--cream);
+                    font: inherit;
+                    font-size: 0.88rem;
+                    font-weight: 600;
+                }
+
+                #tour-360 .plano-mesa {
+                    position: absolute;
+                    z-index: 2;
+                    transform: translate(-50%, -50%);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 2px 4px;
+                    border: 0;
+                    cursor: pointer;
+                    font: inherit;
+                    line-height: 1.05;
+                }
+
+                #tour-360 .plano-mesa .plano-num {
+                    font-size: 0.92rem;
+                    font-weight: 700;
+                }
+
+                #tour-360 .plano-mesa .plano-cap {
+                    font-size: 0.62rem;
+                    font-weight: 600;
+                    letter-spacing: 0.02em;
+                }
+
+                #tour-360 .plano-mesa.libre {
+                    background: #1f8f4e;
+                    color: #f4fff7;
+                }
+
+                #tour-360 .plano-mesa.reservada {
+                    background: #8a847c;
+                    color: #1a120e;
+                }
+
+                #tour-360 .plano-mesa.redonda {
+                    width: 46px;
+                    height: 46px;
+                    border-radius: 50%;
+                }
+
+                #tour-360 .plano-mesa.cuadrada {
+                    width: 48px;
+                    height: 40px;
+                    border-radius: 8px;
+                }
+
+                #tour-360 .plano-mesa.alargada {
+                    width: 64px;
+                    height: 36px;
+                    border-radius: 8px;
+                }
+
+                #tour-360 .plano-mesa.apagada { opacity: 0.28; }
+
+                #tour-360 .plano-mesa.libre.encendida {
+                    box-shadow: 0 0 0 3px rgba(246, 239, 227, 0.9);
+                }
+
+                #tour-360 .plano-cono {
+                    position: absolute;
+                    z-index: 5;
+                    width: 12px;
+                    height: 12px;
+                    transform: translate(-50%, -50%);
+                    pointer-events: none;
+                }
+
+                #tour-360 .plano-cono-punto {
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    background: #4285f4;
+                    border: 2px solid #fff;
+                    transform: translate(-50%, -50%);
+                    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.35);
+                }
+
+                #tour-360 .plano-cono-forma {
+                    position: absolute;
+                    left: 50%;
+                    bottom: 50%;
+                    width: 0;
+                    height: 0;
+                    border-left: 16px solid transparent;
+                    border-right: 16px solid transparent;
+                    border-top: 46px solid rgba(66, 133, 244, 0.55);
+                    transform-origin: 50% 100%;
+                    transform: translateX(-50%);
+                }
+
                 #tour-360 .tour-punto {
                     position: absolute;
+                    z-index: 4;
                     transform: translate(-50%, -50%);
                     display: inline-flex;
                     align-items: center;
@@ -1516,8 +1691,17 @@
 
                 <div class="tour-plano" id="tour-plano">
                     <p class="ficha-etiqueta">Plano de muestra</p>
-                    <p class="tour-plano-ayuda">Elige un punto para empezar ahí.</p>
-                    <div class="tour-plano-caja" role="group" aria-label="Plano de muestra. Terraza, mesas o barra.">
+                    <p class="plano-resumen" id="plano-resumen" hidden></p>
+                    <div class="plano-filtros" role="group" aria-label="Filtrar por personas">
+                        <button type="button" class="plano-filtro" data-cupo="2" aria-pressed="false">2</button>
+                        <button type="button" class="plano-filtro" data-cupo="4" aria-pressed="false">4</button>
+                        <button type="button" class="plano-filtro" data-cupo="6" aria-pressed="false">6+</button>
+                    </div>
+                    <label class="plano-hora" id="plano-hora-campo" hidden>Hora
+                        <select id="plano-hora" aria-label="Hora para ver mesas libres"></select>
+                    </label>
+                    <p class="tour-plano-ayuda">Toca una mesa libre para reservarla.</p>
+                    <div class="tour-plano-caja" role="group" aria-label="Plano de reservas. Terraza, mesas o barra.">
                         <svg viewBox="0 0 280 360" aria-hidden="true" focusable="false">
                             <rect width="280" height="360" rx="18" fill="#1c130e"/>
                             <rect x="48" y="14" width="184" height="70" rx="14" fill="#3c2b1c" stroke="rgba(226,160,74,0.55)" stroke-width="2"/>
@@ -1558,6 +1742,11 @@
                             <path d="M118 344a20 20 0 0 1 20-20" fill="none" stroke="#e7dccb" stroke-width="1.4"/>
                             <text x="140" y="324" text-anchor="middle" fill="#cfc3b6" font-family="Outfit, sans-serif" font-size="11" font-weight="600">entrada</text>
                         </svg>
+                        <div id="plano-mesas"></div>
+                        <div class="plano-cono" id="plano-cono" style="left:50%;top:80%" aria-hidden="true">
+                            <span class="plano-cono-forma"></span>
+                            <span class="plano-cono-punto"></span>
+                        </div>
                         <button type="button" class="tour-punto" data-escena="terraza" aria-pressed="false" style="left:50%;top:14%">
                             <span class="tour-punto-dot" aria-hidden="true"></span>
                             Terraza
@@ -1571,6 +1760,7 @@
                             Barra
                         </button>
                     </div>
+                    <p class="plano-frase" id="plano-frase">En la barra. <strong>Happy hour</strong> de lunes a jueves, 18:00–20:00.</p>
                 </div>
             </div>
             <p class="tour-credito">Fotos de muestra: <a href="https://commons.wikimedia.org/wiki/File:Bier_macht_Sch%C3%B6n_%E2%80%93_Crafbeer_Shop_in_K%C3%B6ln_2019.jpg">Bier macht Schön, Colonia</a> — foto de Maximilian Schönherr, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Panorámica de las mesas: <a href="https://commons.wikimedia.org/wiki/File:Barbara%27s_Heritage_Restaurant_Intramuros_Interior_Panorama.jpg">Barbara's Heritage Restaurant, Intramuros</a> — foto de Ryomaandres, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Las otras: Poly Haven (CC0) — Greg Zaal y Jarod Guest; Dario Barresi.</p>
@@ -1661,6 +1851,44 @@
                     var configs = {};
                     var mesas = [];
                     var idsPuestas = [];
+                    var filtroCupo = 0;
+                    var miradaPedida = null;
+                    var habiaLibreA = false;
+
+                    var HUECOS = {
+                        terraza: [
+                            { x: 24, y: 12 },
+                            { x: 76, y: 12 },
+                            { x: 24, y: 20 },
+                            { x: 76, y: 20 }
+                        ],
+                        mesas: [
+                            { x: 20, y: 34 },
+                            { x: 80, y: 34 },
+                            { x: 20, y: 56 },
+                            { x: 80, y: 56 },
+                            { x: 35, y: 34 },
+                            { x: 65, y: 56 }
+                        ],
+                        barra: [
+                            { x: 22, y: 68 },
+                            { x: 78, y: 68 },
+                            { x: 34, y: 82 },
+                            { x: 66, y: 82 }
+                        ]
+                    };
+
+                    var CONO = {
+                        terraza: { x: 50, y: 21 },
+                        mesas: { x: 50, y: 64 },
+                        barra: { x: 22, y: 80 }
+                    };
+
+                    var FRASES = {
+                        terraza: 'Afuera, con vista a la plaza.',
+                        mesas: 'El salón, para quedarse a la mesa.',
+                        barra: 'En la barra. <strong>Happy hour</strong> de lunes a jueves, 18:00–20:00.'
+                    };
 
                     function esMovil() {
                         return window.matchMedia('(max-width: 720px)').matches;
@@ -1673,6 +1901,41 @@
 
                     function defDe(id) {
                         return ESCENAS[id] || null;
+                    }
+
+                    function porcentaje(valor) {
+                        if (valor == null || String(valor).trim() === '') return null;
+                        var n = Number(String(valor).trim().replace(',', '.'));
+                        if (!isFinite(n)) return null;
+                        if (n < 0) n = 0;
+                        if (n > 100) n = 100;
+                        return n;
+                    }
+
+                    function zonaPlano(zona) {
+                        if (zona === 'barra' || zona === 'terraza' || zona === 'mesas') return zona;
+                        if (zona === 'mesas-pano') return 'mesas';
+                        return 'mesas';
+                    }
+
+                    /* ocupada_ahora es opcional. null = el campo no vino. */
+                    function ocupadaDe(fila) {
+                        if (!fila || !Object.prototype.hasOwnProperty.call(fila, 'ocupada_ahora')) return null;
+                        var valor = fila.ocupada_ahora;
+                        if (valor == null || String(valor).trim() === '') return null;
+                        var texto = String(valor).trim().toLowerCase();
+                        if (texto === '0' || texto === 'false' || texto === 'no' || texto === 'libre' || texto === 'off') return false;
+                        return true;
+                    }
+
+                    function formaDe(fila, capacidad) {
+                        var forma = String((fila && fila.forma) || '').trim().toLowerCase();
+                        if (forma === 'redonda' || forma === 'circulo' || forma === 'círculo' || forma === 'round' || forma === 'circular') return 'redonda';
+                        if (forma === 'cuadrada' || forma === 'cuadrado' || forma === 'square') return 'cuadrada';
+                        if (forma === 'alargada' || forma === 'larga' || forma === 'rectangular' || forma === 'rect') return 'alargada';
+                        if (capacidad <= 2) return 'redonda';
+                        if (capacidad <= 4) return 'cuadrada';
+                        return 'alargada';
                     }
 
                     function normalizarMesa(fila) {
@@ -1689,8 +1952,53 @@
                             estado: estado === 'libre' ? 'libre' : 'reservada',
                             yaw: Number(fila.yaw) || 0,
                             pitch: Number(fila.pitch) || 0,
-                            nota: String(fila.nota || '').trim()
+                            nota: String(fila.nota || '').trim(),
+                            x: porcentaje(fila.plano_x),
+                            y: porcentaje(fila.plano_y),
+                            forma: formaDe(fila, capacidad),
+                            ocupada: ocupadaDe(fila),
+                            origen: fila
                         };
+                    }
+
+                    function estaLibre(mesa) {
+                        return mesa.estado === 'libre' && mesa.ocupada !== true;
+                    }
+
+                    function hueco(zona, indice) {
+                        var lista = HUECOS[zona] || HUECOS.mesas;
+                        if (indice < lista.length) return lista[indice];
+                        var rect = zona === 'terraza'
+                            ? { x0: 20, x1: 80, y0: 8, y1: 22 }
+                            : (zona === 'barra'
+                                ? { x0: 18, x1: 82, y0: 66, y1: 84 }
+                                : { x0: 16, x1: 84, y0: 30, y1: 60 });
+                        var extra = indice - lista.length;
+                        var cols = 3;
+                        var col = extra % cols;
+                        var row = Math.floor(extra / cols);
+                        var x = rect.x0 + (col + 0.5) * (rect.x1 - rect.x0) / cols;
+                        var y = rect.y0 + Math.min(row, 2) * (rect.y1 - rect.y0) / 3 + 4;
+                        if (Math.abs(x - 50) < 8) x += (col === 0 ? -12 : 12);
+                        return { x: x, y: y };
+                    }
+
+                    function colocarMesas(lista) {
+                        var grupos = {};
+                        lista.forEach(function (mesa) {
+                            if (mesa.x != null && mesa.y != null) return;
+                            var zona = zonaPlano(mesa.zona);
+                            if (!grupos[zona]) grupos[zona] = [];
+                            grupos[zona].push(mesa);
+                        });
+                        Object.keys(grupos).forEach(function (zona) {
+                            grupos[zona].sort(function (a, b) { return Number(a.mesa) - Number(b.mesa); });
+                            grupos[zona].forEach(function (mesa, indice) {
+                                var puesto = hueco(zona, indice);
+                                if (mesa.x == null) mesa.x = puesto.x;
+                                if (mesa.y == null) mesa.y = puesto.y;
+                            });
+                        });
                     }
 
                     /* zona es el id de la escena. mesas-pano es la misma zona
@@ -1706,7 +2014,7 @@
                     }
 
                     function hotspotMesa(mesa) {
-                        var libre = mesa.estado === 'libre';
+                        var libre = estaLibre(mesa);
                         return {
                             id: 'mesa-' + mesa.mesa,
                             pitch: mesa.pitch,
@@ -1723,7 +2031,18 @@
                                 div.appendChild(texto);
                             },
                             clickHandlerFunc: function () {
-                                if (window.brumaAbrirMesa) window.brumaAbrirMesa(mesa);
+                                if (!window.brumaAbrirMesa) return;
+                                if (mesa.ocupada === true && mesa.estado === 'libre') {
+                                    window.brumaAbrirMesa({
+                                        mesa: mesa.mesa,
+                                        zona: mesa.zona,
+                                        capacidad: mesa.capacidad,
+                                        estado: 'reservada',
+                                        nota: mesa.nota
+                                    });
+                                    return;
+                                }
+                                window.brumaAbrirMesa(mesa);
                             }
                         };
                     }
@@ -1745,8 +2064,182 @@
                             if (mesa) siguientes.push(mesa);
                         });
                         if (!siguientes.length) return;
+                        colocarMesas(siguientes);
                         mesas = siguientes;
                         pintarMesas();
+                        pintarResumen();
+                        prepararHora();
+                        dibujarMesasPlano();
+                    }
+
+                    function textoLibres() {
+                        var libres = 0;
+                        mesas.forEach(function (mesa) {
+                            if (estaLibre(mesa)) libres += 1;
+                        });
+                        var verbo = libres === 1 ? 'queda' : 'quedan';
+                        return 'Hoy ' + verbo + ' ' + libres + ' de ' + mesas.length + ' mesas libres';
+                    }
+
+                    function pintarResumen() {
+                        if (!mesas.length) return;
+                        var texto = textoLibres();
+                        var plano = document.getElementById('plano-resumen');
+                        var inicio = document.getElementById('mesas-libres-inicio');
+                        if (plano) {
+                            plano.hidden = false;
+                            plano.textContent = texto;
+                        }
+                        if (inicio) {
+                            inicio.hidden = false;
+                            inicio.textContent = texto;
+                        }
+                    }
+
+                    /* Si la función pide mesa y hora, responde sí o no.
+                       Si pide solo la hora, devuelve ids, mesas o un mapa.
+                       Un fallo o un null no apaga la mesa. */
+                    function libreAEsaHora(mesa, hora) {
+                        var fn = window.BRUMA_MESAS_LIBRE_A;
+                        if (typeof fn !== 'function' || !hora) return true;
+                        var fila = mesa.origen || mesa;
+                        var respuesta;
+                        try {
+                            respuesta = fn.length >= 2 ? fn(fila, hora) : fn(hora);
+                        } catch (error) {
+                            return true;
+                        }
+                        if (respuesta == null) return true;
+                        if (fn.length >= 2) return !!respuesta;
+                        if (Array.isArray(respuesta)) {
+                            var id = String(mesa.mesa);
+                            var i;
+                            for (i = 0; i < respuesta.length; i += 1) {
+                                var item = respuesta[i];
+                                if (item && typeof item === 'object') {
+                                    if (String(item.mesa) === id) return true;
+                                } else if (String(item) === id) return true;
+                            }
+                            return false;
+                        }
+                        if (typeof respuesta === 'object') {
+                            if (Object.prototype.hasOwnProperty.call(respuesta, mesa.mesa) ||
+                                Object.prototype.hasOwnProperty.call(respuesta, String(mesa.mesa))) {
+                                return !!(respuesta[mesa.mesa] || respuesta[String(mesa.mesa)]);
+                            }
+                            return true;
+                        }
+                        return true;
+                    }
+
+                    function prepararHora() {
+                        var campo = document.getElementById('plano-hora-campo');
+                        if (!campo) return;
+                        var hay = typeof window.BRUMA_MESAS_LIBRE_A === 'function';
+                        campo.hidden = !hay;
+                        if (!hay) return;
+                        var select = document.getElementById('plano-hora');
+                        if (select.options.length) return;
+                        var cualquiera = document.createElement('option');
+                        cualquiera.value = '';
+                        cualquiera.textContent = 'Cualquier hora';
+                        select.appendChild(cualquiera);
+                        var h;
+                        for (h = 17; h <= 23; h += 1) {
+                            ['00', '30'].forEach(function (min) {
+                                var valor = (h < 10 ? '0' : '') + h + ':' + min;
+                                var opcion = document.createElement('option');
+                                opcion.value = valor;
+                                opcion.textContent = valor;
+                                select.appendChild(opcion);
+                            });
+                        }
+                        var cero = document.createElement('option');
+                        cero.value = '00:00';
+                        cero.textContent = '00:00';
+                        select.appendChild(cero);
+                    }
+
+                    function dibujarMesasPlano() {
+                        var caja = document.getElementById('plano-mesas');
+                        if (!caja) return;
+                        caja.innerHTML = '';
+                        var campo = document.getElementById('plano-hora-campo');
+                        var select = document.getElementById('plano-hora');
+                        var hora = (campo && !campo.hidden && select) ? select.value : '';
+                        var filtrando = filtroCupo > 0 || !!hora;
+                        mesas.forEach(function (mesa) {
+                            var boton = document.createElement('button');
+                            boton.type = 'button';
+                            boton.className = 'plano-mesa ' + mesa.forma + ' ' + (estaLibre(mesa) ? 'libre' : 'reservada');
+                            boton.setAttribute('data-mesa', mesa.mesa);
+                            var cabe = !filtroCupo || mesa.capacidad >= filtroCupo;
+                            var aEsaHora = libreAEsaHora(mesa, hora);
+                            if (!cabe || !aEsaHora) boton.classList.add('apagada');
+                            else if (filtrando && estaLibre(mesa)) boton.classList.add('encendida');
+                            boton.style.left = mesa.x + '%';
+                            boton.style.top = mesa.y + '%';
+                            var estadoTxt = estaLibre(mesa) ? 'libre' : 'no disponible';
+                            boton.setAttribute('aria-label', tituloMesa(mesa) + ', ' + estadoTxt);
+                            var num = document.createElement('span');
+                            num.className = 'plano-num';
+                            num.textContent = mesa.mesa;
+                            var cap = document.createElement('span');
+                            cap.className = 'plano-cap';
+                            cap.textContent = mesa.capacidad + 'p';
+                            boton.appendChild(num);
+                            boton.appendChild(cap);
+                            caja.appendChild(boton);
+                        });
+                    }
+
+                    function pintarFiltros() {
+                        Array.prototype.forEach.call(document.querySelectorAll('#tour-plano .plano-filtro'), function (boton) {
+                            var activo = Number(boton.getAttribute('data-cupo')) === filtroCupo;
+                            boton.setAttribute('aria-pressed', activo ? 'true' : 'false');
+                        });
+                    }
+
+                    function colocarCono() {
+                        var nodo = document.getElementById('plano-cono');
+                        if (!nodo) return;
+                        var zona = zonaPlano(escenaPedida);
+                        var punto = CONO[zona] || CONO.mesas;
+                        nodo.hidden = false;
+                        nodo.style.left = punto.x + '%';
+                        nodo.style.top = punto.y + '%';
+                    }
+
+                    function actualizarYawCono() {
+                        var forma = document.querySelector('#plano-cono .plano-cono-forma');
+                        if (!forma) return;
+                        var yaw = 0;
+                        if (visor && visor.getYaw) {
+                            try { yaw = visor.getYaw(); } catch (error) {}
+                        }
+                        if (!isFinite(yaw)) yaw = 0;
+                        forma.style.transform = 'translateX(-50%) rotate(' + yaw + 'deg)';
+                    }
+
+                    function seguirVista() {
+                        var hay = typeof window.BRUMA_MESAS_LIBRE_A === 'function';
+                        if (hay !== habiaLibreA) {
+                            habiaLibreA = hay;
+                            prepararHora();
+                            dibujarMesasPlano();
+                        }
+                        actualizarYawCono();
+                        requestAnimationFrame(seguirVista);
+                    }
+
+                    function mirarMesa(mesa) {
+                        var zona = zonaPlano(mesa.zona);
+                        if (!ESCENAS[zona]) return;
+                        if (visor && visor.stopAutoRotate) {
+                            try { visor.stopAutoRotate(); } catch (error) {}
+                        }
+                        irA(zona, { pitch: mesa.pitch, yaw: mesa.yaw });
+                        if (estaLibre(mesa) && window.brumaAbrirMesa) window.brumaAbrirMesa(mesa);
                     }
 
                     function pintarMesas() {
@@ -1932,6 +2425,9 @@
                             boton.setAttribute('aria-pressed', activo ? 'true' : 'false');
                         });
                         document.getElementById('tour-ahora').textContent = 'Mirando desde ' + ESCENAS[idPlano].frase + '.';
+                        var frase = document.getElementById('plano-frase');
+                        if (frase) frase.innerHTML = FRASES[idPlano] || '';
+                        colocarCono();
                     }
 
                     function pintarModo() {
@@ -1940,24 +2436,34 @@
                         document.getElementById('tour-simula').hidden = !modoPano;
                     }
 
-                    function irA(idPlano) {
+                    function irA(idPlano, mirada) {
                         if (!ESCENAS[idPlano]) return;
                         var token = ++pedido;
                         var id = idDe(idPlano);
                         var def = defDe(id);
+                        var pitch = (mirada && mirada.pitch != null && isFinite(Number(mirada.pitch))) ? Number(mirada.pitch) : def.pitch;
+                        var yaw = (mirada && mirada.yaw != null && isFinite(Number(mirada.yaw))) ? Number(mirada.yaw) : def.yaw;
+                        var hfov = (mirada && mirada.hfov != null && isFinite(Number(mirada.hfov))) ? Number(mirada.hfov) : def.hfov;
+                        miradaPedida = mirada || null;
                         pintarPlano(idPlano);
                         if (!visor || !visor.loadScene) return;
                         var actual = '';
                         try { actual = visor.getScene(); } catch (error) {}
                         if (actual === id) {
-                            visor.lookAt(def.pitch, def.yaw, def.hfov, reduce ? 0 : 700);
+                            if (mirada && visor.stopAutoRotate) {
+                                try { visor.stopAutoRotate(); } catch (error) {}
+                            }
+                            visor.lookAt(pitch, yaw, hfov, reduce ? 0 : 700);
                             return;
                         }
                         mostrarCarga();
                         traer(id).then(function (cfg) {
                             if (token !== pedido || !visor) return;
                             asegurar(id, cfg);
-                            visor.loadScene(id, def.pitch, def.yaw, def.hfov);
+                            if (mirada && visor.stopAutoRotate) {
+                                try { visor.stopAutoRotate(); } catch (error) {}
+                            }
+                            visor.loadScene(id, pitch, yaw, hfov);
                         }).catch(function () {
                             if (token !== pedido) return;
                             var n = document.getElementById('tour-carga');
@@ -2049,7 +2555,12 @@
                             if (visor.isOrientationSupported && visor.isOrientationSupported()) {
                                 orientacion.hidden = false;
                             }
-                            if (idDe(escenaPedida) !== id) irA(escenaPedida);
+                            if (idDe(escenaPedida) !== id || miradaPedida) {
+                                if (miradaPedida && visor.stopAutoRotate) {
+                                    try { visor.stopAutoRotate(); } catch (error) {}
+                                }
+                                irA(escenaPedida, miradaPedida);
+                            }
                         }).catch(function () {
                             montando = false;
                             var n = document.getElementById('tour-carga');
@@ -2074,9 +2585,25 @@
 
                     document.getElementById('tour-plano').addEventListener('click', function (evento) {
                         var boton = evento.target.closest('button');
-                        if (!boton) return;
-                        irA(boton.getAttribute('data-escena'));
+                        if (!boton || !document.getElementById('tour-plano').contains(boton)) return;
+                        if (boton.classList.contains('plano-filtro')) {
+                            var cupo = Number(boton.getAttribute('data-cupo'));
+                            filtroCupo = filtroCupo === cupo ? 0 : cupo;
+                            pintarFiltros();
+                            dibujarMesasPlano();
+                            return;
+                        }
+                        if (boton.classList.contains('plano-mesa')) {
+                            var elegida = null;
+                            mesas.forEach(function (mesa) {
+                                if (mesa.mesa === boton.getAttribute('data-mesa')) elegida = mesa;
+                            });
+                            if (elegida) mirarMesa(elegida);
+                            return;
+                        }
+                        if (boton.classList.contains('tour-punto')) irA(boton.getAttribute('data-escena'));
                     });
+                    document.getElementById('plano-hora').addEventListener('change', dibujarMesasPlano);
 
                     document.getElementById('tour-modo-360').addEventListener('click', function () {
                         if (!modoPano) {
@@ -2100,6 +2627,8 @@
 
                     tomarMesas();
                     window.addEventListener('bruma:mesas', tomarMesas);
+                    colocarCono();
+                    requestAnimationFrame(seguirVista);
 
                     if (document.documentElement.classList.contains('ya-mayor')) {
                         requestAnimationFrame(crear);
