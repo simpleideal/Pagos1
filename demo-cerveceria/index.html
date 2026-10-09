@@ -365,8 +365,117 @@
 
         .reserva-hueco {
             width: min(520px, 100%);
-            min-height: 72px;
             margin: 8px auto 0;
+        }
+
+        .reserva-abrir {
+            display: flex;
+            width: 100%;
+            min-height: 48px;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.58);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            color: var(--cream);
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .reserva-capa {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: grid;
+            place-items: center;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .reserva-capa[hidden],
+        .reserva-capa [hidden] { display: none; }
+
+        .reserva-dialogo {
+            width: min(360px, 100%);
+            padding: 16px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.58);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            color: var(--cream);
+        }
+
+        .reserva-dialogo h3 {
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 6px;
+        }
+
+        .reserva-nota,
+        .reserva-mensaje {
+            color: var(--cream-soft);
+            font-size: 0.88rem;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .reserva-mensaje { color: var(--cream); font-weight: 700; }
+
+        .reserva-campo {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cream-soft);
+        }
+
+        .reserva-campo select {
+            display: block;
+            width: 100%;
+            min-height: 44px;
+            margin-top: 4px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(246, 239, 227, 0.28);
+            background: rgba(0, 0, 0, 0.45);
+            color: var(--cream);
+            font: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .reserva-estado {
+            margin: 8px 0 14px;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .reserva-acciones {
+            display: grid;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .reserva-cerrar {
+            min-height: 44px;
+            border: 0;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
+            border-radius: 0;
+            background: none;
+            color: var(--cream);
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
         }
 
         .carta,
@@ -1287,10 +1396,59 @@
                     border-top-color: rgba(28, 19, 14, 0.16);
                 }
 
+                #tour-360 .pnlm-hotspot-base.tour-marca,
+                #tour-360 .pnlm-hotspot-base.mesa-hotspot {
+                    background: none;
+                }
+
                 #tour-360 .pnlm-hotspot-base.tour-marca {
                     width: 16px;
                     height: 16px;
-                    background: none;
+                }
+
+                #tour-360 .pnlm-hotspot-base.mesa-hotspot {
+                    width: 36px;
+                    height: 36px;
+                }
+
+                #tour-360 .mesa-punto {
+                    display: grid;
+                    place-items: center;
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 50%;
+                    font-family: Outfit, sans-serif;
+                    font-size: 0.85rem;
+                    font-weight: 700;
+                    line-height: 1;
+                }
+
+                #tour-360 .mesa-punto.libre {
+                    background: #1f8f4e;
+                    color: #f4fff7;
+                }
+
+                #tour-360 .mesa-punto.reservada {
+                    background: #8a847c;
+                    color: #1a120e;
+                }
+
+                #tour-360 .mesa-texto {
+                    position: absolute;
+                    left: 50%;
+                    bottom: 42px;
+                    transform: translateX(-50%);
+                    padding: 5px 10px;
+                    border-radius: 999px;
+                    border: 1px solid rgba(246, 239, 227, 0.45);
+                    background: rgba(16, 12, 9, 0.9);
+                    color: var(--cream);
+                    font-family: Outfit, sans-serif;
+                    font-size: 0.84rem;
+                    font-weight: 700;
+                    line-height: 1.2;
+                    white-space: nowrap;
+                    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
                 }
 
                 #tour-360 .tour-marca-punto {
@@ -1417,6 +1575,7 @@
             </div>
             <p class="tour-credito">Fotos de muestra: <a href="https://commons.wikimedia.org/wiki/File:Bier_macht_Sch%C3%B6n_%E2%80%93_Crafbeer_Shop_in_K%C3%B6ln_2019.jpg">Bier macht Schön, Colonia</a> — foto de Maximilian Schönherr, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Panorámica de las mesas: <a href="https://commons.wikimedia.org/wiki/File:Barbara%27s_Heritage_Restaurant_Intramuros_Interior_Panorama.jpg">Barbara's Heritage Restaurant, Intramuros</a> — foto de Ryomaandres, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Las otras: Poly Haven (CC0) — Greg Zaal y Jarod Guest; Dario Barresi.</p>
 
+            <script src="js/mesas-ejemplo.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js"></script>
             <script>
                 (function () {
@@ -1499,6 +1658,9 @@
                     var pedido = 0;
                     var cache = {};
                     var anadidas = {};
+                    var configs = {};
+                    var mesas = [];
+                    var idsPuestas = [];
 
                     function esMovil() {
                         return window.matchMedia('(max-width: 720px)').matches;
@@ -1511,6 +1673,98 @@
 
                     function defDe(id) {
                         return ESCENAS[id] || null;
+                    }
+
+                    function normalizarMesa(fila) {
+                        if (!fila) return null;
+                        var numero = String(fila.mesa == null ? '' : fila.mesa).trim();
+                        if (!numero) return null;
+                        var capacidad = parseInt(fila.capacidad, 10);
+                        if (!capacidad || capacidad < 1) capacidad = 1;
+                        var estado = String(fila.estado || '').trim().toLowerCase();
+                        return {
+                            mesa: numero,
+                            zona: String(fila.zona || '').trim(),
+                            capacidad: capacidad,
+                            estado: estado === 'libre' ? 'libre' : 'reservada',
+                            yaw: Number(fila.yaw) || 0,
+                            pitch: Number(fila.pitch) || 0,
+                            nota: String(fila.nota || '').trim()
+                        };
+                    }
+
+                    /* zona es el id de la escena. mesas-pano es la misma zona
+                       Mesas en la foto panorámica, no un cuarto distinto. */
+                    function mesaEnEscena(mesa, sceneId) {
+                        if (mesa.zona === sceneId) return true;
+                        return sceneId === 'mesas-pano' && mesa.zona === 'mesas';
+                    }
+
+                    function tituloMesa(mesa) {
+                        var gente = mesa.capacidad === 1 ? '1 persona' : mesa.capacidad + ' personas';
+                        return 'Mesa ' + mesa.mesa + ' · ' + gente;
+                    }
+
+                    function hotspotMesa(mesa) {
+                        var libre = mesa.estado === 'libre';
+                        return {
+                            id: 'mesa-' + mesa.mesa,
+                            pitch: mesa.pitch,
+                            yaw: mesa.yaw,
+                            cssClass: 'mesa-hotspot',
+                            createTooltipFunc: function (div) {
+                                var punto = document.createElement('span');
+                                punto.className = 'mesa-punto ' + (libre ? 'libre' : 'reservada');
+                                punto.textContent = mesa.mesa;
+                                var texto = document.createElement('span');
+                                texto.className = 'mesa-texto';
+                                texto.textContent = tituloMesa(mesa);
+                                div.appendChild(punto);
+                                div.appendChild(texto);
+                            },
+                            clickHandlerFunc: function () {
+                                if (window.brumaAbrirMesa) window.brumaAbrirMesa(mesa);
+                            }
+                        };
+                    }
+
+                    function hotspotsDe(id) {
+                        var lista = [marca(defDe(id))];
+                        mesas.forEach(function (mesa) {
+                            if (mesaEnEscena(mesa, id)) lista.push(hotspotMesa(mesa));
+                        });
+                        return lista;
+                    }
+
+                    function tomarMesas() {
+                        var lista = window.BRUMA_MESAS;
+                        if (!lista || !lista.length) return;
+                        var siguientes = [];
+                        lista.forEach(function (fila) {
+                            var mesa = normalizarMesa(fila);
+                            if (mesa) siguientes.push(mesa);
+                        });
+                        if (!siguientes.length) return;
+                        mesas = siguientes;
+                        pintarMesas();
+                    }
+
+                    function pintarMesas() {
+                        var nuevas = mesas.map(function (mesa) { return 'mesa-' + mesa.mesa; });
+                        Object.keys(configs).forEach(function (id) {
+                            if (!anadidas[id] || !visor || !visor.removeHotSpot) {
+                                configs[id].hotSpots = hotspotsDe(id);
+                                return;
+                            }
+                            idsPuestas.forEach(function (hid) {
+                                try { visor.removeHotSpot(hid, id); } catch (error) {}
+                            });
+                            mesas.forEach(function (mesa) {
+                                if (!mesaEnEscena(mesa, id)) return;
+                                visor.addHotSpot(hotspotMesa(mesa), id);
+                            });
+                        });
+                        idsPuestas = nuevas;
                     }
 
                     function urlDe(def) {
@@ -1574,7 +1828,7 @@
                         return cfg;
                     }
 
-                    function configEscena(def, tam, url) {
+                    function configEscena(id, def, tam, url) {
                         var parcial = def.tipo === 'panoramica';
                         var cfg = {
                             type: 'equirectangular',
@@ -1585,7 +1839,7 @@
                             minHfov: parcial ? 40 : 50,
                             maxHfov: parcial ? 90 : 120,
                             autoRotate: (esMovil() || reduce || parcial) ? 0 : -1.2,
-                            hotSpots: [marca(def)]
+                            hotSpots: hotspotsDe(id)
                         };
                         if (parcial) {
                             var limites = limitesPanoramica(def, tam);
@@ -1606,7 +1860,9 @@
                             var tam = tamanoJpeg(buffer);
                             if (!tam) throw new Error('jpeg');
                             var url = URL.createObjectURL(new Blob([buffer], { type: 'image/jpeg' }));
-                            return configEscena(def, tam, url);
+                            var cfg = configEscena(id, def, tam, url);
+                            configs[id] = cfg;
+                            return cfg;
                         });
                         cache[id].catch(function () { delete cache[id]; });
                         return cache[id];
@@ -1793,6 +2049,7 @@
                             if (visor.isOrientationSupported && visor.isOrientationSupported()) {
                                 orientacion.hidden = false;
                             }
+                            if (idDe(escenaPedida) !== id) irA(escenaPedida);
                         }).catch(function () {
                             montando = false;
                             var n = document.getElementById('tour-carga');
@@ -1841,6 +2098,9 @@
                     });
                     document.getElementById('tour-orientacion').addEventListener('click', alOrientacion);
 
+                    tomarMesas();
+                    window.addEventListener('bruma:mesas', tomarMesas);
+
                     if (document.documentElement.classList.contains('ya-mayor')) {
                         requestAnimationFrame(crear);
                         return;
@@ -1858,9 +2118,36 @@
                 <p class="tour-aviso">Activa JavaScript para ver el recorrido 360. Datos de muestra.</p>
             </noscript>
         </div>
-            <!-- Hueco para «Reservar mesa». El siguiente cambio marca mesas
-                 en el 360 y abre la reserva por WhatsApp. No va botón todavía. -->
-            <div id="reservar-mesa" class="reserva-hueco"></div>
+            <!-- El botón abre el mismo cuadrito de reserva, con selector de mesa. -->
+            <div id="reservar-mesa" class="reserva-hueco">
+                <button type="button" class="reserva-abrir" id="reserva-abrir">Reservar mesa</button>
+            </div>
+            <div class="reserva-capa" id="reserva-capa" hidden>
+                <div class="reserva-dialogo" role="dialog" aria-modal="true" aria-labelledby="reserva-titulo">
+                    <h3 id="reserva-titulo">Reservar mesa</h3>
+                    <p class="reserva-nota" id="reserva-nota" hidden></p>
+                    <label class="reserva-campo" id="reserva-elige">Mesa
+                        <select id="reserva-cual"></select>
+                    </label>
+                    <div id="reserva-form">
+                        <label class="reserva-campo">Día
+                            <select id="reserva-dia"></select>
+                        </label>
+                        <label class="reserva-campo">Hora
+                            <select id="reserva-hora"></select>
+                        </label>
+                        <label class="reserva-campo">Personas
+                            <select id="reserva-personas"></select>
+                        </label>
+                        <p class="reserva-mensaje" id="reserva-mensaje"></p>
+                        <div class="reserva-acciones">
+                            <a class="btn btn-wa" id="reserva-wa" target="_blank" rel="noopener noreferrer">Reservar por WhatsApp</a>
+                        </div>
+                    </div>
+                    <p class="reserva-estado" id="reserva-estado" hidden>Reservada</p>
+                    <button type="button" class="reserva-cerrar" id="reserva-cerrar">Cerrar</button>
+                </div>
+            </div>
             <div class="panel" id="contacto">
                 <h2 id="contacto-titulo">Contacto</h2>
                 <p class="dato"><b>📍</b> <span id="direccion">Plaza de Armas, costado norte, Osorno</span></p>
@@ -1896,7 +2183,7 @@
            #carta lee FUENTE.carta (CSV): lista, happy hour y oferta.
            El mapa y los botones para compartir están en #inicio.
            Tour, contacto y redes están en la pestaña Recorrido y reserva.
-           #reservar-mesa queda vacío hasta el botón de reserva.
+           Las mesas del recorrido llegan en window.BRUMA_MESAS.
            ================================================================== */
 
         var CLAVE_EDAD = 'bruma-mayor-18';
@@ -3059,6 +3346,194 @@
         } else if (!document.documentElement.classList.contains('ya-mayor')) {
             document.getElementById('edad-si').focus();
         }
+    </script>
+    <script>
+        (function () {
+            var NOMBRES = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+            var ZONAS = { barra: 'Barra', mesas: 'Mesas', terraza: 'Terraza', 'mesas-pano': 'Mesas' };
+            var capa = document.getElementById('reserva-capa');
+            var titulo = document.getElementById('reserva-titulo');
+            var nota = document.getElementById('reserva-nota');
+            var elige = document.getElementById('reserva-elige');
+            var cual = document.getElementById('reserva-cual');
+            var form = document.getElementById('reserva-form');
+            var dia = document.getElementById('reserva-dia');
+            var hora = document.getElementById('reserva-hora');
+            var personas = document.getElementById('reserva-personas');
+            var mensaje = document.getElementById('reserva-mensaje');
+            var enlace = document.getElementById('reserva-wa');
+            var estado = document.getElementById('reserva-estado');
+            var actual = null;
+
+            function listaMesas() {
+                var crudas = window.BRUMA_MESAS || [];
+                var salida = [];
+                crudas.forEach(function (fila) {
+                    if (!fila) return;
+                    var numero = String(fila.mesa == null ? '' : fila.mesa).trim();
+                    if (!numero) return;
+                    var capacidad = parseInt(fila.capacidad, 10);
+                    if (!capacidad || capacidad < 1) capacidad = 1;
+                    var libre = String(fila.estado || '').trim().toLowerCase() === 'libre';
+                    salida.push({
+                        mesa: numero,
+                        zona: String(fila.zona || '').trim(),
+                        capacidad: capacidad,
+                        estado: libre ? 'libre' : 'reservada',
+                        nota: String(fila.nota || '').trim()
+                    });
+                });
+                salida.sort(function (a, b) { return Number(a.mesa) - Number(b.mesa); });
+                return salida;
+            }
+
+            function llenarDias() {
+                if (dia.options.length) return;
+                var base = new Date();
+                base.setHours(12, 0, 0, 0);
+                var i;
+                for (i = 0; i < 7; i += 1) {
+                    var fecha = new Date(base.getTime() + i * 86400000);
+                    var texto = 'el ' + NOMBRES[fecha.getDay()];
+                    var opcion = document.createElement('option');
+                    opcion.value = texto;
+                    opcion.textContent = texto;
+                    dia.appendChild(opcion);
+                }
+                var sabado = dia.querySelector('option[value="el sábado"]');
+                if (sabado) dia.value = 'el sábado';
+            }
+
+            function llenarHoras() {
+                if (hora.options.length) return;
+                var h;
+                for (h = 17; h <= 23; h += 1) {
+                    ['00', '30'].forEach(function (min) {
+                        var valor = (h < 10 ? '0' : '') + h + ':' + min;
+                        var opcion = document.createElement('option');
+                        opcion.value = valor;
+                        opcion.textContent = valor;
+                        hora.appendChild(opcion);
+                    });
+                }
+                var cero = document.createElement('option');
+                cero.value = '00:00';
+                cero.textContent = '00:00';
+                hora.appendChild(cero);
+                hora.value = '21:00';
+            }
+
+            function llenarPersonas(capacidad) {
+                var elegido = personas.value;
+                personas.innerHTML = '';
+                var n;
+                for (n = 1; n <= capacidad; n += 1) {
+                    var opcion = document.createElement('option');
+                    opcion.value = String(n);
+                    opcion.textContent = n === 1 ? '1 persona' : n + ' personas';
+                    personas.appendChild(opcion);
+                }
+                personas.value = personas.querySelector('option[value="' + elegido + '"]') ? elegido : String(capacidad);
+            }
+
+            function llenarCual() {
+                var previo = cual.value;
+                cual.innerHTML = '';
+                listaMesas().forEach(function (mesa) {
+                    var zona = ZONAS[mesa.zona] || mesa.zona;
+                    var extra = mesa.estado === 'libre'
+                        ? (mesa.capacidad === 1 ? '1 persona' : mesa.capacidad + ' personas')
+                        : 'Reservada';
+                    var opcion = document.createElement('option');
+                    opcion.value = mesa.mesa;
+                    opcion.textContent = 'Mesa ' + mesa.mesa + ' · ' + zona + ' · ' + extra;
+                    cual.appendChild(opcion);
+                });
+                if (previo && cual.querySelector('option[value="' + previo + '"]')) cual.value = previo;
+            }
+
+            function armarMensaje() {
+                var n = Number(personas.value);
+                var gente = n === 1 ? '1 persona' : n + ' personas';
+                return 'Hola, quiero reservar la Mesa ' + actual.mesa + ' ' + dia.value +
+                    ' a las ' + hora.value + ' para ' + gente;
+            }
+
+            function refrescarEnlace() {
+                if (!actual || actual.estado !== 'libre') return;
+                var texto = armarMensaje();
+                mensaje.textContent = texto;
+                var numero = String((window.CONTACTO && CONTACTO.whatsappReservas) || '').replace(/\D/g, '');
+                enlace.href = 'https://wa.me/' + numero + '?text=' + encodeURIComponent(texto);
+            }
+
+            function pintar(mesa) {
+                actual = mesa;
+                titulo.textContent = 'Mesa ' + mesa.mesa;
+                if (mesa.nota) {
+                    nota.hidden = false;
+                    nota.textContent = mesa.nota;
+                } else {
+                    nota.hidden = true;
+                    nota.textContent = '';
+                }
+                var libre = mesa.estado === 'libre';
+                form.hidden = !libre;
+                estado.hidden = libre;
+                if (!libre) return;
+                llenarDias();
+                llenarHoras();
+                llenarPersonas(mesa.capacidad);
+                refrescarEnlace();
+            }
+
+            function buscar(numero) {
+                var hallada = null;
+                listaMesas().forEach(function (mesa) {
+                    if (mesa.mesa === String(numero)) hallada = mesa;
+                });
+                return hallada;
+            }
+
+            function abrir(mesa, conSelector) {
+                llenarCual();
+                elige.hidden = !conSelector;
+                if (conSelector) {
+                    if (!cual.options.length) return;
+                    if (mesa) cual.value = String(mesa.mesa);
+                    mesa = buscar(cual.value);
+                }
+                if (!mesa) return;
+                document.querySelector('.pestanias button[data-vista="recorrido"]').click();
+                pintar(mesa);
+                capa.hidden = false;
+            }
+
+            window.brumaAbrirMesa = function (mesa) {
+                abrir(mesa, false);
+            };
+
+            document.getElementById('reserva-abrir').addEventListener('click', function () {
+                abrir(null, true);
+            });
+            cual.addEventListener('change', function () {
+                var mesa = buscar(cual.value);
+                if (mesa) pintar(mesa);
+            });
+            dia.addEventListener('change', refrescarEnlace);
+            hora.addEventListener('change', refrescarEnlace);
+            personas.addEventListener('change', refrescarEnlace);
+            document.getElementById('reserva-cerrar').addEventListener('click', function () {
+                capa.hidden = true;
+            });
+            capa.addEventListener('click', function (evento) {
+                if (evento.target === capa) capa.hidden = true;
+            });
+            document.addEventListener('keydown', function (evento) {
+                if (evento.key === 'Escape' && !capa.hidden) capa.hidden = true;
+            });
+            window.addEventListener('bruma:mesas', llenarCual);
+        })();
     </script>
 </body>
 </html>
