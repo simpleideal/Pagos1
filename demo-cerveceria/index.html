@@ -1183,7 +1183,7 @@
                 <button type="button" class="tour-modo" id="tour-modo-pano" aria-pressed="false">Panorámica de teléfono</button>
                 <button type="button" class="tour-orientacion" id="tour-orientacion" hidden aria-pressed="false">Mover con el teléfono</button>
             </div>
-            <p class="tour-simula" id="tour-simula" hidden>Simulación de panorámica de teléfono (recorte de la foto 360).</p>
+            <p class="tour-simula" id="tour-simula" hidden>Panorámica real (otro local, de muestra).</p>
 
             <div class="tour-cuerpo">
                 <div class="tour-vista">
@@ -1253,7 +1253,7 @@
                     </div>
                 </div>
             </div>
-            <p class="tour-credito">Fotos 360° de muestra: <a href="https://commons.wikimedia.org/wiki/File:Bier_macht_Sch%C3%B6n_%E2%80%93_Crafbeer_Shop_in_K%C3%B6ln_2019.jpg">Bier macht Schön, Colonia</a> — foto de Maximilian Schönherr, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Las otras: Poly Haven (CC0) — Greg Zaal y Jarod Guest; Dario Barresi.</p>
+            <p class="tour-credito">Fotos de muestra: <a href="https://commons.wikimedia.org/wiki/File:Bier_macht_Sch%C3%B6n_%E2%80%93_Crafbeer_Shop_in_K%C3%B6ln_2019.jpg">Bier macht Schön, Colonia</a> — foto de Maximilian Schönherr, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Panorámica de las mesas: <a href="https://commons.wikimedia.org/wiki/File:Barbara%27s_Heritage_Restaurant_Intramuros_Interior_Panorama.jpg">Barbara's Heritage Restaurant, Intramuros</a> — foto de Ryomaandres, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Las otras: Poly Haven (CC0) — Greg Zaal y Jarod Guest; Dario Barresi.</p>
 
             <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js"></script>
             <script>
@@ -1272,20 +1272,21 @@
 
                        Panorámica de teléfono, parcial, no es 360×180:
                          tipo: 'panoramica'
-                         vertical: ángulo vertical en grados (vaov). Típico 60–90.
+                         vertical: ángulo vertical en grados (vaov). Típico 50–70.
                          desfase: vOffset. 0 = horizonte en el centro de la foto.
                        No se escribe haov a mano. Al abrir la foto:
                          haov = vertical × (ancho / alto)
-                       Si haov < 360, el giro se detiene en los bordes
-                       (minYaw/maxYaw = ±haov/2) y el cabeceo también
-                       (minPitch/maxPitch = desfase ± vertical/2).
+                       Si pasa de 360, se deja en 360. Si haov < 360, el giro
+                       se detiene en los bordes (minYaw/maxYaw = ±haov/2) y
+                       el cabeceo también (minPitch/maxPitch = desfase ± vertical/2).
 
                        La barra es el panorama completo de Wikimedia
                        (Bier macht Schön, Colonia). Solo se achica: no se
-                       recorta. La tira mesas-pano es una simulación CC0:
-                       un recorte de la foto 360 de las mesas (~200° × 65°,
-                       centrado en una mesa). No es una cuarta escena del
-                       plano. Cómo sumar otra: demo-cerveceria/README.md
+                       recorta. mesas-pano es otra foto, un panorama real de
+                       teléfono (Barbara's Heritage Restaurant, Intramuros),
+                       también solo achicada. No es un recorte de las mesas
+                       360 ni una zona nueva del plano.
+                       Cómo sumar otra: demo-cerveceria/README.md
                        ============================================================ */
 
                     var HFOV = 100;
@@ -1319,10 +1320,10 @@
                             etiqueta: 'Mesas',
                             frase: 'las mesas',
                             tipo: 'panoramica',
-                            vertical: 65,
-                            desfase: -12,
-                            yaw: 0,
-                            pitch: -12,
+                            vertical: 58,
+                            desfase: 0,
+                            yaw: -10,
+                            pitch: -14,
                             hfov: 58
                         }
                     };
@@ -1395,10 +1396,12 @@
                         var vertical = Number(def.vertical);
                         var desfase = Number(def.desfase) || 0;
                         var haov = vertical * (tam.ancho / tam.alto);
+                        if (haov > 360) haov = 360;
                         var cfg = {
                             haov: haov,
                             vaov: vertical,
-                            vOffset: desfase
+                            vOffset: desfase,
+                            avoidShowingBackground: true
                         };
                         if (haov < 360) {
                             cfg.minYaw = -haov / 2;
