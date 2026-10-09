@@ -5,45 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cervecería Bruma</title>
     <meta name="description" content="Cervecería Bruma, bar de ejemplo en Osorno. Carta, ubicación y contacto. Datos inventados. Solo mayores de 18 años.">
-    <meta name="theme-color" content="#100c09">
+    <meta name="theme-color" content="#3d2918">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --ink: #100c09;
-            --brown: #1c130e;
-            --panel: #271910;
+            --ink: #3d2918;
+            --brown: #3d2918;
+            --panel: #fffdf8;
             --cream: #f6efe3;
             --cream-soft: #e7dccb;
-            --amber: #e2a04a;
-            --amber-deep: #c47d2a;
-            --muted: #cfc3b6;
-            --line: rgba(246, 239, 227, 0.14);
-            --wa: #25d366;
-            --wa-ink: #062816;
+            --amber: #c47d2a;
+            --amber-deep: #8a4e12;
+            --muted: #6d5e52;
+            --line: rgba(61, 41, 24, 0.14);
+            --wa: #1f8f4e;
+            --wa-ink: #f4fff7;
+            --tinta: #2a2118;
+            --crema: #fbf6ee;
+            --madera: #3d2918;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        html { scroll-behavior: smooth; color-scheme: dark; }
-
-        #inicio,
-        #carta,
-        #redes,
-        #ubicacion { scroll-margin-top: 64px; }
+        html { scroll-behavior: smooth; color-scheme: light; }
 
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
         }
 
+        html { background: #2a1a12; }
+
         body {
             min-height: 100vh;
             font-family: Outfit, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            color: var(--cream);
-            background:
-                radial-gradient(900px 420px at 50% -12%, rgba(196, 125, 42, 0.28), transparent 58%),
-                var(--ink);
+            color: var(--tinta);
+            background: transparent;
+        }
+
+        /* La misma fachada oscurecida de la portada, fija detrás de todo.
+           Foto y velo en capas distintas, para que el filtro no apague el degradado.
+           position: fixed, no background-attachment: en iPhone ese no se queda quieto. */
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        body::before {
+            z-index: -2;
+            background: #120c09 url("img/fachada.jpg") center 42% / cover no-repeat;
+            filter: brightness(0.32) saturate(0.8);
+        }
+
+        body::after {
+            z-index: -1;
+            background: linear-gradient(180deg,
+                rgba(8, 5, 3, 0.35) 0%,
+                rgba(8, 5, 3, 0.88) 14%,
+                rgba(8, 5, 3, 0.88) 50%,
+                rgba(8, 5, 3, 0.5) 68%,
+                rgba(8, 5, 3, 0.74) 100%);
         }
 
         :focus-visible {
@@ -52,31 +77,27 @@
         }
 
         .barra {
-            position: sticky;
-            top: 0;
-            z-index: 20;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
+            gap: 8px 12px;
             flex-wrap: wrap;
             min-height: 58px;
-            padding: calc(10px + env(safe-area-inset-top, 0px)) 20px 10px;
-            background: rgba(16, 12, 9, 0.92);
-            border-bottom: 1px solid var(--line);
-            backdrop-filter: blur(10px);
+            padding: 10px 16px;
+            background: var(--madera);
         }
 
         .marca {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: var(--cream);
+            color: var(--amber);
             text-decoration: none;
             font-family: Fraunces, Georgia, serif;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 700;
             letter-spacing: -0.02em;
+            line-height: 1.15;
         }
 
         .sello-edad {
@@ -93,68 +114,707 @@
             letter-spacing: 0.04em;
         }
 
-        .barra nav {
+        .pestanias {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px 14px;
+            justify-content: flex-end;
+            gap: 10px 14px;
         }
 
-        .barra nav a {
-            color: var(--cream-soft);
-            text-decoration: none;
-            font-size: 0.84rem;
-            font-weight: 600;
-            min-height: 36px;
-            display: inline-flex;
+        .pestanias button {
+            appearance: none;
+            border: none;
+            background: none;
+            color: var(--crema);
+            font-family: Outfit, sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+
+        .pestanias button.activa { color: var(--amber); }
+
+        .vista { display: none; }
+        .vista.activa { display: block; }
+
+        .vista.inicio.activa {
+            display: block;
+            padding: 0;
+            background: transparent;
+        }
+
+        .portada {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            min-height: calc(100vh - 58px);
+            min-height: calc(100svh - 58px);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px 52px;
+            text-align: center;
+        }
+
+        .inicio .fondo {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 42%;
+            z-index: 0;
+            filter: brightness(0.32) saturate(0.8);
+        }
+
+        .inicio .velo-foto {
+            position: absolute;
+            inset: 0;
+            /* Franja oscura sobre el letrero del local de la foto. */
+            background:
+                linear-gradient(180deg,
+                    rgba(8, 5, 3, 0.35) 0%,
+                    rgba(8, 5, 3, 0.88) 14%,
+                    rgba(8, 5, 3, 0.88) 50%,
+                    rgba(8, 5, 3, 0.5) 68%,
+                    rgba(8, 5, 3, 0.74) 100%);
+            z-index: 1;
+        }
+
+        .inicio .contenido {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
             align-items: center;
         }
 
-        .hero {
-            border-bottom: 1px solid var(--line);
+        .inicio h1 {
+            font-family: Fraunces, Georgia, serif;
+            font-size: clamp(2.4rem, 10vw, 4.2rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 0.98;
+            max-width: 12ch;
+            color: #fff8ee;
+            text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
+            margin-bottom: 10px;
         }
 
-        .hero-interior,
-        .seccion,
-        .pie-interior {
-            width: min(1040px, 100%);
-            margin: 0 auto;
-            padding: 28px 20px 36px;
+        .inicio .bajada {
+            color: #f3ddb8;
+            font-size: 1.05rem;
+            line-height: 1.4;
+            max-width: 28ch;
+            margin-bottom: 18px;
+        }
+
+        .boton-pedir,
+        .ver-carta {
+            display: inline-block;
+            background: var(--amber);
+            color: #1a120e;
+            text-decoration: none;
+            border: none;
+            border-radius: 999px;
+            padding: 10px 22px;
+            font-family: Outfit, sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .ver-carta {
+            display: block;
+            width: 100%;
+            margin-top: 0;
+            min-height: 44px;
+            background: none;
+            color: var(--cream);
+            border: 0;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
+            border-radius: 0;
+        }
+
+        .ficha-fila {
+            margin-top: 22px;
+            width: min(520px, 100%);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .ficha {
+            margin-top: 0;
+            flex: 1 1 auto;
+            min-width: 0;
+            background: rgba(0, 0, 0, 0.58);
+            border-radius: 8px;
+            padding: 12px 14px;
+            color: var(--crema);
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .ficha a { color: inherit; text-decoration: underline; }
+
+        .ficha span { margin-right: 8px; }
+
+        .credito-foto {
+            position: absolute;
+            z-index: 2;
+            left: 12px;
+            right: 12px;
+            bottom: 10px;
+            color: rgba(255, 248, 238, 0.9);
+            font-size: 0.68rem;
+            line-height: 1.35;
+        }
+
+        .credito-foto a { color: inherit; }
+
+        .mapa-mini {
+            flex: 0 0 208px;
+            width: 208px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .mapa-marco {
+            height: 104px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.58);
+            box-shadow: inset 0 0 0 1px rgba(246, 239, 227, 0.18);
+        }
+
+        .mapa-marco .mapa {
+            width: 100%;
+            height: 104px;
+            border: 0;
+            display: block;
+            background: #1a120e;
+            filter: invert(1) hue-rotate(180deg) saturate(0.2) brightness(0.78) contrast(0.95);
+        }
+
+        .llegar-botones {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 4px;
+        }
+
+        .llegar-botones a,
+        .llegar-botones button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 30px;
+            padding: 4px 2px;
+            border-radius: 999px;
+            border: 1px solid rgba(246, 239, 227, 0.28);
+            background: rgba(0, 0, 0, 0.5);
+            color: #f6efe3;
+            font-family: Outfit, sans-serif;
+            font-size: 0.66rem;
+            font-weight: 700;
+            line-height: 1.1;
+            text-decoration: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .aviso-compartir {
+            margin: 0;
+            text-align: center;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #f6efe3;
+        }
+
+        .aviso-compartir[hidden] { display: none; }
+
+        .nota-oculta {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        @media (max-width: 560px) {
+            .ficha-fila {
+                flex-direction: column;
+                align-items: stretch;
+                width: min(300px, 100%);
+                margin-top: 14px;
+                gap: 8px;
+            }
+
+            .mapa-mini { flex: none; width: 100%; }
+            .mapa-marco,
+            .mapa-marco .mapa { height: 88px; }
+            .ficha { flex: 0 0 auto; padding: 10px 12px; }
+        }
+
+        .reserva-hueco {
+            width: min(520px, 100%);
+            min-height: 72px;
+            margin: 8px auto 0;
+        }
+
+        .carta,
+        .contacto,
+        .recorrido {
+            padding: 28px 16px 48px;
+        }
+
+        .vista h2 {
+            font-family: Fraunces, Georgia, serif;
+            font-weight: 700;
+            font-size: 2.2rem;
+            letter-spacing: -0.03em;
+            line-height: 1.12;
+            text-align: center;
+            margin-bottom: 8px;
+            display: table;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--cream);
+        }
+
+        .vista h2::after {
+            content: "";
+            display: block;
+            width: 46%;
+            height: 2px;
+            background: rgba(246, 239, 227, 0.45);
+            margin: 8px 0 0 auto;
+        }
+
+        .ficha-etiqueta {
+            color: var(--cream-soft);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
         }
 
         .oficio {
-            color: var(--amber);
+            color: var(--cream-soft);
             font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            text-align: center;
         }
 
-        h1, h2 {
+        .seccion-texto {
+            color: var(--cream-soft);
+            font-size: 0.95rem;
+            line-height: 1.45;
+            max-width: 42ch;
+            margin: 0 auto 8px;
+            text-align: center;
+        }
+
+        .panel {
+            width: min(520px, 100%);
+            margin: 28px auto 0;
+            background: rgba(0, 0, 0, 0.58);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            color: var(--cream);
+            border-radius: 8px;
+            padding: 22px 18px;
+        }
+
+        .happy {
+            margin: 0 0 8px;
+            padding: 0 0 12px;
+            border: 0;
+            border-bottom: 1px solid rgba(246, 239, 227, 0.28);
+            border-radius: 0;
+            background: none;
+            color: var(--cream);
+            text-align: center;
+        }
+
+        .happy.ahora {
+            background: none;
+            color: var(--cream);
+        }
+
+        .happy-titulo {
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .happy-cuenta,
+        .happy-horario { display: none; }
+
+        .oferta-dia {
+            margin: 4px 0 0;
+            padding: 12px 0 4px;
+            border: 0;
+            border-radius: 0;
+            background: none;
+            color: var(--cream);
+        }
+
+        .oferta-dia[hidden] { display: none; }
+
+        .oferta-layout {
+            display: grid;
+            grid-template-columns: 76px minmax(0, 1fr);
+            gap: 12px 14px;
+            align-items: center;
+        }
+
+        .oferta-dia .oficio { margin-bottom: 0; text-align: left; }
+
+        .oferta-dia h3 {
             font-family: Fraunces, Georgia, serif;
+            font-size: 1.45rem;
             font-weight: 700;
             letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin: 2px 0 6px;
+            overflow-wrap: anywhere;
         }
 
-        h1 {
-            font-size: clamp(2.55rem, 11vw, 4.8rem);
-            line-height: 1.02;
-            margin-bottom: 14px;
+        .oferta-dia h3::after { display: none; }
+
+        .oferta-compra { grid-column: 1 / -1; }
+
+        .precios-oferta {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 8px 10px;
+            margin: 10px 0 12px;
         }
 
-        h2 { line-height: 1.12; }
+        .precio-antes {
+            color: #cbbbaa;
+            font-weight: 600;
+            text-decoration: line-through;
+            font-size: 0.95rem;
+        }
 
-        .bajada {
-            max-width: 34ch;
+        .precio-ahora {
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            color: var(--amber);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .oferta-compra .btn { width: 100%; }
+
+        .filtros { margin: 2px 0 14px; }
+        .filtros[hidden] { display: none; }
+
+        .filtro-nombre {
             color: var(--cream-soft);
-            font-size: 1.05rem;
-            line-height: 1.45;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin: 10px 0 6px;
         }
 
-        .hero-acciones {
+        .filtro-fila {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            flex: 0 0 auto;
+            min-height: 40px;
+            padding: 8px 2px;
+            border: 0;
+            border-bottom: 1px solid transparent;
+            border-radius: 0;
+            background: none;
+            color: var(--cream-soft);
+            font: inherit;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .chip.activo {
+            background: none;
+            color: var(--cream);
+            border-bottom-color: rgba(246, 239, 227, 0.7);
+        }
+
+        .cervezas { display: grid; gap: 0; }
+
+        .cerveza {
+            border: 0;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
+            border-radius: 0;
+            background: none;
+            color: var(--cream);
+        }
+
+        .cerveza.agotada .cerveza-nombre,
+        .cerveza.agotada .estilo,
+        .cerveza.agotada .medidas,
+        .cerveza.agotada .desc,
+        .cerveza.agotada .estado {
+            color: #b7ada3;
+        }
+
+        .cerveza.agotada .precio {
+            color: #b7ada3;
+            text-decoration: line-through;
+            text-decoration-thickness: 1.5px;
+        }
+
+        .cerveza-tope {
             display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            column-gap: 12px;
+            row-gap: 2px;
+            align-items: baseline;
+            width: 100%;
+            padding: 12px 14px;
+            border: none;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .cerveza-nombre {
+            grid-column: 1;
+            grid-row: 1;
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+
+        .cerveza-tope .precio {
+            grid-column: 2;
+            grid-row: 1;
+            text-align: right;
+        }
+
+        .cerveza-tope .estilo {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        .cerveza-tope .estado {
+            grid-column: 2;
+            grid-row: 2;
+            text-align: right;
+        }
+
+        .estilo {
+            color: var(--cream-soft);
+            font-size: 0.88rem;
+            line-height: 1.35;
+        }
+
+        .precio {
+            color: var(--amber);
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            font-size: 1.02rem;
+        }
+
+        .precio s,
+        .precio .precio-antes {
+            color: #cbbbaa;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        .estado {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cream-soft);
+        }
+
+        .estado.agotada { color: #b7ada3; }
+
+        .cerveza-extra {
+            padding: 0 14px 12px;
+        }
+
+        .cerveza-extra[hidden] { display: none; }
+
+        .medidas {
+            color: var(--cream);
+            font-size: 0.88rem;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .desc {
+            color: var(--cream-soft);
+            font-size: 0.86rem;
+            line-height: 1.4;
+            margin-top: 4px;
+        }
+
+        .foto {
+            position: relative;
+            overflow: hidden;
+            width: 76px;
+            height: 96px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            background: #f3e6d4;
+        }
+
+        .foto svg { width: 40px; height: 64px; }
+        .foto-ambar { color: #c47d2a; background: linear-gradient(180deg, #f6e2c4, #f3d7a4); }
+        .foto-stout { color: #4a342c; background: linear-gradient(180deg, #d7c4b8, #b89a8c); }
+        .foto-lager { color: #c4a15a; background: linear-gradient(180deg, #f8ecc4, #f0d48a); }
+        .foto-ipa { color: #c46a22; background: linear-gradient(180deg, #f8d7b0, #f0b072); }
+        .foto-trigo { color: #a89048; background: linear-gradient(180deg, #f7f0d0, #e6d7a0); }
+
+        .foto img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cerveza.agotada .foto,
+        .oferta-dia .foto { filter: none; }
+        .cerveza.agotada .foto { filter: grayscale(0.75); }
+
+        .carta-espera,
+        .carta-vacia {
+            color: var(--cream-soft);
+            line-height: 1.45;
+            padding: 6px 0 8px;
+        }
+
+        .carta-nota {
+            margin-top: 14px;
+            color: var(--cream-soft);
+            font-size: 0.78rem;
+            line-height: 1.4;
+        }
+
+        .dato {
+            display: flex;
             gap: 10px;
-            margin-top: 22px;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+
+        .dato b { color: var(--cream); min-width: 1.2rem; }
+
+        .dato a {
+            color: inherit;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .panel h3 {
+            font-family: Outfit, sans-serif;
+            font-weight: 700;
+            color: var(--cream);
+            font-size: 1.05rem;
+            margin: 18px 0 10px;
+        }
+
+        .redes-lista {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 18px;
+        }
+
+        .red {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--cream);
+            text-decoration: none;
+            font-weight: 700;
+            min-height: 44px;
+        }
+
+        .red svg { width: 22px; height: 22px; fill: var(--cream); flex-shrink: 0; }
+
+        .mapa-caja { margin-top: 16px; }
+
+        .mapa {
+            width: 100%;
+            height: 220px;
+            border: 0;
+            border-radius: 8px;
+            display: block;
+            background: #efe6d8;
+        }
+
+        .abrir-maps {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            color: var(--amber-deep);
+            font-weight: 700;
+            font-size: 0.88rem;
+            text-decoration: none;
+        }
+
+        .nota-punto {
+            margin-top: 12px;
+            font-size: 0.78rem;
+            line-height: 1.4;
+            color: var(--muted);
+        }
+
+        .aviso-edad {
+            margin-top: 18px;
+            padding: 12px 0 0;
+            border: 0;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
+            border-radius: 0;
+            background: none;
+            color: var(--cream);
+            font-weight: 700;
+            font-size: 0.86rem;
+            line-height: 1.45;
+            text-align: center;
+        }
+
+        .pie-muestra {
+            margin-top: 12px;
+            color: var(--cream-soft);
+            font-size: 0.78rem;
+            line-height: 1.45;
+            text-align: center;
         }
 
         .btn {
@@ -174,460 +834,10 @@
         }
 
         .btn svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
-
         .btn-carta { background: var(--amber); color: #1a120e; }
         .btn-wa { background: var(--wa); color: var(--wa-ink); }
-
         .btn:active { transform: scale(0.98); }
 
-        .ficha {
-            margin-top: 26px;
-            padding: 16px 16px 8px;
-            border-radius: 18px;
-            border: 1px solid var(--line);
-            background: rgba(39, 25, 16, 0.72);
-        }
-
-        .horario { display: grid; gap: 8px; margin-bottom: 14px; }
-
-        .horario div {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            font-size: 0.92rem;
-        }
-
-        .horario dt { color: var(--muted); font-weight: 500; }
-        .horario dd { font-weight: 700; text-align: right; }
-
-        .ficha-etiqueta {
-            color: var(--amber);
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-        }
-
-        .ficha a {
-            color: var(--cream);
-            font-weight: 600;
-            line-height: 1.4;
-        }
-
-        .seccion { border-top: 1px solid var(--line); }
-
-        h2 {
-            font-size: clamp(1.8rem, 5vw, 2.6rem);
-            margin-bottom: 8px;
-        }
-
-        h2::after {
-            content: "";
-            display: block;
-            width: 42px;
-            height: 2px;
-            margin-top: 12px;
-            background: var(--amber);
-        }
-
-        .seccion-texto {
-            color: var(--muted);
-            font-size: 0.98rem;
-            line-height: 1.45;
-            max-width: 46ch;
-            margin: 14px 0 18px;
-        }
-
-        .cervezas { display: grid; gap: 10px; }
-
-        .cerveza {
-            display: flex;
-            gap: 14px;
-            align-items: center;
-            padding: 12px;
-            border-radius: 16px;
-            border: 1px solid var(--line);
-            background: var(--panel);
-        }
-
-        .cerveza.agotada { opacity: 0.72; }
-
-        .foto {
-            width: 76px;
-            height: 96px;
-            flex-shrink: 0;
-            border-radius: 14px;
-            display: grid;
-            place-items: center;
-            background: #140e0b;
-        }
-
-        .foto svg { width: 40px; height: 64px; }
-        .foto-ambar { color: #e2a04a; background: linear-gradient(180deg, #4a2c12, #1a100c); }
-        .foto-stout { color: #c4a48a; background: linear-gradient(180deg, #3a2a24, #120d0b); }
-        .foto-lager { color: #f0d48a; background: linear-gradient(180deg, #5a4214, #1a140c); }
-        .foto-ipa { color: #f0a04a; background: linear-gradient(180deg, #5a3010, #1a100c); }
-
-        .cuerpo { min-width: 0; flex: 1; }
-
-        .cerveza h3 {
-            font-family: Fraunces, Georgia, serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            line-height: 1.15;
-            margin-bottom: 4px;
-        }
-
-        .estilo {
-            color: var(--muted);
-            font-size: 0.88rem;
-            line-height: 1.35;
-        }
-
-        .linea {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .precio {
-            color: var(--amber);
-            font-weight: 700;
-            font-variant-numeric: tabular-nums;
-            font-size: 1.02rem;
-        }
-
-        .estado {
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--amber);
-        }
-
-        .estado.agotada { color: var(--muted); }
-
-        .happy {
-            margin: 0 0 14px;
-            padding: 14px 16px;
-            border-radius: 16px;
-            border: 1px solid var(--line);
-            background: var(--panel);
-        }
-
-        .happy.ahora {
-            background: var(--amber);
-            color: #1a120e;
-            border-color: var(--amber);
-        }
-
-        .happy-titulo {
-            font-family: Fraunces, Georgia, serif;
-            font-size: clamp(1.35rem, 4.4vw, 1.75rem);
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            line-height: 1.15;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .happy-cuenta {
-            margin-top: 4px;
-            font-size: 1.15rem;
-            font-weight: 700;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .happy-cuenta:empty { display: none; }
-
-        .happy-horario {
-            margin-top: 6px;
-            color: var(--muted);
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .happy.ahora .happy-horario { color: rgba(26, 18, 14, 0.78); }
-
-        .oferta-dia {
-            margin: 0 0 16px;
-            padding: 16px;
-            border-radius: 18px;
-            border: 1.5px solid var(--amber);
-            background:
-                linear-gradient(180deg, rgba(226, 160, 74, 0.18), rgba(39, 25, 16, 0.92));
-        }
-
-        .oferta-dia[hidden] { display: none; }
-
-        .oferta-layout {
-            display: grid;
-            grid-template-columns: 76px minmax(0, 1fr);
-            gap: 12px 14px;
-            align-items: center;
-        }
-
-        .oferta-dia .oficio { margin-bottom: 0; }
-
-        .oferta-dia h3 {
-            font-family: Fraunces, Georgia, serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-            margin: 2px 0 6px;
-            overflow-wrap: anywhere;
-        }
-
-        .oferta-compra { grid-column: 1 / -1; }
-
-        .precios-oferta {
-            display: flex;
-            align-items: baseline;
-            flex-wrap: wrap;
-            gap: 8px 10px;
-            margin: 10px 0 12px;
-        }
-
-        .precio-antes {
-            color: var(--muted);
-            font-weight: 600;
-            text-decoration: line-through;
-            font-size: 0.95rem;
-        }
-
-        .precio-ahora {
-            font-family: Fraunces, Georgia, serif;
-            font-size: 1.9rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            line-height: 1;
-            color: var(--amber);
-            font-variant-numeric: tabular-nums;
-        }
-
-        .oferta-compra .btn { width: 100%; }
-
-        .filtros { margin: 2px 0 14px; }
-
-        .filtro-nombre {
-            color: var(--muted);
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            margin: 10px 0 6px;
-        }
-
-        .filtro-fila {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .chip {
-            flex: 0 0 auto;
-            min-height: 40px;
-            padding: 8px 14px;
-            border-radius: 999px;
-            border: 1px solid var(--line);
-            background: transparent;
-            color: var(--cream-soft);
-            font: inherit;
-            font-size: 0.88rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .chip.activo {
-            background: var(--cream);
-            color: #1c130e;
-            border-color: var(--cream);
-        }
-
-        .foto-trigo {
-            color: #f2e2a8;
-            background: linear-gradient(180deg, #6a5a28, #1a160e);
-        }
-
-        .foto { position: relative; overflow: hidden; }
-
-        .foto img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .cerveza.agotada .foto { filter: grayscale(0.75); }
-
-        .desc {
-            color: var(--muted);
-            font-size: 0.86rem;
-            line-height: 1.35;
-            margin-top: 4px;
-        }
-
-        .carta-espera,
-        .carta-vacia {
-            color: var(--muted);
-            line-height: 1.45;
-            padding: 6px 0 8px;
-        }
-
-        .carta-nota {
-            margin-top: 14px;
-            color: var(--muted);
-            font-size: 0.78rem;
-            line-height: 1.4;
-        }
-
-        @media (hover: hover) {
-            .chip:hover { border-color: var(--amber); }
-            .chip.activo:hover { border-color: var(--cream); }
-        }
-
-        @media (min-width: 720px) {
-            .oferta-layout {
-                grid-template-columns: 96px minmax(0, 1fr) auto;
-                align-items: center;
-                gap: 8px 20px;
-            }
-
-            .oferta-dia .foto { width: 96px; height: 120px; }
-
-            .oferta-compra {
-                grid-column: auto;
-                justify-self: end;
-                text-align: right;
-                min-width: 220px;
-            }
-
-            .precios-oferta { justify-content: flex-end; margin-top: 0; }
-            .oferta-compra .btn { width: auto; min-width: 220px; }
-        }
-
-        .redes-lista {
-            display: grid;
-            gap: 10px;
-            margin-top: 18px;
-        }
-
-        .red {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-height: 56px;
-            padding: 12px 14px;
-            border-radius: 14px;
-            border: 1px solid var(--line);
-            background: var(--panel);
-            color: var(--cream);
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .red svg { width: 22px; height: 22px; fill: var(--amber); flex-shrink: 0; }
-
-        .direccion {
-            margin-top: 14px;
-            font-size: 1.02rem;
-            font-weight: 600;
-            line-height: 1.4;
-        }
-
-        .mapa-caja { margin-top: 14px; }
-
-        .mapa {
-            width: 100%;
-            height: 220px;
-            border: 0;
-            border-radius: 16px;
-            display: block;
-            background: #1a120e;
-        }
-
-        .abrir-maps {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 48px;
-            margin-top: 10px;
-            border-radius: 999px;
-            border: 1.5px solid var(--amber);
-            color: var(--amber);
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .nota-punto {
-            margin-top: 12px;
-            color: var(--muted);
-            font-size: 0.84rem;
-            line-height: 1.45;
-            max-width: 52ch;
-        }
-
-        .pie {
-            border-top: 1px solid var(--line);
-            padding-bottom: env(safe-area-inset-bottom, 0px);
-        }
-
-        .aviso-edad {
-            padding: 14px 16px;
-            border-radius: 14px;
-            border: 1px solid rgba(226, 160, 74, 0.5);
-            background: rgba(226, 160, 74, 0.12);
-            color: var(--cream);
-            font-weight: 700;
-            line-height: 1.45;
-            text-align: center;
-        }
-
-        .pie-contacto {
-            display: grid;
-            gap: 8px;
-            margin-top: 14px;
-        }
-
-        .pie-contacto a {
-            display: block;
-            padding: 12px 14px;
-            border-radius: 14px;
-            border: 1px solid var(--line);
-            background: var(--panel);
-            color: var(--cream);
-            text-decoration: none;
-            min-height: 48px;
-        }
-
-        .pie-contacto span {
-            display: block;
-            color: var(--muted);
-            font-size: 0.78rem;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .pie-contacto strong {
-            font-weight: 700;
-            overflow-wrap: anywhere;
-        }
-
-        .pie-muestra {
-            margin-top: 16px;
-            color: var(--muted);
-            font-size: 0.8rem;
-            line-height: 1.45;
-            text-align: center;
-        }
-
-        /* Puerta de edad. Cubre la página hasta que la persona confirma. */
         .edad {
             position: fixed;
             inset: 0;
@@ -638,8 +848,8 @@
             overflow: auto;
             padding: 24px 20px;
             background:
-                radial-gradient(520px 320px at 50% 18%, rgba(196, 125, 42, 0.32), transparent 70%),
-                var(--ink);
+                radial-gradient(520px 320px at 50% 18%, rgba(196, 125, 42, 0.28), transparent 70%),
+                var(--crema);
         }
 
         html.ya-mayor .edad { display: none; }
@@ -650,10 +860,10 @@
             width: min(420px, 100%);
             padding: 28px 22px 22px;
             border-radius: 22px;
-            background: var(--cream);
-            color: #1c130e;
+            background: #fffdf8;
+            color: var(--tinta);
             margin: auto;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 16px 40px rgba(61, 41, 24, 0.12);
             text-align: center;
         }
 
@@ -666,14 +876,15 @@
 
         .edad-lugar {
             margin-top: 4px;
-            color: #6d5c50;
+            color: var(--muted);
             font-size: 0.88rem;
         }
 
         .edad-caja h2 {
+            font-family: Fraunces, Georgia, serif;
             font-size: clamp(1.7rem, 6vw, 2.15rem);
             margin: 18px 0 10px;
-            color: #1c130e;
+            color: var(--tinta);
         }
 
         .edad-caja h2::after { display: none; }
@@ -691,22 +902,18 @@
             margin-top: 20px;
         }
 
-        .btn-no {
+        .btn-no,
+        .btn-volver {
             background: transparent;
-            color: #1c130e;
-            border-color: rgba(28, 19, 14, 0.28);
+            color: var(--tinta);
+            border-color: rgba(42, 33, 24, 0.28);
         }
 
-        .btn-volver {
-            margin-top: 18px;
-            background: transparent;
-            color: #1c130e;
-            border-color: rgba(28, 19, 14, 0.28);
-        }
+        .btn-volver { margin-top: 18px; }
 
         .edad-nota {
             margin-top: 16px;
-            color: #6d5c50;
+            color: var(--muted);
             font-size: 0.82rem;
             line-height: 1.4;
         }
@@ -715,36 +922,48 @@
         html.edad-no #edad-pregunta { display: none; }
         html.edad-no #edad-bloqueo { display: block; }
 
-        @media (min-width: 720px) {
-            .cervezas,
-            .redes-lista { grid-template-columns: 1fr 1fr; }
-            .mapa { height: 300px; }
+        #tour-360.seccion {
+            border: none;
+            width: min(1040px, 100%);
+            margin: 0 auto;
+            padding: 22px 18px 28px;
+            background: rgba(0, 0, 0, 0.58);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            color: var(--cream);
+            border-radius: 8px;
         }
 
-        @media (min-width: 880px) {
-            .barra { padding-left: 32px; padding-right: 32px; }
-            .hero {
-                min-height: calc(100svh - 64px);
-                display: flex;
+        @media (hover: hover) {
+            .chip:hover { color: var(--cream); }
+        }
+
+        @media (min-width: 720px) {
+            .oferta-layout {
+                grid-template-columns: 96px minmax(0, 1fr);
                 align-items: center;
+                gap: 8px 20px;
+            }
+
+            .oferta-dia .foto { width: 96px; height: 120px; }
+
+            .oferta-compra .btn { width: 100%; }
+        }
+
+        @media (max-width: 560px) {
+            .marca { font-size: 1.05rem; }
+            .pestanias {
+                flex: 1 1 100%;
+                justify-content: space-between;
+                gap: 8px;
+            }
+            .pestanias button { font-size: 0.8rem; }
+            .portada {
+                /* La barra pasa a dos filas (~74px) y la portada llena el resto. */
+                min-height: calc(100svh - 74px);
+                padding: 16px 16px 40px;
                 justify-content: center;
             }
-            .hero-interior {
-                display: grid;
-                grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.72fr);
-                gap: 40px;
-                align-items: center;
-                padding: 48px 32px 64px;
-            }
-            .ficha { margin-top: 0; }
-            .hero-acciones {
-                grid-template-columns: auto auto;
-                justify-content: start;
-            }
-            .seccion,
-            .pie-interior { padding: 48px 32px 56px; }
-            .pie-contacto { grid-template-columns: repeat(3, 1fr); }
-            .mapa { height: 360px; }
         }
     </style>
     <script>
@@ -783,68 +1002,69 @@
 
     <div id="sitio">
         <header class="barra">
-            <a class="marca" href="#inicio">Bruma <span class="sello-edad">+18</span></a>
-            <nav aria-label="Secciones">
-                <a href="#carta">Carta</a>
-                <a href="#redes">Redes</a>
-                <a href="#ubicacion">Ubicación</a>
+            <a class="marca" href="#inicio" id="logo">Bruma <span class="sello-edad">+18</span></a>
+            <nav class="pestanias" aria-label="Secciones">
+                <button type="button" data-vista="inicio" class="activa" aria-current="page">Inicio</button>
+                <button type="button" data-vista="carta">Carta</button>
+                <button type="button" data-vista="recorrido">Recorrido y reserva</button>
             </nav>
         </header>
 
-        <main>
-            <!-- ========== #inicio · hero ========== -->
-            <section class="hero" id="inicio" tabindex="-1">
-                <div class="hero-interior">
-                    <div>
-                        <p class="oficio">Cervecería y bar · Osorno</p>
-                        <h1 id="inicio-titulo">Cervecería<br>Bruma</h1>
-                        <p class="bajada">Cerveza de barril, tragos y picoteo en el centro de Osorno.</p>
-                        <div class="hero-acciones">
-                            <a class="btn btn-carta" href="#carta">Ver la carta</a>
-                            <a class="btn btn-wa" id="heroWhatsapp" target="_blank" rel="noopener noreferrer">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm.01 1.67c2.2 0 4.26.86 5.82 2.42a8.22 8.22 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.39-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.23 8.23 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24zM8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.85-.87 2.07 0 1.22.89 2.39 1.01 2.56.12.17 1.73 2.78 4.27 3.79 2.11.85 2.54.68 3 .64.46-.05 1.48-.6 1.69-1.18.21-.58.21-1.07.15-1.18-.06-.1-.22-.17-.46-.3-.24-.13-1.47-.73-1.7-.81-.22-.08-.39-.13-.56.13-.17.25-.65.81-.8.97-.15.17-.29.19-.53.06-.24-.13-1.03-.38-1.96-1.21-.72-.64-1.21-1.44-1.35-1.68-.14-.25-.02-.38.11-.51.11-.11.24-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.76-1.84-.2-.48-.4-.42-.56-.42z"/></svg>
-                                WhatsApp
-                            </a>
+        <section class="vista activa inicio" id="inicio" tabindex="-1">
+            <div class="portada">
+                <img class="fondo" alt="" src="img/fachada.jpg" width="2000" height="1500" fetchpriority="high">
+                <div class="velo-foto" aria-hidden="true"></div>
+                <div class="contenido">
+                    <h1 id="inicio-titulo">Cervecería Bruma</h1>
+                    <p class="bajada">Cerveza de barril, tragos y picoteo en el centro de Osorno.</p>
+                    <button type="button" class="boton-pedir" id="irCarta">Ver la carta</button>
+                    <div class="ficha-fila">
+                        <div class="ficha" aria-label="Horario y dirección">
+                            <p><span>📍</span> <a id="heroLugar" href="#" target="_blank" rel="noopener noreferrer">Plaza de Armas, costado norte, Osorno</a></p>
+                            <p><span>🕒</span> Mar a jueves: 17:00 a 00:00<br>Viernes y sábado: 17:00 a 02:00<br>Domingo y lunes: cerrado</p>
+                        </div>
+                        <div class="mapa-mini">
+                            <div class="mapa-marco">
+                                <iframe
+                                    class="mapa"
+                                    id="mapa"
+                                    title="Cómo llegar a Cervecería Bruma"
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                            <div class="llegar-botones">
+                                <a id="abrirMaps" target="_blank" rel="noopener noreferrer">Cómo llegar</a>
+                                <button type="button" id="compartirUbicacion">Compartir</button>
+                                <a id="compartirWhatsapp" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                            </div>
+                            <p class="aviso-compartir" id="avisoCompartir" role="status" hidden></p>
                         </div>
                     </div>
-                    <aside class="ficha" aria-label="Horario y dirección">
-                        <p class="ficha-etiqueta">Horario</p>
-                        <dl class="horario">
-                            <div>
-                                <dt>Martes a jueves</dt>
-                                <dd>17:00 a 00:00</dd>
-                            </div>
-                            <div>
-                                <dt>Viernes y sábado</dt>
-                                <dd>17:00 a 02:00</dd>
-                            </div>
-                            <div>
-                                <dt>Domingo y lunes</dt>
-                                <dd>Cerrado</dd>
-                            </div>
-                        </dl>
-                        <p class="ficha-etiqueta">Dirección</p>
-                        <p><a id="heroLugar" href="#" target="_blank" rel="noopener noreferrer">Plaza de Armas, costado norte, Osorno</a></p>
-                    </aside>
+                    <p class="nota-oculta" id="notaPunto"></p>
                 </div>
-            </section>
+                <p class="credito-foto">Fachada de muestra, no es el local. <a href="https://commons.wikimedia.org/wiki/File:Sixty_Four_bar_storefront_at_NOMO,_Bacoor,_Cavite_%E2%80%94_25_Feb_2022_01.jpg">Sixty Four, Bacoor</a> — foto de UndueMarmot, <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.es">CC0 1.0</a>.</p>
+            </div>
+        </section>
 
-            <!-- ========== #carta ==========
-                 Lista, happy hour y oferta del día, leídos de un CSV.
-                 PEGA LA URL publicada en FUENTE.carta (en el script,
-                 busca "PEGA LA URL"). Vacía o con error: datos/carta.csv.
-                 Happy hour: datos/happy-hour.csv o las constantes HAPPY. -->
-            <section class="seccion" id="carta" aria-labelledby="carta-titulo">
-                <p class="oficio">De barril</p>
+        <!-- ========== #carta ==========
+             Lista, happy hour y oferta del día, leídos de un CSV.
+             PEGA LA URL publicada en FUENTE.carta (en el script,
+             busca "PEGA LA URL"). Vacía o con error: datos/carta.csv.
+             Happy hour: datos/happy-hour.csv o las constantes HAPPY.
+             La presentación muestra primero la oferta y cuatro cervezas;
+             el resto se abre con «Ver carta completa». -->
+        <section class="vista carta" id="carta" aria-labelledby="carta-titulo">
+            <div class="panel">
                 <h2 id="carta-titulo">Carta</h2>
-                <p class="seccion-texto">Pintas, botellas y latas. Lo agotado sigue en la lista, marcado.</p>
+                <p class="seccion-texto">Lo agotado sigue en la lista, marcado.</p>
                 <div class="happy" id="happy">
                     <p class="happy-titulo" id="happy-titulo">Revisando el horario…</p>
                     <p class="happy-cuenta" id="happy-cuenta"></p>
                     <p class="happy-horario" id="happy-horario"></p>
                 </div>
                 <article class="oferta-dia" id="oferta" hidden></article>
-                <div class="filtros" id="filtros"></div>
+                <div class="filtros" id="filtros" hidden></div>
                 <div class="cervezas" id="cervezas" aria-label="Cervezas">
                     <p class="carta-espera">Cargando la carta…</p>
                 </div>
@@ -852,69 +1072,10 @@
                 <noscript>
                     <p class="carta-vacia">Activa JavaScript para ver la carta.</p>
                 </noscript>
-            </section>
-
-            <!-- ========== #redes · redes sociales ==========
-                 Va encima de #ubicacion. Enlaces en CONTACTO. -->
-            <section class="seccion" id="redes" aria-labelledby="redes-titulo">
-                <p class="oficio">Del local</p>
-                <h2 id="redes-titulo">Redes sociales</h2>
-                <nav class="redes-lista" id="redes-lista" aria-label="Redes sociales">
-                    <a class="red" id="redInstagram" href="https://www.instagram.com/cerveceriabruma.demo" target="_blank" rel="noopener noreferrer">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4c0 3.2-2.6 5.8-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2zm0 2C5.7 4 4 5.7 4 7.8v8.4C4 18.3 5.7 20 7.8 20h8.4c2.1 0 3.8-1.7 3.8-3.8V7.8C20 5.7 18.3 4 16.2 4H7.8zM17.5 5.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2zM12 7a5 5 0 1 1 0 10 5 5 0 1 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 1 0 0-6z"/></svg>
-                        Instagram
-                    </a>
-                    <a class="red" id="redFacebook" href="https://www.facebook.com/cerveceriabruma.demo" target="_blank" rel="noopener noreferrer">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 4h3V.5h-3.3C10.2.5 9.5 3.4 9.5 5.3V7.5h-3v4h3V23.5h5v-12h3.9l.4-4H14.5z"/></svg>
-                        Facebook
-                    </a>
-                </nav>
-            </section>
-
-            <!-- ========== #ubicacion ==========
-                 Mapa por punto GPS (lat, lng), igual que demo-restaurante.
-                 Datos en LOCAL, al inicio del script. -->
-            <section class="seccion" id="ubicacion" aria-labelledby="ubicacion-titulo">
-                <p class="oficio">Cómo llegar</p>
-                <h2 id="ubicacion-titulo">Ubicación</h2>
-                <p class="direccion" id="direccion">Plaza de Armas, costado norte, Osorno</p>
-                <div class="mapa-caja">
-                    <iframe
-                        class="mapa"
-                        id="mapa"
-                        title="Cómo llegar a Cervecería Bruma"
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                        allowfullscreen>
-                    </iframe>
-                    <a class="abrir-maps" id="abrirMaps" target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a>
-                </div>
-                <p class="nota-punto" id="notaPunto"></p>
-            </section>
-        </main>
-
-        <!-- ========== #pie ========== -->
-        <footer class="pie" id="pie">
-            <div class="pie-interior">
-                <p class="aviso-edad">Disfruta con moderación. Venta y consumo solo para mayores de 18 años.</p>
-                <div class="pie-contacto">
-                    <a id="waBarra" target="_blank" rel="noopener noreferrer">
-                        <span>WhatsApp barra</span>
-                        <strong id="waBarraNumero">+56 9 5555 8888</strong>
-                    </a>
-                    <a id="waReservas" target="_blank" rel="noopener noreferrer">
-                        <span>WhatsApp reservas</span>
-                        <strong id="waReservasNumero">+56 9 5555 8899</strong>
-                    </a>
-                    <a id="correo">
-                        <span>Correo</span>
-                        <strong id="correoTexto">hola@cerveceriabruma.demo</strong>
-                    </a>
-                </div>
-                <p class="pie-muestra">Muestra de Simple Ideal. Nombres, precios y teléfonos son ficticios.</p>
             </div>
-        </footer>
+        </section>
 
+        <section class="vista recorrido" id="vista-recorrido">
         <!-- ========== #tour-360 ==========
              Recorrido de muestra, no del local. Barra: panorama
              CC BY-SA de Wikimedia. Mesas y terraza: Poly Haven (CC0).
@@ -925,11 +1086,11 @@
                 #tour-360 { scroll-margin-top: 64px; }
 
                 #tour-360 .tour-aviso {
-                    margin: 0 0 16px;
-                    padding: 12px 14px;
-                    border-radius: 14px;
-                    border: 1px solid rgba(226, 160, 74, 0.55);
-                    background: rgba(226, 160, 74, 0.12);
+                    margin: 0 0 12px;
+                    padding: 0;
+                    border: 0;
+                    border-radius: 0;
+                    background: none;
                     color: var(--cream);
                     font-weight: 700;
                     line-height: 1.45;
@@ -991,7 +1152,7 @@
 
                 #tour-360 .tour-credito {
                     margin: 14px 0 0;
-                    color: var(--muted);
+                    color: var(--cream-soft);
                     font-size: 0.78rem;
                     line-height: 1.45;
                 }
@@ -1012,10 +1173,11 @@
                 #tour-360 .tour-modo,
                 #tour-360 .tour-orientacion {
                     min-height: 44px;
-                    padding: 8px 14px;
-                    border-radius: 999px;
-                    border: 1px solid var(--line);
-                    background: transparent;
+                    padding: 8px 2px;
+                    border-radius: 0;
+                    border: 0;
+                    border-bottom: 1px solid transparent;
+                    background: none;
                     color: var(--cream-soft);
                     font: inherit;
                     font-size: 0.88rem;
@@ -1025,14 +1187,14 @@
 
                 #tour-360 .tour-modo[aria-pressed="true"],
                 #tour-360 .tour-orientacion[aria-pressed="true"] {
-                    background: var(--cream);
-                    color: #1c130e;
-                    border-color: var(--cream);
+                    background: none;
+                    color: var(--cream);
+                    border-bottom-color: rgba(246, 239, 227, 0.7);
                 }
 
                 #tour-360 .tour-simula {
                     margin: 0 0 12px;
-                    color: var(--amber);
+                    color: var(--cream-soft);
                     font-size: 0.88rem;
                     font-weight: 700;
                     line-height: 1.4;
@@ -1053,7 +1215,7 @@
 
                 #tour-360 .tour-plano-ayuda {
                     margin: 0 0 10px;
-                    color: var(--muted);
+                    color: var(--cream-soft);
                     font-size: 0.9rem;
                     line-height: 1.4;
                 }
@@ -1062,7 +1224,7 @@
                     position: relative;
                     border-radius: 18px;
                     border: 1px solid var(--line);
-                    background: var(--panel);
+                    background: #1c130e;
                 }
 
                 #tour-360 .tour-plano-caja svg {
@@ -1100,9 +1262,9 @@
                 }
 
                 #tour-360 .tour-punto[aria-pressed="true"] {
-                    border-color: var(--amber);
+                    border-color: transparent;
                     color: #1a120e;
-                    background: var(--amber);
+                    background: var(--cream);
                 }
 
                 #tour-360 .tour-punto[aria-pressed="true"] .tour-punto-dot {
@@ -1162,7 +1324,7 @@
                 @media (hover: hover) {
                     #tour-360 .tour-punto:hover,
                     #tour-360 .tour-modo:hover,
-                    #tour-360 .tour-orientacion:hover { border-color: var(--amber); }
+                    #tour-360 .tour-orientacion:hover { color: var(--cream); }
                 }
 
                 @media (min-width: 880px) {
@@ -1696,6 +1858,31 @@
                 <p class="tour-aviso">Activa JavaScript para ver el recorrido 360. Datos de muestra.</p>
             </noscript>
         </div>
+            <!-- Hueco para «Reservar mesa». El siguiente cambio marca mesas
+                 en el 360 y abre la reserva por WhatsApp. No va botón todavía. -->
+            <div id="reservar-mesa" class="reserva-hueco"></div>
+            <div class="panel" id="contacto">
+                <h2 id="contacto-titulo">Contacto</h2>
+                <p class="dato"><b>📍</b> <span id="direccion">Plaza de Armas, costado norte, Osorno</span></p>
+                <p class="dato"><b>🕒</b> Martes a jueves: 17:00 a 00:00.<br>Viernes y sábado: 17:00 a 02:00.<br>Domingo y lunes: cerrado.</p>
+                <p class="dato"><b>💬</b> <a id="waBarra" target="_blank" rel="noopener noreferrer">WhatsApp barra · <strong id="waBarraNumero">+56 9 5555 8888</strong></a></p>
+                <p class="dato"><b>💬</b> <a id="waReservas" target="_blank" rel="noopener noreferrer">WhatsApp reservas · <strong id="waReservasNumero">+56 9 5555 8899</strong></a></p>
+                <p class="dato"><b>✉️</b> <a id="correo"><strong id="correoTexto">hola@cerveceriabruma.demo</strong></a></p>
+                <h3>Redes</h3>
+                <nav class="redes-lista" id="redes" aria-label="Redes sociales">
+                    <a class="red" id="redInstagram" href="https://www.instagram.com/cerveceriabruma.demo" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4c0 3.2-2.6 5.8-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2zm0 2C5.7 4 4 5.7 4 7.8v8.4C4 18.3 5.7 20 7.8 20h8.4c2.1 0 3.8-1.7 3.8-3.8V7.8C20 5.7 18.3 4 16.2 4H7.8zM17.5 5.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2zM12 7a5 5 0 1 1 0 10 5 5 0 1 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 1 0 0-6z"/></svg>
+                        Instagram
+                    </a>
+                    <a class="red" id="redFacebook" href="https://www.facebook.com/cerveceriabruma.demo" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 4h3V.5h-3.3C10.2.5 9.5 3.4 9.5 5.3V7.5h-3v4h3V23.5h5v-12h3.9l.4-4H14.5z"/></svg>
+                        Facebook
+                    </a>
+                </nav>
+                <p class="aviso-edad">Disfruta con moderación. Venta y consumo solo para mayores de 18 años.</p>
+                <p class="pie-muestra">Muestra de Simple Ideal. Nombres, precios y teléfonos son ficticios.</p>
+            </div>
+        </section>
     </div>
 
     <script>
@@ -1707,7 +1894,9 @@
            el pin y Maps acerca a esa chincheta.
 
            #carta lee FUENTE.carta (CSV): lista, happy hour y oferta.
-           #redes, #ubicacion, #pie y #tour-360 están en el HTML.
+           El mapa y los botones para compartir están en #inicio.
+           Tour, contacto y redes están en la pestaña Recorrido y reserva.
+           #reservar-mesa queda vacío hasta el botón de reserva.
            ================================================================== */
 
         var CLAVE_EDAD = 'bruma-mayor-18';
@@ -1777,16 +1966,21 @@
             document.getElementById('edad-si').focus();
         }
 
+        function textoUbicacion() {
+            return LOCAL.nombre + ' — ' + LOCAL.lugar;
+        }
+
         function aplicarContacto() {
             var maps = urlMapsPunto();
             document.getElementById('mapa').src = urlMapsEmbed();
             document.getElementById('abrirMaps').href = maps;
+            document.getElementById('compartirWhatsapp').href =
+                'https://wa.me/?text=' + encodeURIComponent(textoUbicacion() + ' ' + maps);
             document.getElementById('heroLugar').href = maps;
             document.getElementById('heroLugar').textContent = LOCAL.lugar;
             document.getElementById('direccion').textContent = LOCAL.lugar;
             document.getElementById('notaPunto').textContent = LOCAL.nota;
 
-            document.getElementById('heroWhatsapp').href = urlWhatsapp(CONTACTO.whatsappBarra);
             document.getElementById('waBarra').href = urlWhatsapp(CONTACTO.whatsappBarra);
             document.getElementById('waBarraNumero').textContent = CONTACTO.whatsappBarraTexto;
             document.getElementById('waReservas').href = urlWhatsapp(CONTACTO.whatsappReservas);
@@ -1810,7 +2004,93 @@
             mostrarEstado('pregunta');
         });
 
+        function copiarEnlace(url) {
+            var aviso = document.getElementById('avisoCompartir');
+            function mostrar(texto) {
+                aviso.hidden = false;
+                aviso.textContent = texto;
+            }
+            function porTextarea() {
+                var area = document.createElement('textarea');
+                area.value = url;
+                area.setAttribute('readonly', '');
+                area.style.position = 'fixed';
+                area.style.left = '-999px';
+                document.body.appendChild(area);
+                area.select();
+                var ok = false;
+                try { ok = document.execCommand('copy'); } catch (error) {}
+                area.remove();
+                mostrar(ok ? 'Enlace copiado.' : url);
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(function () {
+                    mostrar('Enlace copiado.');
+                }).catch(porTextarea);
+            } else {
+                porTextarea();
+            }
+        }
+
+        document.getElementById('compartirUbicacion').addEventListener('click', function () {
+            var url = urlMapsPunto();
+            var datos = { title: LOCAL.nombre, text: textoUbicacion(), url: url };
+            if (navigator.share) {
+                navigator.share(datos).catch(function (error) {
+                    if (error && error.name === 'AbortError') return;
+                    copiarEnlace(url);
+                });
+                return;
+            }
+            copiarEnlace(url);
+        });
+
         aplicarContacto();
+
+        function mostrarVista(vista) {
+            var ids = {
+                inicio: 'inicio',
+                carta: 'carta',
+                recorrido: 'vista-recorrido'
+            };
+            document.querySelectorAll('#sitio .vista').forEach(function (caja) {
+                caja.classList.toggle('activa', caja.id === ids[vista]);
+            });
+            document.querySelectorAll('.pestanias button').forEach(function (boton) {
+                var activa = boton.getAttribute('data-vista') === vista;
+                boton.classList.toggle('activa', activa);
+                if (activa) boton.setAttribute('aria-current', 'page');
+                else boton.removeAttribute('aria-current');
+            });
+            window.scrollTo(0, 0);
+        }
+
+        document.querySelectorAll('.pestanias button').forEach(function (boton) {
+            boton.addEventListener('click', function () {
+                mostrarVista(boton.getAttribute('data-vista'));
+            });
+        });
+        document.getElementById('logo').addEventListener('click', function (evento) {
+            evento.preventDefault();
+            mostrarVista('inicio');
+        });
+        document.getElementById('irCarta').addEventListener('click', function () {
+            mostrarVista('carta');
+        });
+        (function () {
+            var porHash = {
+                inicio: 'inicio',
+                carta: 'carta',
+                recorrido: 'recorrido',
+                'tour-360': 'recorrido',
+                redes: 'recorrido',
+                ubicacion: 'recorrido',
+                contacto: 'recorrido',
+                visita: 'recorrido'
+            };
+            var vista = porHash[(location.hash || '').replace('#', '')];
+            if (vista && document.documentElement.classList.contains('ya-mayor')) mostrarVista(vista);
+        })();
 
         /* ==================================================================
            CARTA — Google Sheets publicado como CSV
@@ -1895,6 +2175,8 @@
         var zonaHappy = HAPPY.zona;
         var filtroFormato = '';
         var filtroEstilo = '';
+        var cartaCompleta = false;
+        var CUANTAS_A_LA_VISTA = 4;
         var anclaForzada = null;
         var marcaForzada = 0;
         var relojTimer = null;
@@ -2154,6 +2436,23 @@
             return partes.join(' · ');
         }
 
+        function lineaCorta(cerveza) {
+            var partes = [];
+            if (cerveza.estilo) partes.push(cerveza.estilo);
+            var formato = etiquetaFormato(cerveza.formato);
+            if (formato) partes.push(formato);
+            return partes.join(' · ');
+        }
+
+        function lineaMedidas(cerveza) {
+            var partes = [];
+            var abv = textoAbv(cerveza.abv);
+            var ibu = textoIbu(cerveza.ibu);
+            if (abv) partes.push(abv);
+            if (ibu) partes.push(ibu);
+            return partes.join(' · ');
+        }
+
         function htmlVaso(cerveza) {
             var html = '<div class="foto ' + claseFoto(cerveza.estilo) + '">';
             if (cerveza.foto) {
@@ -2285,30 +2584,51 @@
             });
         }
 
+        function htmlCerveza(cerveza) {
+            var medidas = lineaMedidas(cerveza);
+            var html = '<article class="cerveza' + (cerveza.disponible ? '' : ' agotada') + '">';
+            html += '<button type="button" class="cerveza-tope" aria-expanded="false">';
+            html += '<span class="cerveza-nombre">' + esc(cerveza.nombre) + '</span>';
+            html += htmlPrecioLista(cerveza);
+            html += '<span class="estilo">' + esc(lineaCorta(cerveza)) + '</span>';
+            html += cerveza.disponible
+                ? '<span class="estado">Disponible</span>'
+                : '<span class="estado agotada">Agotada</span>';
+            html += '</button><div class="cerveza-extra" hidden>';
+            if (medidas) html += '<p class="medidas">' + esc(medidas) + '</p>';
+            if (cerveza.descripcion) html += '<p class="desc">' + esc(cerveza.descripcion) + '</p>';
+            html += '</div></article>';
+            return html;
+        }
+
         function pintarCervezas() {
             var caja = document.getElementById('cervezas');
+            var filtros = document.getElementById('filtros');
             if (!cervezasCarta.length) {
                 caja.innerHTML = '<p class="carta-vacia">La carta no tiene cervezas.</p>';
+                filtros.hidden = true;
                 return;
             }
             var visibles = cervezasVisibles();
             if (!visibles.length) {
                 caja.innerHTML = '<p class="carta-vacia">Ninguna cerveza coincide con ese filtro.</p>';
+                filtros.hidden = !cartaCompleta;
                 return;
             }
-            caja.innerHTML = visibles.map(function (cerveza) {
-                var html = '<article class="cerveza' + (cerveza.disponible ? '' : ' agotada') + '">';
-                html += htmlVaso(cerveza);
-                html += '<div class="cuerpo"><h3>' + esc(cerveza.nombre) + '</h3>';
-                html += '<p class="estilo">' + esc(lineaEstilo(cerveza)) + '</p>';
-                if (cerveza.descripcion) html += '<p class="desc">' + esc(cerveza.descripcion) + '</p>';
-                html += '<p class="linea">' + htmlPrecioLista(cerveza);
-                html += cerveza.disponible
-                    ? '<span class="estado">Disponible</span>'
-                    : '<span class="estado agotada">Agotada</span>';
-                html += '</p></div></article>';
-                return html;
-            }).join('');
+            var oferta = elegirOferta(cervezasCarta);
+            var sinOferta = visibles.filter(function (cerveza) { return cerveza !== oferta; });
+            var mostradas = cartaCompleta ? visibles : sinOferta.slice(0, CUANTAS_A_LA_VISTA);
+            var quedan = cartaCompleta ? 0 : sinOferta.length - mostradas.length;
+            caja.innerHTML = mostradas.map(htmlCerveza).join('');
+            if (quedan > 0 || cartaCompleta) {
+                var boton = document.createElement('button');
+                boton.type = 'button';
+                boton.className = 'ver-carta';
+                boton.id = 'ver-carta-completa';
+                boton.textContent = cartaCompleta ? 'Ver menos' : 'Ver carta completa';
+                caja.appendChild(boton);
+            }
+            filtros.hidden = !cartaCompleta;
             enlazarFotos(caja);
         }
 
@@ -2574,6 +2894,19 @@
             return { ahora: false, frase: frase, horario: textoHorario(tramos) };
         }
 
+        function textoFranja(fecha, tramos, zona) {
+            var reloj = partesZona(fecha, zona);
+            var seg = reloj.h * 3600 + reloj.m * 60 + reloj.s;
+            var hoy = tramoDelDia(tramos, reloj.dia);
+            if (hoy) return 'Happy hour hoy ' + hoy.inicio + '–' + hoy.fin;
+            var proximo = buscarProximo(reloj, seg, tramos);
+            if (!proximo) return 'Happy hour ' + tramos[0].inicio + '–' + tramos[0].fin;
+            var tramo = tramoDelDia(tramos, proximo.dia) || { inicio: proximo.inicio, fin: '' };
+            var cuando = proximo.diasHasta === 1 ? 'mañana' : ('el ' + DIAS_LARGO[proximo.dia]);
+            if (!tramo.fin) return 'Happy hour ' + cuando + ' ' + tramo.inicio;
+            return 'Happy hour ' + cuando + ' ' + tramo.inicio + '–' + tramo.fin;
+        }
+
         function pintarHappy() {
             var caja = document.getElementById('happy');
             if (!tramosHappy.length) {
@@ -2581,16 +2914,12 @@
                 return;
             }
             caja.hidden = false;
-            var estado = estadoHappy(fechaAhora(), tramosHappy, zonaHappy);
+            var ahoraFecha = fechaAhora();
+            var estado = estadoHappy(ahoraFecha, tramosHappy, zonaHappy);
             caja.classList.toggle('ahora', Boolean(estado.ahora));
-            document.getElementById('happy-horario').textContent = estado.horario;
-            if (estado.ahora) {
-                document.getElementById('happy-titulo').textContent = 'Happy hour AHORA';
-                document.getElementById('happy-cuenta').textContent = textoCuenta(estado.falta);
-            } else {
-                document.getElementById('happy-titulo').textContent = estado.frase;
-                document.getElementById('happy-cuenta').textContent = '';
-            }
+            document.getElementById('happy-titulo').textContent = textoFranja(ahoraFecha, tramosHappy, zonaHappy);
+            document.getElementById('happy-cuenta').textContent = '';
+            document.getElementById('happy-horario').textContent = '';
         }
 
         function arrancarReloj() {
@@ -2679,6 +3008,25 @@
                 else filtroEstilo = boton.dataset.valor || '';
                 pintarFiltros();
                 pintarCervezas();
+            });
+            document.getElementById('cervezas').addEventListener('click', function (evento) {
+                var ver = evento.target.closest('#ver-carta-completa');
+                if (ver) {
+                    cartaCompleta = !cartaCompleta;
+                    if (!cartaCompleta) {
+                        filtroFormato = '';
+                        filtroEstilo = '';
+                        pintarFiltros();
+                    }
+                    pintarCervezas();
+                    return;
+                }
+                var tope = evento.target.closest('.cerveza-tope');
+                if (!tope) return;
+                var extra = tope.parentElement.querySelector('.cerveza-extra');
+                var abierto = tope.getAttribute('aria-expanded') === 'true';
+                tope.setAttribute('aria-expanded', abierto ? 'false' : 'true');
+                if (extra) extra.hidden = abierto;
             });
             cargarCarta(q.get('csv') || '').then(function (carta) {
                 cervezasCarta = carta.items;
