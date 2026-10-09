@@ -1,9 +1,9 @@
-mesa,zona,capacidad,estado,yaw,pitch,nota
-1,barra,2,libre,-16,-28,"Mesa alta a la izquierda de la barra. Yaw y pitch aproximados en la foto de muestra."
-2,barra,4,libre,28,-20,"Mesa a la derecha de la barra. Yaw y pitch aproximados en la foto de muestra."
-3,mesas,2,libre,-58,-14,"Mesa chica a la izquierda del salón. Yaw y pitch aproximados en la foto de muestra."
-4,mesas,4,reservada,-6,-8,"Mesa del centro. En la muestra está reservada. Yaw y pitch aproximados."
-5,mesas,4,libre,22,-16,"Mesa del salón, hacia la derecha. Yaw y pitch aproximados en la foto de muestra."
-6,mesas,6,libre,52,-10,"Mesa larga a la derecha del salón. Yaw y pitch aproximados en la foto de muestra."
-7,terraza,4,libre,-62,-16,"Mesa de afuera, a la izquierda. Yaw y pitch aproximados en la foto de muestra."
-8,terraza,2,reservada,18,-22,"Mesa de afuera para dos. En la muestra está reservada. Yaw y pitch aproximados."
+mesa,zona,capacidad,estado,yaw,pitch,nota,plano_x,plano_y,forma,reservada_desde,reservada_hasta,fecha
+1,barra,2,libre,-16,-28,"Mesa alta a la izquierda de la barra. Yaw y pitch aproximados en la foto de muestra.",26.4,75.6,barra,,,
+2,barra,4,libre,28,-20,"Mesa a la derecha de la barra. Yaw y pitch aproximados en la foto de muestra.",75,75.6,barra,,,
+3,mesas,2,libre,-58,-14,"Mesa chica a la izquierda del salón. Yaw y pitch aproximados en la foto de muestra.",26.8,35.6,cuadrada,,,
+4,mesas,4,reservada,-6,-8,"Mesa del centro. En la muestra está reservada por estado. Yaw y pitch aproximados.",26.8,50.6,cuadrada,,,
+5,mesas,4,libre,22,-16,"Mesa del salón, hacia la derecha. Yaw y pitch aproximados en la foto de muestra.",73.2,35.6,cuadrada,,,
+6,mesas,6,libre,52,-10,"Mesa larga a la derecha del salón. Yaw y pitch aproximados en la foto de muestra.",73.2,50.6,cuadrada,,,
+7,terraza,4,libre,-62,-16,"Mesa de afuera, a la izquierda. Yaw y pitch aproximados en la foto de muestra.",33.6,13.9,redonda,,,
+8,terraza,2,libre,18,-22,"Mesa de afuera para dos. Reservada de 21:00 a 23:30. Yaw y pitch aproximados.",66.4,13.9,redonda,21:00,23:30,

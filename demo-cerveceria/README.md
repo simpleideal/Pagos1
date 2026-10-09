@@ -128,10 +128,23 @@ Cada objeto queda con tipos limpios:
 | `yaw` | número o `null` | grados de Pannellum |
 | `pitch` | número o `null` | grados de Pannellum |
 | `nota` | texto | puede ir vacía |
+| `plano_x` | número o `null` | 0 a 100, centro en el plano |
+| `plano_y` | número o `null` | 0 a 100, centro en el plano |
+| `forma` | texto o `null` | `redonda`, `cuadrada` o `barra` |
+| `reservada_desde` | número o `null` | minutos desde medianoche |
+| `reservada_hasta` | número o `null` | minutos desde medianoche |
+| `fecha` | texto o `null` | `AAAA-MM-DD` |
+| `ocupada_ahora` | booleano | se calcula, no va en el CSV |
+
+En el CSV, `reservada_desde` y `reservada_hasta` se escriben `HH:MM`.
+En el objeto quedan en minutos (`21:00` → `1260`). Si faltan las
+columnas nuevas, quedan en `null` y manda `estado`, como antes.
 
 Columnas del CSV, en este orden:
 
-`mesa`, `zona`, `capacidad`, `estado`, `yaw`, `pitch`, `nota`
+`mesa`, `zona`, `capacidad`, `estado`, `yaw`, `pitch`, `nota`,
+`plano_x`, `plano_y`, `forma`, `reservada_desde`, `reservada_hasta`,
+`fecha`
 
 `yaw` y `pitch` de la muestra están aproximados, cerca de la vista
 inicial de cada escena y fuera de la etiqueta del lugar (barra en
@@ -150,8 +163,30 @@ zona del CSV. `barra` y `terraza` solo salen en su escena.
 
 El punto usa el `yaw` y el `pitch` de la fila. Libre se pinta verde
 (`.mesa-punto.libre`). Reservada se pinta gris
-(`.mesa-punto.reservada`). En la muestra, la 4 y la 8 están
-reservadas.
+(`.mesa-punto.reservada`). Ese color sigue `estado`, no
+`ocupada_ahora`. En la muestra, la 4 está reservada por estado y
+sale gris. La 8 está libre en `estado` (el punto sale verde) y
+ocupada solo de 21:00 a 23:30.
+
+`plano_x` y `plano_y` son el centro de la mesa en el dibujo de
+muestra (`viewBox` 0 0 280 360), en porcentaje del ancho y del alto.
+No mueven el plano. Los centros que ya dibuja el SVG:
+
+- 7 y 8, terraza: círculos en 33,6% / 13,9% y 66,4% / 13,9%
+- 3, 5, 4 y 6, salón: los cuatro rectángulos, de izquierda a
+  derecha y de arriba a abajo, en 26,8% / 35,6%, 73,2% / 35,6%,
+  26,8% / 50,6% y 73,2% / 50,6%
+- 1 y 2, barra: taburetes de los extremos, 26,4% / 75,6% y 75% / 75,6%
+
+Cada minuto se vuelve a calcular `ocupada_ahora` con la hora de
+Chile (`America/Santiago`). Si alguna mesa cambia, se dispara otra
+vez `bruma:mesas`.
+
+`window.BRUMA_MESAS_LIBRE_A('22:00')` devuelve, para cada mesa,
+`libre` y `ocupada` a esa hora. El segundo argumento es una fecha
+`AAAA-MM-DD`. Si no se pasa, usa el día de hoy en Chile. La 8 sale
+ocupada a las 22:00 y libre a las 15:00. La 4 sale ocupada a
+cualquier hora.
 
 Tocar un punto llama `window.brumaAbrirMesa`. El botón «Reservar
 mesa» abre el mismo cuadro, con un selector. Si la mesa está libre,
@@ -166,7 +201,8 @@ los datos.
 2. Fila 1 con las columnas de arriba, en ese orden.
 3. Desde la fila 2, una mesa por fila. `zona`: `barra`, `mesas` o
    `terraza`. `estado`: `libre` o `reservada`. `yaw` y `pitch`:
-   grados, con punto o coma decimal.
+   grados, con punto o coma decimal. Las columnas del plano y del
+   horario pueden ir vacías.
 4. **Archivo → Compartir → Publicar en la web**. Pestaña de las
    mesas → **Valores separados por comas (.csv)** → **Publicar**.
    Copia el enlace.
@@ -178,12 +214,40 @@ Si la URL queda vacía o la hoja falla, siguen las 8 mesas de
 
 ### Desde el teléfono del dueño
 
+Para dejarla reservada todo el día:
+
 1. Abre la hoja de las mesas.
 2. Busca la fila de la mesa.
-3. En `estado`, escribe `reservada`. Para dejarla libre, escribe
-   `libre`.
-4. No hace falta volver a publicar. Al recargar la página se lee
-   el CSV de nuevo (`cache: no-store`).
+3. En `estado`, escribe `reservada`. Deja vacías
+   `reservada_desde`, `reservada_hasta` y `fecha`.
+4. Para dejarla libre, escribe `libre` y vacía esas tres celdas.
+
+Para una reserva por horario, deja `estado` en `libre` y anota el
+tramo. La mesa cuenta como reservada solo dentro de esas horas. Si
+el tramo cruza la medianoche, la hora de fin es menor que la de
+inicio (`22:00` y `01:00` reserva hasta la una).
+
+Ejemplo, la mesa 8 de la muestra, todos los días de 21:00 a 23:30:
+
+```text
+estado: libre
+reservada_desde: 21:00
+reservada_hasta: 23:30
+fecha: (vacía)
+```
+
+Si la reserva es de un solo día, escribe la fecha `AAAA-MM-DD`.
+Ese día manda el horario. Los otros días manda `estado`.
+
+```text
+estado: libre
+reservada_desde: 21:00
+reservada_hasta: 23:30
+fecha: 2026-10-09
+```
+
+No hace falta volver a publicar. Al recargar la página se lee el
+CSV de nuevo (`cache: no-store`).
 
 ## Carta y happy hour
 

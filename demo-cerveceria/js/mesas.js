@@ -28,7 +28,17 @@
             pitch: 'pitch',
             vertical: 'pitch',
             nota: 'nota',
-            comentario: 'nota'
+            comentario: 'nota',
+            plano_x: 'plano_x',
+            x: 'plano_x',
+            plano_y: 'plano_y',
+            y: 'plano_y',
+            forma: 'forma',
+            reservada_desde: 'reservada_desde',
+            desde: 'reservada_desde',
+            reservada_hasta: 'reservada_hasta',
+            hasta: 'reservada_hasta',
+            fecha: 'fecha'
         };
         return alias[limpio] || limpio;
     }
@@ -101,6 +111,71 @@
         return 'libre';
     }
 
+    function porcentaje(valor) {
+        var n = grados(valor);
+        if (n == null) return null;
+        if (n < 0) return 0;
+        if (n > 100) return 100;
+        return n;
+    }
+
+    function minutosDe(valor) {
+        var s = String(valor == null ? '' : valor).trim();
+        var m = s.match(/^(\d{1,2}):(\d{2})$/);
+        if (!m) return null;
+        var h = Number(m[1]);
+        var min = Number(m[2]);
+        if (h === 24 && min === 0) return 0;
+        if (h < 0 || h > 23 || min < 0 || min > 59) return null;
+        return h * 60 + min;
+    }
+
+    function fechaDe(valor) {
+        var s = String(valor || '').trim();
+        return /^\d{4}-\d{2}-\d{2}$/.test(s) ? s : null;
+    }
+
+    function formaDe(valor) {
+        var s = sinTilde(valor);
+        if (s === 'redonda' || s === 'cuadrada' || s === 'barra') return s;
+        return null;
+    }
+
+    function partesChile(date) {
+        var fmt = new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'America/Santiago',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hourCycle: 'h23'
+        });
+        var partes = {};
+        fmt.formatToParts(date).forEach(function (p) {
+            if (p.type !== 'literal') partes[p.type] = p.value;
+        });
+        var hora = Number(partes.hour);
+        if (hora === 24) hora = 0;
+        return {
+            fecha: partes.year + '-' + partes.month + '-' + partes.day,
+            minutos: hora * 60 + Number(partes.minute)
+        };
+    }
+
+    function enRango(minutos, desde, hasta) {
+        if (desde <= hasta) return minutos >= desde && minutos <= hasta;
+        return minutos >= desde || minutos <= hasta;
+    }
+
+    function ocupadaEn(mesa, minutos, fecha) {
+        var porEstado = mesa.estado === 'reservada';
+        if (mesa.reservada_desde == null || mesa.reservada_hasta == null) return porEstado;
+        if (mesa.fecha && mesa.fecha !== fecha) return porEstado;
+        if (minutos == null) return porEstado;
+        return enRango(minutos, mesa.reservada_desde, mesa.reservada_hasta);
+    }
+
     function mesaDe(fila) {
         var mesa = String(fila.mesa || '').trim();
         var zona = sinTilde(fila.zona);
@@ -112,7 +187,14 @@
             estado: estadoDe(fila.estado),
             yaw: grados(fila.yaw),
             pitch: grados(fila.pitch),
-            nota: String(fila.nota || '').trim()
+            nota: String(fila.nota || '').trim(),
+            plano_x: porcentaje(fila.plano_x),
+            plano_y: porcentaje(fila.plano_y),
+            forma: formaDe(fila.forma),
+            reservada_desde: minutosDe(fila.reservada_desde),
+            reservada_hasta: minutosDe(fila.reservada_hasta),
+            fecha: fechaDe(fila.fecha),
+            ocupada_ahora: false
         };
     }
 
@@ -158,10 +240,38 @@
         });
     }
 
-    function publicar(lista) {
-        window.BRUMA_MESAS = lista;
-        window.dispatchEvent(new CustomEvent('bruma:mesas', { detail: lista }));
+    function firma(lista) {
+        return lista.map(function (mesa) {
+            return mesa.mesa + (mesa.ocupada_ahora ? '1' : '0');
+        }).join(',');
     }
+
+    function aplicarAhora(lista, date) {
+        var chile = partesChile(date || new Date());
+        lista.forEach(function (mesa) {
+            mesa.ocupada_ahora = ocupadaEn(mesa, chile.minutos, chile.fecha);
+        });
+    }
+
+    function publicar(lista, forzar) {
+        var antes = firma(lista);
+        aplicarAhora(lista);
+        window.BRUMA_MESAS = lista;
+        if (forzar || firma(lista) !== antes) {
+            window.dispatchEvent(new CustomEvent('bruma:mesas', { detail: lista }));
+        }
+    }
+
+    window.BRUMA_MESAS_LIBRE_A = function (hora, fecha) {
+        var minutos = minutosDe(hora);
+        var dia = fecha ? fechaDe(fecha) : null;
+        if (!dia) dia = partesChile(new Date()).fecha;
+        return (window.BRUMA_MESAS || []).map(function (mesa) {
+            var cuando = minutos == null ? partesChile(new Date()).minutos : minutos;
+            var ocupada = ocupadaEn(mesa, cuando, dia);
+            return { mesa: mesa.mesa, libre: !ocupada, ocupada: ocupada };
+        });
+    };
 
     function cargar() {
         var pedido = resolver(window.FUENTE && window.FUENTE.mesas);
@@ -175,8 +285,14 @@
             return usarLocal().then(limpiar);
         }).catch(function () {
             return usarLocal().then(limpiar).catch(function () { return []; });
-        }).then(publicar);
+        }).then(function (lista) {
+            publicar(lista, true);
+        });
     }
+
+    setInterval(function () {
+        if (window.BRUMA_MESAS && window.BRUMA_MESAS.length) publicar(window.BRUMA_MESAS, false);
+    }, 60000);
 
     cargar();
 })();
