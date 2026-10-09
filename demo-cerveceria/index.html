@@ -1575,7 +1575,6 @@
             </div>
             <p class="tour-credito">Fotos de muestra: <a href="https://commons.wikimedia.org/wiki/File:Bier_macht_Sch%C3%B6n_%E2%80%93_Crafbeer_Shop_in_K%C3%B6ln_2019.jpg">Bier macht Schön, Colonia</a> — foto de Maximilian Schönherr, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Panorámica de las mesas: <a href="https://commons.wikimedia.org/wiki/File:Barbara%27s_Heritage_Restaurant_Intramuros_Interior_Panorama.jpg">Barbara's Heritage Restaurant, Intramuros</a> — foto de Ryomaandres, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Las otras: Poly Haven (CC0) — Greg Zaal y Jarod Guest; Dario Barresi.</p>
 
-            <script src="js/mesas-ejemplo.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js"></script>
             <script>
                 (function () {
@@ -2400,11 +2399,16 @@
 
            Para mirar los dos estados sin esperar la hora:
            ?hh=ahora  y  ?hh=no
+
+           Mesas: PEGA LA URL del CSV en FUENTE.mesas (Publicar en la
+           web → valores separados por comas). Si queda vacía, o la
+           hoja no responde, js/mesas.js usa datos/mesas.csv.
            ================================================================== */
 
         var FUENTE = {
             carta: '',
             happy: '',
+            mesas: '',
             csvLocal: 'datos/carta.csv',
             happyLocal: 'datos/happy-hour.csv'
         };
@@ -3532,8 +3536,10 @@
             document.addEventListener('keydown', function (evento) {
                 if (evento.key === 'Escape' && !capa.hidden) capa.hidden = true;
             });
+            llenarCual();
             window.addEventListener('bruma:mesas', llenarCual);
         })();
     </script>
+    <script src="js/mesas.js"></script>
 </body>
 </html>
