@@ -1509,11 +1509,12 @@
                     bottom: 50%;
                     width: 0;
                     height: 0;
-                    border-left: 16px solid transparent;
-                    border-right: 16px solid transparent;
-                    border-top: 46px solid rgba(66, 133, 244, 0.55);
+                    border-left: 18px solid transparent;
+                    border-right: 18px solid transparent;
+                    border-top: 54px solid rgba(66, 133, 244, 0.9);
                     transform-origin: 50% 100%;
                     transform: translateX(-50%);
+                    filter: drop-shadow(0 0 5px rgba(66, 133, 244, 0.9));
                 }
 
                 #tour-360 .tour-punto {
@@ -2541,7 +2542,12 @@
                         traer(id).then(function (cfg) {
                             visor = pannellum.viewer(caja, configVisor(id, cfg));
                             anadidas[id] = true;
-                            visor.on('load', ocultarCarga);
+                            visor.on('load', function () {
+                                ocultarCarga();
+                                if (miradaPedida && visor.stopAutoRotate) {
+                                    try { visor.stopAutoRotate(); } catch (error) {}
+                                }
+                            });
                             visor.on('error', function () {
                                 var n = document.getElementById('tour-carga');
                                 n.hidden = false;
