@@ -1,6 +1,10 @@
 # Cervecería Bruma
 
 La página tiene tres pestañas: Inicio, Carta y Recorrido y reserva.
+En el encabezado van a la derecha, en la misma fila que «Bruma +18».
+En el escritorio se leen completas. En el teléfono el grupo se aprieta
+un poco; por debajo de 390 px, «Recorrido y reserva» se ve como «Reserva»
+y el nombre largo queda en la etiqueta del botón. No hay menú de hamburguesa.
 La portada (`img/fachada.jpg`) es la fachada del bar Sixty Four en NOMO,
 Bacoor, Cavite — foto de UndueMarmot, [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/deed.es).
 Solo se achicó (2000×1500). El nombre «Cervecería Bruma» va encima, con un degradado.
@@ -23,6 +27,10 @@ La pestaña «Recorrido y reserva» junta el tour, el plano y el contacto.
 La reserva sale por WhatsApp.
 
 # Recorrido y plano
+
+«Mover con el teléfono» está dentro del marco de la foto. Solo se muestra
+si el aparato puede usar la orientación, y no sale a la portada: el marco
+recorta lo que queda afuera (`overflow: hidden`).
 
 La sección `#tour-360` usa fotos de ejemplo, no del local.
 Las tres zonas del plano (barra, mesas, terraza) tienen panorama 360×180.
