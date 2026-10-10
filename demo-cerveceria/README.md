@@ -283,9 +283,10 @@ los datos.
 
 ### Anotar la reserva en la hoja
 
-En `index.html`, junto a `CONTACTO`, está `RESERVAS_URL`. Ahí va la
-dirección `/exec` del Google Apps Script: la URL que termina en
-`/exec` después de Implementar → Aplicación web.
+En `js/reservas-url.js` está `RESERVAS_URL`. Ahí va la dirección
+`/exec` del Google Apps Script: la URL que termina en `/exec`
+después de Implementar → Aplicación web. La usan el cuadrito, la
+franja del mesero y `barra.html`.
 
 Si queda `''`, el cuadrito solo abre WhatsApp.
 
@@ -393,3 +394,64 @@ Para otra hoja, pega su CSV publicado en `FUENTE.happy`.
 
 Para ver los dos estados sin esperar la hora: `?hh=ahora` y
 `?hh=no`.
+
+## Llamado al mesero
+
+Si la página se abre con `?mesa=14`, arriba queda una franja fija:
+«Estás en la Mesa 14», el texto «para pedir algo o la cuenta» y un
+botón, «Llamar al mesero». No hay otro botón para la cuenta. Esa
+mesa se marca en el plano, si está entre las del recorrido.
+
+Al tocarlo se avisa «Avisamos al mesero…». Cada 5 segundos se
+pregunta si ya salió. Cuando llega `listo`, la franja dice
+«El mesero va en camino» y deja de preguntar. También deja de
+preguntar a los 10 minutos. No se puede llamar otra vez hasta
+pasados 60 segundos.
+
+### Pegatinas NFC
+
+Cada mesa lleva una pegatina. El teléfono lee una dirección web:
+la de esta página, más `?mesa=` y el número. Ejemplo:
+
+`https://tu-sitio/demo-cerveceria/?mesa=14`
+
+Con una app de NFC se escribe esa dirección en la pegatina
+(un registro de URL). Al acercar el teléfono, se abre la página
+de esa mesa.
+
+### Pantalla de la barra
+
+En el computador de la barra se abre `barra.html`, en la misma
+carpeta que `index.html`, y se deja esa pestaña abierta. Al
+entrar pide la clave, la guarda en el navegador y tiene el botón
+«Cambiar clave». Cada 4 segundos mira los llamados pendientes.
+Una tarjeta se lee «Mesa 14 · hace 1 min». «Listo» avisa que el
+mesero va.
+
+Si la respuesta es `{ok:false}`, se lee «Clave incorrecta».
+«Activar sonido» deja sonar un aviso corto cuando entra un
+llamado nuevo. El navegador pide ese toque antes de sonar.
+
+Si `RESERVAS_URL` está vacía, la franja y la barra dicen que es
+una demo. Los llamados se guardan en ese navegador y cualquier
+clave sirve.
+
+### Contrato del script
+
+La dirección es `RESERVAS_URL` en `js/reservas-url.js`.
+
+POST con `Content-Type: text/plain;charset=utf-8`:
+
+- Llamar: `{"accion":"llamar","mesa":"14","website":""}`
+  responde `{ok:true, id}`. `website` es la misma trampa para
+  robots que en la reserva.
+- Listo: `{"accion":"listo","id":"…","clave":"CLAVE"}`
+  responde `{ok:true}` o `{ok:false}`.
+
+GET:
+
+- `?accion=llamado&id=ID` responde `{estado:"pendiente"}` o
+  `{estado:"listo"}`.
+- `?accion=llamados&clave=CLAVE` responde
+  `{ok:true, llamados:[{id, mesa, hora, estado}]}`.
+  Si la clave no sirve, `{ok:false}`.

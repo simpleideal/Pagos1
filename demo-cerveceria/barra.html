@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Llamados · Cervecería Bruma</title>
+    <meta name="description" content="Pantalla de la barra para los llamados al mesero. Datos de ejemplo.">
+    <meta name="theme-color" content="#120c09">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #f6efe3;
+            --cream-soft: #e7dccb;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            font-family: Outfit, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--cream);
+            background: #120c09 url("img/fachada.jpg") center 42% / cover no-repeat;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: rgba(8, 5, 3, 0.82);
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--cream);
+            outline-offset: 3px;
+        }
+
+        main {
+            width: min(720px, 100%);
+            margin: 0 auto;
+            padding: 28px 20px 64px;
+        }
+
+        .demo {
+            margin-bottom: 16px;
+            color: var(--cream-soft);
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        h1 {
+            font-family: Fraunces, Georgia, serif;
+            font-size: clamp(2.4rem, 6vw, 3.4rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 18px;
+        }
+
+        .panel {
+            padding: 18px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.58);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            margin-top: 8px;
+            padding: 12px 14px;
+            border: 0;
+            border-radius: 8px;
+            background: rgba(246, 239, 227, 0.12);
+            color: var(--cream);
+            font: inherit;
+            font-size: 1.35rem;
+        }
+
+        button {
+            appearance: none;
+            border: 1px solid rgba(246, 239, 227, 0.45);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--cream);
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.45;
+            cursor: default;
+        }
+
+        .entrar,
+        .listo,
+        .sonido {
+            margin-top: 14px;
+            padding: 12px 18px;
+            font-size: 1.25rem;
+        }
+
+        .error {
+            margin-top: 14px;
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+
+        .barra-acciones {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 14px;
+            margin-bottom: 18px;
+        }
+
+        .cambiar,
+        .sonido {
+            padding: 10px 14px;
+            font-size: 1rem;
+        }
+
+        .sonido { margin-top: 0; }
+
+        .vacio {
+            font-size: 1.6rem;
+            color: var(--cream-soft);
+        }
+
+        .tarjeta {
+            margin-bottom: 12px;
+            padding: 18px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.58);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+        }
+
+        .tarjeta h2 {
+            font-family: Fraunces, Georgia, serif;
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+        }
+
+        [hidden] { display: none !important; }
+    </style>
+</head>
+<body>
+    <main>
+        <p class="demo" id="demo" hidden>Demo · los llamados se guardan en este navegador. Cualquier clave sirve.</p>
+        <h1>Llamados</h1>
+
+        <form class="panel" id="clave-form">
+            <label>Clave de la barra
+                <input id="clave" type="password" name="clave" autocomplete="current-password" required>
+            </label>
+            <button class="entrar" type="submit">Entrar</button>
+            <p class="error" id="clave-error" hidden>Clave incorrecta</p>
+        </form>
+
+        <section id="sala" hidden>
+            <div class="barra-acciones">
+                <button type="button" class="cambiar" id="cambiar">Cambiar clave</button>
+                <button type="button" class="sonido" id="sonido" aria-pressed="false">Activar sonido</button>
+            </div>
+            <div id="lista"></div>
+            <p class="vacio" id="vacio" hidden>No hay llamados.</p>
+        </section>
+    </main>
+
+    <script src="js/reservas-url.js"></script>
+    <script src="js/llamados.js"></script>
+    <script>
+        (function () {
+            var CLAVE_GUARDADA = 'bruma-clave-barra';
+            var form = document.getElementById('clave-form');
+            var campo = document.getElementById('clave');
+            var error = document.getElementById('clave-error');
+            var sala = document.getElementById('sala');
+            var lista = document.getElementById('lista');
+            var vacio = document.getElementById('vacio');
+            var demo = document.getElementById('demo');
+            var sonidoBtn = document.getElementById('sonido');
+            var claveActual = '';
+            var poll = 0;
+            var vistos = null;
+            var audioCtx = null;
+            var sonidoOn = false;
+
+            if (window.BRUMA_LLAMADOS.esDemo()) demo.hidden = false;
+
+            function leerClave() {
+                try { return localStorage.getItem(CLAVE_GUARDADA) || ''; }
+                catch (error) { return ''; }
+            }
+
+            function guardarClave(valor) {
+                try { localStorage.setItem(CLAVE_GUARDADA, valor); }
+                catch (error) {}
+            }
+
+            function borrarClave() {
+                try { localStorage.removeItem(CLAVE_GUARDADA); }
+                catch (error) {}
+            }
+
+            function hace(hora) {
+                var t = Date.parse(hora);
+                if (isNaN(t)) return hora ? String(hora) : '';
+                var min = Math.max(0, Math.round((Date.now() - t) / 60000));
+                if (min < 1) return 'hace un momento';
+                if (min === 1) return 'hace 1 min';
+                if (min < 60) return 'hace ' + min + ' min';
+                var horas = Math.round(min / 60);
+                if (horas === 1) return 'hace 1 h';
+                return 'hace ' + horas + ' h';
+            }
+
+            function parar() {
+                if (poll) {
+                    clearInterval(poll);
+                    poll = 0;
+                }
+            }
+
+            function mostrarFormulario() {
+                parar();
+                sala.hidden = true;
+                form.hidden = false;
+                campo.focus();
+            }
+
+            function claveMala() {
+                parar();
+                borrarClave();
+                error.hidden = false;
+                error.textContent = 'Clave incorrecta';
+                mostrarFormulario();
+            }
+
+            function pitar() {
+                if (!audioCtx) return;
+                var osc = audioCtx.createOscillator();
+                var gan = audioCtx.createGain();
+                var ahora = audioCtx.currentTime;
+                osc.type = 'sine';
+                osc.frequency.value = 880;
+                gan.gain.setValueAtTime(0.0001, ahora);
+                gan.gain.exponentialRampToValueAtTime(0.08, ahora + 0.02);
+                gan.gain.exponentialRampToValueAtTime(0.0001, ahora + 0.22);
+                osc.connect(gan);
+                gan.connect(audioCtx.destination);
+                osc.start(ahora);
+                osc.stop(ahora + 0.24);
+            }
+
+            function pintar(llamados) {
+                var pendientes = (llamados || []).filter(function (item) {
+                    return item && item.estado !== 'listo';
+                });
+                pendientes.sort(function (a, b) {
+                    return Date.parse(a.hora) - Date.parse(b.hora);
+                });
+                var ids = pendientes.map(function (item) { return String(item.id); });
+                if (vistos && sonidoOn) {
+                    var hayNuevo = ids.some(function (id) { return vistos.indexOf(id) === -1; });
+                    if (hayNuevo) pitar();
+                }
+                vistos = ids;
+                lista.innerHTML = '';
+                pendientes.forEach(function (item) {
+                    var art = document.createElement('article');
+                    art.className = 'tarjeta';
+                    var titulo = document.createElement('h2');
+                    titulo.textContent = 'Mesa ' + item.mesa + ' · ' + hace(item.hora);
+                    var boton = document.createElement('button');
+                    boton.type = 'button';
+                    boton.className = 'listo';
+                    boton.textContent = 'Listo';
+                    boton.addEventListener('click', function () { marcar(item.id, boton); });
+                    art.appendChild(titulo);
+                    art.appendChild(boton);
+                    lista.appendChild(art);
+                });
+                vacio.hidden = pendientes.length > 0;
+            }
+
+            function alRecibir(data, primera) {
+                if (data && data.ok === true && Array.isArray(data.llamados)) {
+                    error.hidden = true;
+                    form.hidden = true;
+                    sala.hidden = false;
+                    guardarClave(claveActual);
+                    pintar(data.llamados);
+                    return true;
+                }
+                if (data && data.ok === false) {
+                    claveMala();
+                    return false;
+                }
+                if (primera) {
+                    error.hidden = false;
+                    error.textContent = 'No se pudo leer los llamados.';
+                    mostrarFormulario();
+                }
+                return false;
+            }
+
+            function consultar(primera) {
+                return window.BRUMA_LLAMADOS.llamados(claveActual).then(function (data) {
+                    return alRecibir(data, primera);
+                }).catch(function () {
+                    if (primera) {
+                        error.hidden = false;
+                        error.textContent = 'No se pudo leer los llamados.';
+                        mostrarFormulario();
+                    }
+                    return false;
+                });
+            }
+
+            function empezar(clave) {
+                claveActual = clave;
+                vistos = null;
+                consultar(true).then(function (ok) {
+                    if (!ok) return;
+                    parar();
+                    poll = setInterval(function () { consultar(false); }, 4000);
+                });
+            }
+
+            function marcar(id, boton) {
+                boton.disabled = true;
+                window.BRUMA_LLAMADOS.listo(id, claveActual).then(function (data) {
+                    if (!data || data.ok === false) {
+                        boton.disabled = false;
+                        claveMala();
+                        return;
+                    }
+                    if (data.ok !== true) {
+                        boton.disabled = false;
+                        return;
+                    }
+                    consultar(false);
+                }).catch(function () {
+                    boton.disabled = false;
+                });
+            }
+
+            form.addEventListener('submit', function (evento) {
+                evento.preventDefault();
+                error.hidden = true;
+                empezar(campo.value);
+            });
+
+            document.getElementById('cambiar').addEventListener('click', function () {
+                borrarClave();
+                claveActual = '';
+                campo.value = '';
+                error.hidden = true;
+                mostrarFormulario();
+            });
+
+            sonidoBtn.addEventListener('click', function () {
+                var AC = window.AudioContext || window.webkitAudioContext;
+                if (!AC) return;
+                audioCtx = audioCtx || new AC();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                sonidoOn = true;
+                sonidoBtn.textContent = 'Sonido activado';
+                sonidoBtn.setAttribute('aria-pressed', 'true');
+            });
+
+            var guardada = leerClave();
+            if (guardada) empezar(guardada);
+        })();
+    </script>
+</body>
+</html>
