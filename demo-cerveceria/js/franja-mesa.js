@@ -18,6 +18,8 @@
     var web = document.getElementById('llama-website');
     var poll = 0;
     var enviando = false;
+    var idActivo = '';
+    var desdeActivo = 0;
     var CLAVE_HASTA = 'bruma-llamar-hasta';
     var CLAVE_ID = 'bruma-llamar-id';
     var CLAVE_DESDE = 'bruma-llamar-desde';
@@ -63,29 +65,43 @@
             clearInterval(poll);
             poll = 0;
         }
+        idActivo = '';
+    }
+
+    function revisar() {
+        if (!idActivo) return;
+        var id = idActivo;
+        if (Date.now() - desdeActivo > DIEZ_MIN) {
+            parar();
+            borrar(CLAVE_ID);
+            borrar(CLAVE_DESDE);
+            return;
+        }
+        window.BRUMA_LLAMADOS.llamado(id).then(function (data) {
+            if (id !== idActivo) return;
+            if (data && String(data.estado || '').toLowerCase() === 'listo') {
+                parar();
+                decir('El mesero va en camino');
+                borrar(CLAVE_ID);
+                borrar(CLAVE_DESDE);
+            }
+        }).catch(function () {});
     }
 
     function seguir(id, desde) {
         parar();
-        function una() {
-            if (Date.now() - desde > DIEZ_MIN) {
-                parar();
-                borrar(CLAVE_ID);
-                borrar(CLAVE_DESDE);
-                return;
-            }
-            window.BRUMA_LLAMADOS.llamado(id).then(function (data) {
-                if (data && String(data.estado || '').toLowerCase() === 'listo') {
-                    parar();
-                    decir('El mesero va en camino');
-                    borrar(CLAVE_ID);
-                    borrar(CLAVE_DESDE);
-                }
-            }).catch(function () {});
-        }
-        una();
-        poll = setInterval(una, 5000);
+        idActivo = String(id);
+        desdeActivo = desde;
+        revisar();
+        poll = setInterval(revisar, 5000);
     }
+
+    document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible') revisar();
+    });
+    window.addEventListener('storage', function (evento) {
+        if (evento.key === 'bruma-llamados') revisar();
+    });
 
     donde.textContent = 'Estás en la Mesa ' + mesa;
     if (window.BRUMA_LLAMADOS.esDemo()) demo.hidden = false;
