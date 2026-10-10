@@ -23,7 +23,8 @@ y con el precio tachado.
 La pestaña «Reserva» junta el tour, el plano y el contacto.
 El título de esa sección también dice «Reserva».
 «Reservar mesa» abre el mismo cuadrito que una mesa libre del plano o del 360.
-La reserva sale por WhatsApp.
+Pide nombre y teléfono, y la reserva sale por WhatsApp.
+Si `RESERVAS_URL` tiene la dirección `/exec`, también se anota en la hoja.
 
 # Recorrido y plano
 
@@ -273,10 +274,34 @@ cualquier hora.
 
 Tocar un punto llama `window.brumaAbrirMesa`. El botón «Reservar
 mesa» abre el mismo cuadro, con un selector. Si la mesa está libre,
-el enlace es WhatsApp al número `CONTACTO.whatsappReservas`, con el
-texto de la reserva. Si está reservada, el cuadro muestra «Reservada»
+pide el día, la hora, las personas, el nombre y un teléfono de Chile
+(puede empezar con `+56`). «Reservar por WhatsApp» abre
+`CONTACTO.whatsappReservas` con ese texto, y el mensaje suma el
+nombre. Si está reservada, el cuadro muestra «Reservada»
 y no arma el mensaje. No cambies ese cuadro ni los colores al tocar
 los datos.
+
+### Anotar la reserva en la hoja
+
+En `index.html`, junto a `CONTACTO`, está `RESERVAS_URL`. Ahí va la
+dirección `/exec` del Google Apps Script: la URL que termina en
+`/exec` después de Implementar → Aplicación web.
+
+Si queda `''`, el cuadrito solo abre WhatsApp.
+
+Si tiene la dirección, al tocar «Reservar por WhatsApp» la página
+hace un `POST` con `Content-Type: text/plain;charset=utf-8` y este
+JSON: `mesa`, `fecha` (`AAAA-MM-DD`), `hora` (`HH:MM`), `personas`,
+`nombre`, `telefono`, `website`.
+
+`website` es una trampa para robots. El campo está fuera de la
+pantalla y no entra en el tabulador. Nombre y teléfono son
+obligatorios.
+
+Si la respuesta es `{ok:true}`, se lee «Reserva enviada, el local
+te confirma por WhatsApp». Si es `{ok:false,error}`, se muestra
+ese error con calma. Si el envío falla, también se avisa. En todos
+esos casos se abre igual el WhatsApp.
 
 ### Conectar la hoja de Google
 

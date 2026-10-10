@@ -410,6 +410,8 @@
 
         .reserva-dialogo {
             width: min(360px, 100%);
+            max-height: calc(100svh - 32px);
+            overflow: auto;
             padding: 16px;
             border-radius: 8px;
             background: rgba(0, 0, 0, 0.58);
@@ -447,7 +449,8 @@
             color: var(--cream-soft);
         }
 
-        .reserva-campo select {
+        .reserva-campo select,
+        .reserva-campo input {
             display: block;
             width: 100%;
             min-height: 44px;
@@ -463,6 +466,26 @@
             letter-spacing: 0;
             text-transform: none;
         }
+
+        .reserva-campo input::placeholder { color: rgba(231, 220, 203, 0.55); }
+
+        .reserva-trampa {
+            position: absolute;
+            left: -10000px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
+        .reserva-aviso {
+            margin: 0 0 12px;
+            color: var(--cream);
+            font-size: 0.9rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .reserva-aviso[hidden] { display: none; }
 
         .reserva-estado {
             margin: 8px 0 14px;
@@ -2733,9 +2756,19 @@
                         <label class="reserva-campo">Personas
                             <select id="reserva-personas"></select>
                         </label>
+                        <label class="reserva-campo">Nombre
+                            <input id="reserva-nombre" type="text" name="nombre" autocomplete="name" required placeholder="Tu nombre">
+                        </label>
+                        <label class="reserva-campo">Teléfono
+                            <input id="reserva-telefono" type="tel" name="telefono" autocomplete="tel" inputmode="tel" required placeholder="+56 9 1234 5678">
+                        </label>
+                        <label class="reserva-trampa" aria-hidden="true">Website
+                            <input id="reserva-website" type="text" name="website" tabindex="-1" autocomplete="off">
+                        </label>
                         <p class="reserva-mensaje" id="reserva-mensaje"></p>
+                        <p class="reserva-aviso" id="reserva-aviso" role="status" hidden></p>
                         <div class="reserva-acciones">
-                            <a class="btn btn-wa" id="reserva-wa" target="_blank" rel="noopener noreferrer">Reservar por WhatsApp</a>
+                            <button type="button" class="btn btn-wa" id="reserva-wa">Reservar por WhatsApp</button>
                         </div>
                     </div>
                     <p class="reserva-estado" id="reserva-estado" hidden>Reservada</p>
@@ -2800,6 +2833,10 @@
             instagram: 'https://www.instagram.com/cerveceriabruma.demo',
             facebook: 'https://www.facebook.com/cerveceriabruma.demo'
         };
+
+        /* Ahí va la dirección /exec del Google Apps Script.
+           Vacía: el cuadrito solo abre WhatsApp. */
+        var RESERVAS_URL = '';
 
         /* ==================================================================
            FIN DE LOS DATOS DEL LOCAL
@@ -3959,7 +3996,11 @@
             var dia = document.getElementById('reserva-dia');
             var hora = document.getElementById('reserva-hora');
             var personas = document.getElementById('reserva-personas');
+            var nombre = document.getElementById('reserva-nombre');
+            var telefono = document.getElementById('reserva-telefono');
+            var website = document.getElementById('reserva-website');
             var mensaje = document.getElementById('reserva-mensaje');
+            var aviso = document.getElementById('reserva-aviso');
             var enlace = document.getElementById('reserva-wa');
             var estado = document.getElementById('reserva-estado');
             var actual = null;
@@ -3986,6 +4027,14 @@
                 return salida;
             }
 
+            function isoDe(fecha) {
+                var mes = String(fecha.getMonth() + 1);
+                var d = String(fecha.getDate());
+                if (mes.length < 2) mes = '0' + mes;
+                if (d.length < 2) d = '0' + d;
+                return fecha.getFullYear() + '-' + mes + '-' + d;
+            }
+
             function llenarDias() {
                 if (dia.options.length) return;
                 var base = new Date();
@@ -3995,12 +4044,33 @@
                     var fecha = new Date(base.getTime() + i * 86400000);
                     var texto = 'el ' + NOMBRES[fecha.getDay()];
                     var opcion = document.createElement('option');
-                    opcion.value = texto;
+                    opcion.value = isoDe(fecha);
+                    opcion.setAttribute('data-frase', texto);
                     opcion.textContent = texto;
                     dia.appendChild(opcion);
                 }
-                var sabado = dia.querySelector('option[value="el sábado"]');
-                if (sabado) dia.value = 'el sábado';
+                var sabado = dia.querySelector('option[data-frase="el sábado"]');
+                if (sabado) dia.value = sabado.value;
+            }
+
+            function fraseDia() {
+                var opcion = dia.options[dia.selectedIndex];
+                if (!opcion) return '';
+                return opcion.getAttribute('data-frase') || opcion.textContent;
+            }
+
+            /* +56 9 y ocho dígitos, con o sin espacios. */
+            function telefonoChile(valor) {
+                var limpio = String(valor || '').replace(/[\s().-]/g, '');
+                if (limpio.charAt(0) === '+') limpio = limpio.slice(1);
+                if (limpio.indexOf('56') === 0) limpio = limpio.slice(2);
+                if (limpio.charAt(0) === '0') limpio = limpio.slice(1);
+                return /^9\d{8}$/.test(limpio);
+            }
+
+            function mostrarAviso(texto) {
+                aviso.hidden = !texto;
+                aviso.textContent = texto || '';
             }
 
             function llenarHoras() {
@@ -4054,16 +4124,72 @@
             function armarMensaje() {
                 var n = Number(personas.value);
                 var gente = n === 1 ? '1 persona' : n + ' personas';
-                return 'Hola, quiero reservar la Mesa ' + actual.mesa + ' ' + dia.value +
+                var texto = 'Hola, quiero reservar la Mesa ' + actual.mesa + ' ' + fraseDia() +
                     ' a las ' + hora.value + ' para ' + gente;
+                var quien = nombre.value.trim();
+                if (quien) texto += '. Soy ' + quien;
+                return texto;
+            }
+
+            function urlWhatsappReserva() {
+                var numero = String((window.CONTACTO && CONTACTO.whatsappReservas) || '').replace(/\D/g, '');
+                return 'https://wa.me/' + numero + '?text=' + encodeURIComponent(armarMensaje());
             }
 
             function refrescarEnlace() {
                 if (!actual || actual.estado !== 'libre') return;
-                var texto = armarMensaje();
-                mensaje.textContent = texto;
-                var numero = String((window.CONTACTO && CONTACTO.whatsappReservas) || '').replace(/\D/g, '');
-                enlace.href = 'https://wa.me/' + numero + '?text=' + encodeURIComponent(texto);
+                mensaje.textContent = armarMensaje();
+            }
+
+            function cuerpoReserva() {
+                return {
+                    mesa: actual.mesa,
+                    fecha: dia.value,
+                    hora: hora.value,
+                    personas: Number(personas.value),
+                    nombre: nombre.value.trim(),
+                    telefono: telefono.value.trim(),
+                    website: website.value
+                };
+            }
+
+            function anotarReserva() {
+                var url = String(typeof RESERVAS_URL === 'string' ? RESERVAS_URL : '').trim();
+                if (!url) return;
+                fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(cuerpoReserva())
+                }).then(function (res) {
+                    return res.json().catch(function () { return null; });
+                }).then(function (data) {
+                    if (data && data.ok === true) {
+                        mostrarAviso('Reserva enviada, el local te confirma por WhatsApp');
+                        return;
+                    }
+                    var error = data && data.error ? String(data.error) : '';
+                    mostrarAviso(error || 'No se pudo anotar la reserva. Te abrimos WhatsApp para avisarle al local.');
+                }).catch(function () {
+                    mostrarAviso('No se pudo anotar la reserva. Te abrimos WhatsApp para avisarle al local.');
+                });
+            }
+
+            function reservar() {
+                if (!actual || actual.estado !== 'libre') return;
+                if (!nombre.value.trim()) {
+                    mostrarAviso('Escribe tu nombre.');
+                    nombre.focus();
+                    return;
+                }
+                if (!telefonoChile(telefono.value)) {
+                    mostrarAviso('Escribe un teléfono de Chile. Puede empezar con +56.');
+                    telefono.focus();
+                    return;
+                }
+                mostrarAviso('');
+                refrescarEnlace();
+                window.open(urlWhatsappReserva(), '_blank', 'noopener');
+                anotarReserva();
             }
 
             function pintar(mesa) {
@@ -4080,6 +4206,7 @@
                 form.hidden = !libre;
                 estado.hidden = libre;
                 if (!libre) return;
+                mostrarAviso('');
                 llenarDias();
                 llenarHoras();
                 llenarPersonas(mesa.capacidad);
@@ -4122,6 +4249,9 @@
             dia.addEventListener('change', refrescarEnlace);
             hora.addEventListener('change', refrescarEnlace);
             personas.addEventListener('change', refrescarEnlace);
+            nombre.addEventListener('input', refrescarEnlace);
+            telefono.addEventListener('input', function () { mostrarAviso(''); });
+            enlace.addEventListener('click', reservar);
             document.getElementById('reserva-cerrar').addEventListener('click', function () {
                 capa.hidden = true;
             });
