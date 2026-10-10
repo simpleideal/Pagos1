@@ -289,6 +289,10 @@ los datos.
 4. **Archivo → Compartir → Publicar en la web**. Pestaña de las
    mesas → **Valores separados por comas (.csv)** → **Publicar**.
    Copia el enlace.
+
+   Publica solo las pestañas `carta`, `happy-hour` y `mesas`, una por
+   una. **Nunca** publiques `reservas` ni «Todo el documento»:
+   `reservas` tiene nombres y teléfonos de clientes.
 5. En `demo-cerveceria/index.html`, busca **PEGA LA URL** y pega
    ese enlace en `FUENTE.mesas`.
 
@@ -332,36 +336,12 @@ fecha: 2026-10-09
 No hace falta volver a publicar. Al recargar la página se lee el
 CSV de nuevo (`cache: no-store`).
 
-## Apps Script para guardar reservas
+## Reservas desde la página
 
-La página no cambia. Aquí solo está el script para pegar en Google
-Apps Script, y cómo dejarlo andando. El código es
-`apps-script/Code.gs`. Los pasos están en `apps-script/README.md`.
-
-Cuando el cuadrito manda la reserva a la dirección `/exec`, el
-script recibe un `POST` con `Content-Type: text/plain;charset=utf-8`
-y este JSON: `mesa`, `fecha` (`AAAA-MM-DD`), `hora` (`HH:MM`),
-`personas`, `nombre`, `telefono`, `website`.
-
-`website` es una trampa. Si viene con texto, contesta `{ok:true}`
-y no escribe la fila.
-
-Si los datos sirven, agrega una fila en la pestaña `Reservas` de
-la misma hoja (la crea si no existe). Las columnas son `recibido`,
-`mesa`, `fecha`, `hora`, `personas`, `nombre` y `telefono`. Contesta
-`{ok:true}`. Si falta algo o el mensaje no se puede leer, contesta
-`{ok:false,error}` con una frase corta.
-
-No toca las filas de las mesas. Marcar `estado` sigue siendo a mano,
-como en la sección de arriba.
-
-La URL que termina en `/exec` se pega en `RESERVAS_URL`, en
-`index.html`, junto a `CONTACTO`, cuando esa constante esté. Si
-queda vacía, o todavía no está, el cuadrito sigue solo con WhatsApp
-y la muestra se ve igual.
-
-Cada cambio del script pide una implementación nueva. Si no, la
-URL vieja sigue con el código anterior.
+Los pedidos de reserva se guardan en la pestaña `reservas` de la hoja
+con un script de Google Apps Script. Instalación, cómo confirmar y
+cómo actualizarlo: [`apps-script/README.md`](apps-script/README.md).
+La pestaña `reservas` no se publica.
 
 ## Carta y happy hour
 
