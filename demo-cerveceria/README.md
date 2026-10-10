@@ -291,8 +291,8 @@ los datos.
    Copia el enlace.
 
    Publica solo las pestañas `carta`, `happy-hour` y `mesas`, una por
-   una. **Nunca** publiques `reservas` ni «Todo el documento»:
-   `reservas` tiene nombres y teléfonos de clientes.
+   una. **Nunca** publiques `reservas`, `llamados` ni «Todo el
+   documento»: `reservas` tiene nombres y teléfonos de clientes.
 5. En `demo-cerveceria/index.html`, busca **PEGA LA URL** y pega
    ese enlace en `FUENTE.mesas`.
 
@@ -341,7 +341,11 @@ CSV de nuevo (`cache: no-store`).
 Los pedidos de reserva se guardan en la pestaña `reservas` de la hoja
 con un script de Google Apps Script. Instalación, cómo confirmar y
 cómo actualizarlo: [`apps-script/README.md`](apps-script/README.md).
-La pestaña `reservas` no se publica.
+El mismo script recibe el botón **Llamar al mesero**: anota cada
+llamado en la pestaña `llamados` y la pantalla de la barra los marca
+como listos con la clave `CLAVE_BARRA` (Configuración del proyecto →
+Propiedades del script). API y pasos en el mismo README.
+Las pestañas `reservas` y `llamados` no se publican.
 
 ## Carta y happy hour
 
