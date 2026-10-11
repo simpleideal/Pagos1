@@ -108,6 +108,29 @@ Así la URL `/exec` sigue siendo la misma. Si en cambio haces una
 - `POST {accion:'listo', id, clave}` → `{"ok":true}`.
 - Errores extra: `clave_invalida` (falta `CLAVE_BARRA` o no coincide),
   `no_existe`, `accion_invalida`.
+- **Administración de reservas** (misma clave `CLAVE_BARRA` para todo
+  el personal):
+  - `GET ?accion=reservas&clave=K` → `{"ok":true,"reservas":[{id, fila, creada, mesa, fecha, hora, personas, nombre, telefono, estado}]}`
+    con las `pendiente` y las `confirmada` de hoy en adelante, ordenadas
+    por fecha y hora. Usa `id` para identificar la reserva; `fila`
+    es solo informativa (cambia si alguien borra o mueve filas).
+  - `POST {accion:'confirmar'|'rechazar', id, clave}` → `{"ok":true}`;
+    cambia `estado` a `confirmada` o `rechazada`.
+  - `POST {accion:'sin_reserva', mesa, personas?, minutos?, clave}` →
+    `{"ok":true,"id":"..."}`. Anota a quien llega sin reserva: fila
+    `confirmada` con fecha y hora de ahora, nombre «Sin reserva», sin
+    teléfono y `minutos=N` en `nota` (por defecto 120, máximo 720).
+- `GET ?accion=ocupadas` (público, sin clave) →
+  `{"ok":true,"ocupadas":[{mesa, fecha, desde, hasta}]}` con las
+  reservas `confirmada` de hoy en adelante. `hasta` = `desde` + 120
+  minutos (`DURACION_MIN`), o los minutos de la nota; si pasa de
+  medianoche queda menor que `desde` (ej. `23:30` → `01:30`). Nunca
+  trae nombres ni teléfonos.
+- Columna `id` de `reservas`: va al final (columna J, después de
+  `nota`). El script la crea si falta y les pone id a las filas
+  antiguas la primera vez que se listan. Una reserva nueva responde
+  `{"ok":true,"id":"..."}`.
+- Errores nuevos: `minutos_invalidos`.
 - **CORS:** envía con `Content-Type: text/plain;charset=utf-8` y el
   JSON en el cuerpo. Con `application/json` el navegador hace una
   petición previa que Apps Script no contesta.
