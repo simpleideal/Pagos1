@@ -2118,8 +2118,18 @@
                         };
                     }
 
+                    /* Visita sin reserva (?accion=ocupadas). Si ese pedido falla, no marca nada. */
+                    function visitaToma(mesa, hora) {
+                        if (typeof window.brumaVisitaOcupa !== 'function') return false;
+                        try {
+                            return window.brumaVisitaOcupa(mesa.mesa, hora) === true;
+                        } catch (error) {
+                            return false;
+                        }
+                    }
+
                     function estaLibre(mesa) {
-                        return mesa.estado === 'libre' && mesa.ocupada !== true;
+                        return mesa.estado === 'libre' && mesa.ocupada !== true && !visitaToma(mesa);
                     }
 
                     function hueco(zona, indice) {
@@ -2189,7 +2199,7 @@
                             },
                             clickHandlerFunc: function () {
                                 if (!window.brumaAbrirMesa) return;
-                                if (mesa.ocupada === true && mesa.estado === 'libre') {
+                                if ((mesa.ocupada === true || visitaToma(mesa)) && mesa.estado === 'libre') {
                                     window.brumaAbrirMesa({
                                         mesa: mesa.mesa,
                                         zona: mesa.zona,
@@ -2273,7 +2283,7 @@
                         return null;
                     }
 
-                    function libreAEsaHora(mesa, hora) {
+                    function librePorCsv(mesa, hora) {
                         var fn = window.BRUMA_MESAS_LIBRE_A;
                         if (typeof fn !== 'function' || !hora) return true;
                         var fila = mesa.origen || mesa;
@@ -2308,6 +2318,12 @@
                             return true;
                         }
                         return true;
+                    }
+
+                    function libreAEsaHora(mesa, hora) {
+                        var libre = librePorCsv(mesa, hora);
+                        if (hora && visitaToma(mesa, hora)) return false;
+                        return libre;
                     }
 
                     function prepararHora() {
@@ -2819,6 +2835,11 @@
 
                     tomarMesas();
                     window.addEventListener('bruma:mesas', tomarMesas);
+                    window.addEventListener('bruma:ocupadas', function () {
+                        pintarMesas();
+                        pintarResumen();
+                        dibujarMesasPlano();
+                    });
                     colocarCono();
                     requestAnimationFrame(seguirVista);
 
@@ -4369,5 +4390,6 @@
     <script src="js/llamados.js"></script>
     <script src="js/franja-mesa.js"></script>
     <script src="js/mesas.js"></script>
+    <script src="js/ocupadas.js"></script>
 </body>
 </html>

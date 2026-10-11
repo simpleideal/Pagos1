@@ -1,5 +1,5 @@
 /* Dirección /exec del Google Apps Script.
-   La usan el cuadrito de reserva, la franja del mesero y barra.html.
+   La usan el cuadrito de reserva, la franja del mesero, barra.html y admin.html.
    Para cambiarla, edita solo esta línea.
    Vacía: la reserva solo abre WhatsApp y los llamados quedan en demo. */
 var RESERVAS_URL = 'https://script.google.com/macros/s/AKfycbzbHLeRKXEEPZznsRXroGQXJtL2tTRFsz7MyqNL4Nb7g4I60RZKXpME4sac2dbtAKM/exec';
