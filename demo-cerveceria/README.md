@@ -488,3 +488,74 @@ GET:
 - `?accion=llamados&clave=CLAVE` responde
   `{ok:true, llamados:[{id, mesa, hora, estado}]}`.
   Si la clave no sirve, `{ok:false}`.
+
+## Operación (para quien mantenga Bruma)
+
+### Planilla «bar la bruma»
+
+ID: `1MDlcnxuu1dEQTMaxW0gKa_el_GriuPc6BJxnDCqlsX4`. Es una copia de la
+plantilla de Huerto Dulce; no se toca la hoja de Huerto Dulce.
+
+| Pestaña | gid | Publicada |
+|---|---|---|
+| `carta` | `0` | sí |
+| `happy-hour` | `292586376` | sí |
+| `mesas` | `1563542866` | sí |
+| `reservas` | `326120532` | **no** |
+| `llamados` | `1212080562` | **no** |
+| «Cómo usar» | `1726462365` | no |
+
+CSV publicado de cada pestaña (cambia `<gid>`):
+
+`https://docs.google.com/spreadsheets/d/e/2PACX-1vSz2FQgS9ECLDJ6UjgvXPGx2rm5UThIzDaaR3BHyaiielF1_OrRD9Ibstp2Hy7bhwUUJ2w9lgIQh70V/pub?gid=<gid>&single=true&output=csv`
+
+Las pestañas no publicadas responden 401 en ese enlace; así debe
+quedar. Cada encabezado tiene una nota (pasa el mouse sobre la celda)
+que explica la columna, un ejemplo y si la cambia el dueño o no se
+toca. Cómo publicar: ver «Conectar la hoja de Google», más arriba.
+
+### Robot (cuenta de servicio)
+
+- Cuenta: `cursor-vitrina@simple-ideal-vitrina.iam.gserviceaccount.com`,
+  compartida en la planilla como **Editor** (sin notificar).
+- Su llave JSON vive solo como secreto `GOOGLE_SA_JSON` en el
+  computador del agente. **Nunca** va al repositorio, al grupo ni a
+  un chat abierto.
+- Para crear una llave nueva: [Cuentas de servicio](https://console.cloud.google.com/iam-admin/serviceaccounts)
+  → proyecto `simple-ideal-vitrina` → `cursor-vitrina` → **Claves** →
+  **Agregar clave → Crear clave nueva → JSON**. Se descarga un `.json`;
+  su contenido completo (de `{` a `}`) se entrega por el recuadro
+  seguro del chat privado. El «ID de clave» solo no sirve.
+- Después, en la misma pestaña **Claves**, borra las llaves viejas
+  (ícono de basurero) para que solo quede la que está en uso.
+
+### Apps Script publicado
+
+- URL: `https://script.google.com/macros/s/AKfycbzbHLeRKXEEPZznsRXroGQXJtL2tTRFsz7MyqNL4Nb7g4I60RZKXpME4sac2dbtAKM/exec`
+  (es pública; está en `js/reservas-url.js`).
+- `CLAVE_BARRA` vive solo en **Propiedades del script**; no se escribe
+  en el repo.
+- Al pegar `Code.gs`, copia solo el código: si viene de un bloque con
+  la etiqueta `javascript`, no pegues esa palabra ni las comillas
+  triples.
+- Para actualizar sin cambiar la URL: **Implementar → Administrar
+  implementaciones → Editar (lápiz) → Versión: Nueva versión →
+  Implementar**. Tarda cerca de un minuto en verse.
+- Instalación completa: [`apps-script/README.md`](apps-script/README.md).
+
+### Mantenimiento
+
+Todos los días a las 04:33 (hora de Chile) el agente Vitrina Dinámica
+borra de `llamados` las filas con `estado` `listo` de más de 7 días
+(según `creada`). Nunca borra llamados `pendiente` ni toca `reservas`.
+
+A mano: en la pestaña `llamados`, **Datos → Crear un filtro**, filtra
+`estado` = `listo`, ordena por `creada`, selecciona las filas de hace
+más de 7 días, clic derecho → **Borrar filas**. Quita el filtro al
+terminar.
+
+### Pegatinas y pantalla de la barra
+
+Enlace por mesa, `barra.html` y prueba: ver [«Llamado al mesero»](#llamado-al-mesero).
+En producción el enlace es `https://simpleideal.github.io/Pagos1/demo-cerveceria/?mesa=N`.
+Tras probar con dos teléfonos, borra las filas de prueba en `llamados`.
