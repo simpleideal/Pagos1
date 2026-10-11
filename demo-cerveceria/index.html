@@ -87,6 +87,78 @@
             background: var(--madera);
         }
 
+        html.con-llama { --llama-alto: 52px; }
+
+        html.con-llama .barra { margin-top: var(--llama-alto); }
+
+        html.con-llama .portada {
+            min-height: calc(100vh - 58px - var(--llama-alto));
+            min-height: calc(100svh - 58px - var(--llama-alto));
+        }
+
+        .llama-franja {
+            position: fixed;
+            z-index: 28;
+            top: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px 12px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.72);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            color: var(--cream);
+        }
+
+        .llama-franja[hidden] { display: none; }
+
+        .llama-franja > div { min-width: 0; }
+
+        .llama-donde {
+            font-weight: 700;
+            font-size: 0.95rem;
+            line-height: 1.2;
+        }
+
+        .llama-ayuda,
+        .llama-demo {
+            color: var(--cream-soft);
+            font-size: 0.78rem;
+            line-height: 1.3;
+        }
+
+        .llama-estado {
+            margin-top: 2px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            line-height: 1.2;
+        }
+
+        .llama-estado:empty { display: none; }
+
+        .llama-boton {
+            appearance: none;
+            flex: 0 0 auto;
+            padding: 8px 12px;
+            border: 1px solid rgba(246, 239, 227, 0.45);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--cream);
+            font: inherit;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .llama-boton:disabled {
+            opacity: 0.45;
+            cursor: default;
+        }
+
         .marca {
             display: inline-flex;
             align-items: center;
@@ -1120,8 +1192,13 @@
                 padding: 16px 16px 40px;
                 justify-content: center;
             }
+
+            html.con-llama .portada {
+                min-height: calc(100svh - 52px - var(--llama-alto));
+            }
         }
     </style>
+    <script src="js/reservas-url.js"></script>
     <script>
         try {
             var edadGuardada = localStorage.getItem('bruma-mayor-18');
@@ -1157,6 +1234,18 @@
     </div>
 
     <div id="sitio">
+        <div class="llama-franja" id="llama-franja" hidden>
+            <div>
+                <p class="llama-donde" id="llama-donde"></p>
+                <p class="llama-ayuda">para pedir algo o la cuenta</p>
+                <p class="llama-estado" id="llama-estado" role="status"></p>
+                <p class="llama-demo" id="llama-demo" hidden>Demo · sin el script</p>
+            </div>
+            <button type="button" class="llama-boton" id="llama-boton">Llamar al mesero</button>
+            <label class="reserva-trampa" aria-hidden="true">Website
+                <input id="llama-website" type="text" name="website" tabindex="-1" autocomplete="off">
+            </label>
+        </div>
         <header class="barra">
             <a class="marca" href="#inicio" id="logo">Bruma <span class="sello-edad">+18</span></a>
             <nav class="pestanias" aria-label="Secciones">
@@ -1541,6 +1630,12 @@
 
                 #tour-360 .plano-mesa.libre.encendida {
                     box-shadow: 0 0 0 3px rgba(246, 239, 227, 0.9);
+                }
+
+                #tour-360 .plano-mesa.aqui {
+                    opacity: 1;
+                    z-index: 4;
+                    box-shadow: 0 0 0 3px #f6efe3;
                 }
 
                 #tour-360 .plano-cono {
@@ -2251,6 +2346,10 @@
                         var select = document.getElementById('plano-hora');
                         var hora = (campo && !campo.hidden && select) ? select.value : '';
                         var filtrando = filtroCupo > 0 || !!hora;
+                        var aqui = '';
+                        try {
+                            aqui = String(new URLSearchParams(location.search).get('mesa') || '').trim();
+                        } catch (error) {}
                         mesas.forEach(function (mesa) {
                             var boton = document.createElement('button');
                             boton.type = 'button';
@@ -2263,7 +2362,12 @@
                             boton.style.left = mesa.x + '%';
                             boton.style.top = mesa.y + '%';
                             var estadoTxt = estaLibre(mesa) ? 'libre' : 'no disponible';
-                            boton.setAttribute('aria-label', tituloMesa(mesa) + ', ' + estadoTxt);
+                            var etiqueta = tituloMesa(mesa) + ', ' + estadoTxt;
+                            if (aqui && String(mesa.mesa) === aqui) {
+                                boton.classList.add('aqui');
+                                etiqueta = tituloMesa(mesa) + ', estás aquí, ' + estadoTxt;
+                            }
+                            boton.setAttribute('aria-label', etiqueta);
                             var num = document.createElement('span');
                             num.className = 'plano-num';
                             num.textContent = mesa.mesa;
@@ -2834,9 +2938,7 @@
             facebook: 'https://www.facebook.com/cerveceriabruma.demo'
         };
 
-        /* Ahí va la dirección /exec del Google Apps Script.
-           Vacía: el cuadrito solo abre WhatsApp. */
-        var RESERVAS_URL = '';
+        /* RESERVAS_URL está en js/reservas-url.js. */
 
         /* ==================================================================
            FIN DE LOS DATOS DEL LOCAL
@@ -4155,20 +4257,19 @@
 
             function anotarReserva() {
                 var url = String(typeof RESERVAS_URL === 'string' ? RESERVAS_URL : '').trim();
-                if (!url) return;
-                fetch(url, {
+                if (!url || typeof window.brumaLeerScript !== 'function') return;
+                window.brumaLeerScript(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(cuerpoReserva())
-                }).then(function (res) {
-                    return res.json().catch(function () { return null; });
+                }, function () {
+                    mostrarAviso('El script tardó. Reintentando…');
                 }).then(function (data) {
                     if (data && data.ok === true) {
                         mostrarAviso('Reserva enviada, el local te confirma por WhatsApp');
                         return;
                     }
-                    var error = data && data.error ? String(data.error) : '';
-                    mostrarAviso(error || 'No se pudo anotar la reserva. Te abrimos WhatsApp para avisarle al local.');
+                    mostrarAviso('No se pudo anotar la reserva. Te abrimos WhatsApp para avisarle al local.');
                 }).catch(function () {
                     mostrarAviso('No se pudo anotar la reserva. Te abrimos WhatsApp para avisarle al local.');
                 });
@@ -4265,6 +4366,8 @@
             window.addEventListener('bruma:mesas', llenarCual);
         })();
     </script>
+    <script src="js/llamados.js"></script>
+    <script src="js/franja-mesa.js"></script>
     <script src="js/mesas.js"></script>
 </body>
 </html>
