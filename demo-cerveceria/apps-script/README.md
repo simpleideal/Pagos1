@@ -130,7 +130,19 @@ Así la URL `/exec` sigue siendo la misma. Si en cambio haces una
   `nota`). El script la crea si falta y les pone id a las filas
   antiguas la primera vez que se listan. Una reserva nueva responde
   `{"ok":true,"id":"..."}`.
-- Errores nuevos: `minutos_invalidos`.
+- **Carta** (misma clave `CLAVE_BARRA`):
+  - `GET ?accion=carta&clave=K` →
+    `{"ok":true,"carta":[{fila, nombre, precio, precio_oferta, disponible}]}`.
+  - `POST {accion:'carta', clave, nombre, disponible?, precio?, precio_oferta?}`
+    → `{"ok":true,"fila":N}`. Busca la cerveza por `nombre` (sin
+    importar mayúsculas) y cambia solo los campos enviados.
+    `disponible`: `si` o `no` (los mismos de la lista desplegable).
+    `precio`: pesos enteros, sin puntos (`4200`). `precio_oferta`:
+    pesos enteros, o `''` para quitar la oferta. Las columnas se
+    buscan por su encabezado.
+- Errores nuevos: `minutos_invalidos`, `disponible_invalido`,
+  `precio_invalido`, `precio_oferta_invalido`, `nombre_repetido`
+  (dos filas con el mismo nombre), `sin_cambios`.
 - **CORS:** envía con `Content-Type: text/plain;charset=utf-8` y el
   JSON en el cuerpo. Con `application/json` el navegador hace una
   petición previa que Apps Script no contesta.

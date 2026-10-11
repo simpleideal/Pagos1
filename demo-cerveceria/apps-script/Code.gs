@@ -27,6 +27,7 @@ var FORMATO_FECHA = 'yyyy-MM-dd HH:mm:ss';
  * GET ?accion=llamado&id=ID     -> {ok, estado}  (el cliente consulta su llamado)
  * GET ?accion=llamados&clave=K  -> {ok, llamados:[{id, mesa, hora, estado}]}  (pantalla de la barra)
  * GET ?accion=reservas&clave=K  -> {ok, reservas:[{id, fila, creada, mesa, fecha, hora, personas, nombre, telefono, estado}]}
+ * GET ?accion=carta&clave=K     -> {ok, carta:[{fila, nombre, precio, precio_oferta, disponible}]}
  * GET ?accion=ocupadas          -> {ok, ocupadas:[{mesa, fecha, desde, hasta}]}  (público, sin datos personales)
  */
 function doGet(e) {
@@ -36,6 +37,10 @@ function doGet(e) {
     if (accion === '') return responder_({ ok: true });
     if (accion === 'llamado') return estadoLlamado_(texto_(p.id));
     if (accion === 'ocupadas') return listarOcupadas_();
+    if (accion === 'carta') {
+      if (!claveValida_(p.clave)) return responder_({ ok: false, error: 'clave_invalida' });
+      return listarCarta_();
+    }
     if (accion === 'reservas') {
       if (!claveValida_(p.clave)) return responder_({ ok: false, error: 'clave_invalida' });
       return listarReservas_();
@@ -55,6 +60,7 @@ function doGet(e) {
  * POST accion=llamar {mesa, website} -> {ok, id}
  * POST accion=listo {id, clave}      -> {ok}
  * POST accion=confirmar|rechazar {id, clave} -> {ok}
+ * POST accion=carta {clave, nombre, disponible?, precio?, precio_oferta?} -> {ok, fila}
  * POST accion=sin_reserva {mesa, personas?, minutos?, clave} -> {ok, id}
  */
 function doPost(e) {
@@ -70,6 +76,7 @@ function doPost(e) {
   if (accion === 'confirmar') return cambiarEstadoReserva_(datos, 'confirmada');
   if (accion === 'rechazar') return cambiarEstadoReserva_(datos, 'rechazada');
   if (accion === 'sin_reserva') return sinReserva_(datos);
+  if (accion === 'carta') return cambiarCarta_(datos);
   if (accion !== 'reservar') return responder_({ ok: false, error: 'accion_invalida' });
   return reservar_(datos);
 }
@@ -474,6 +481,99 @@ function listarOcupadas_() {
   }
   lista.sort(function (a, b) { return ordenarPorFecha_({ fecha: a.fecha, hora: a.desde }, { fecha: b.fecha, hora: b.desde }); });
   return responder_({ ok: true, ocupadas: lista });
+}
+
+// ---------- Carta (personal, con CLAVE_BARRA) ----------
+// Lee y cambia la pestaña «carta» por el nombre de la cerveza. Las columnas
+// se buscan por su encabezado, así que el orden de la hoja puede cambiar.
+
+var HOJA_CARTA = 'carta';
+var DISPONIBLE_VALORES = ['si', 'no']; // los mismos que acepta la página y la lista desplegable
+
+function hojaCarta_() {
+  var hoja = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(HOJA_CARTA);
+  if (!hoja) throw new Error('sin_carta');
+  var ancho = hoja.getLastColumn();
+  var alto = hoja.getLastRow();
+  var datos = hoja.getRange(1, 1, Math.max(alto, 1), ancho).getValues();
+  var col = {};
+  for (var j = 0; j < datos[0].length; j++) col[texto_(datos[0][j]).toLowerCase()] = j;
+  return { hoja: hoja, col: col, filas: datos.slice(1) };
+}
+
+function celdaCarta_(c, f, nombre) {
+  return c.col[nombre] === undefined ? '' : f[c.col[nombre]];
+}
+
+function listarCarta_() {
+  var c = hojaCarta_();
+  var lista = [];
+  for (var i = 0; i < c.filas.length; i++) {
+    var f = c.filas[i];
+    var nombre = texto_(celdaCarta_(c, f, 'nombre'));
+    if (!nombre) continue;
+    lista.push({
+      fila: i + 2, nombre: nombre,
+      precio: celdaCarta_(c, f, 'precio'),
+      precio_oferta: celdaCarta_(c, f, 'precio_oferta'),
+      disponible: texto_(celdaCarta_(c, f, 'disponible')).toLowerCase()
+    });
+  }
+  return responder_({ ok: true, carta: lista });
+}
+
+function enteroPesos_(v) {
+  var t = texto_(v);
+  if (!/^\d{1,7}$/.test(t)) return null;
+  return Number(t);
+}
+
+function cambiarCarta_(datos) {
+  if (!claveValida_(datos.clave)) return responder_({ ok: false, error: 'clave_invalida' });
+  var nombre = texto_(datos.nombre);
+  if (!nombre) return responder_({ ok: false, error: 'faltan_datos' });
+
+  var cambios = {};
+  if (datos.disponible !== undefined) {
+    var d = texto_(datos.disponible).toLowerCase();
+    if (DISPONIBLE_VALORES.indexOf(d) === -1) return responder_({ ok: false, error: 'disponible_invalido' });
+    cambios.disponible = d;
+  }
+  if (datos.precio !== undefined) {
+    var p = enteroPesos_(datos.precio);
+    if (p === null || p < 1) return responder_({ ok: false, error: 'precio_invalido' });
+    cambios.precio = p;
+  }
+  if (datos.precio_oferta !== undefined) {
+    if (texto_(datos.precio_oferta) === '') {
+      cambios.precio_oferta = '';
+    } else {
+      var po = enteroPesos_(datos.precio_oferta);
+      if (po === null || po < 1) return responder_({ ok: false, error: 'precio_oferta_invalido' });
+      cambios.precio_oferta = po;
+    }
+  }
+  if (Object.keys(cambios).length === 0) return responder_({ ok: false, error: 'sin_cambios' });
+
+  return conLock_(function () {
+    var c = hojaCarta_();
+    var buscado = nombre.toLowerCase();
+    var encontradas = [];
+    for (var i = 0; i < c.filas.length; i++) {
+      if (texto_(celdaCarta_(c, c.filas[i], 'nombre')).toLowerCase() === buscado) encontradas.push(i);
+    }
+    if (encontradas.length === 0) return responder_({ ok: false, error: 'no_existe' });
+    if (encontradas.length > 1) return responder_({ ok: false, error: 'nombre_repetido' });
+    var fila = encontradas[0] + 2;
+    for (var k in cambios) {
+      if (c.col[k] === undefined) return responder_({ ok: false, error: 'sin_columna_' + k });
+    }
+    for (var campo in cambios) {
+      c.hoja.getRange(fila, c.col[campo] + 1, 1, 1).setValues([[cambios[campo]]]);
+    }
+    SpreadsheetApp.flush();
+    return responder_({ ok: true, fila: fila });
+  });
 }
 
 function responder_(obj) {
