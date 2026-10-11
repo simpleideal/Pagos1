@@ -25,6 +25,7 @@ El título de esa sección también dice «Reserva».
 «Reservar mesa» abre el mismo cuadrito que una mesa libre del plano o del 360.
 Pide nombre y teléfono, y la reserva sale por WhatsApp.
 Si `RESERVAS_URL` tiene la dirección `/exec`, también se anota en la hoja.
+Si el script falla, igual se abre WhatsApp.
 
 # Recorrido y plano
 
@@ -283,12 +284,17 @@ los datos.
 
 ### Anotar la reserva en la hoja
 
-En `js/reservas-url.js` está `RESERVAS_URL`. Ahí va la dirección
-`/exec` del Google Apps Script: la URL que termina en `/exec`
-después de Implementar → Aplicación web. La usan el cuadrito, la
-franja del mesero y `barra.html`.
+En `js/reservas-url.js` está `RESERVAS_URL`. Hoy apunta al script
+publicado:
 
-Si queda `''`, el cuadrito solo abre WhatsApp.
+`https://script.google.com/macros/s/AKfycbzbHLeRKXEEPZznsRXroGQXJtL2tTRFsz7MyqNL4Nb7g4I60RZKXpME4sac2dbtAKM/exec`
+
+La usan el cuadrito, la franja del mesero y `barra.html`. Para
+cambiarla, edita solo esa línea. Si José publica otra
+implementación, pega ahí la URL nueva que termina en `/exec`.
+
+Si queda `''`, el cuadrito solo abre WhatsApp y los llamados
+quedan en demo, en este navegador.
 
 Si tiene la dirección, al tocar «Reservar por WhatsApp» la página
 hace un `POST` con `Content-Type: text/plain;charset=utf-8` y este
@@ -300,9 +306,15 @@ pantalla y no entra en el tabulador. Nombre y teléfono son
 obligatorios.
 
 Si la respuesta es `{ok:true}`, se lee «Reserva enviada, el local
-te confirma por WhatsApp». Si es `{ok:false,error}`, se muestra
-ese error con calma. Si el envío falla, también se avisa. En todos
-esos casos se abre igual el WhatsApp.
+te confirma por WhatsApp». Si el script responde mal, no contesta
+o aún no tiene la versión nueva, se lee «No se pudo anotar la
+reserva. Te abrimos WhatsApp para avisarle al local.» El WhatsApp
+se abre igual. La página no se rompe.
+
+Si en vez de JSON llega una página HTML (Google tarda cerca de un
+minuto en cambiar la versión publicada), la página reintenta sola
+y mientras tanto dice «El script tardó. Reintentando…». Una clave
+que no sirve sigue siendo «Clave incorrecta», sin reintento.
 
 ### Conectar la hoja de Google
 
@@ -443,9 +455,14 @@ entrar pide la clave, la guarda en el navegador y tiene el botón
 Una tarjeta se lee «Mesa 14 · hace 1 min». «Listo» avisa que el
 mesero va.
 
-Si la respuesta es `{ok:false}`, se lee «Clave incorrecta».
-«Activar sonido» deja sonar un aviso corto cuando entra un
-llamado nuevo. El navegador pide ese toque antes de sonar.
+Si la respuesta es `{ok:false}` por la clave, se lee «Clave
+incorrecta». Si el script falla por otra cosa, se lee «No se pudo
+leer los llamados.» «Activar sonido» deja sonar un aviso corto
+cuando entra un llamado nuevo. El navegador pide ese toque antes
+de sonar.
+
+Si el llamado no sale, la franja dice «No pudimos avisar. Intenta
+de nuevo.»
 
 Si `RESERVAS_URL` está vacía, la franja y la barra dicen que es
 una demo. Los llamados se guardan en ese navegador y cualquier
@@ -453,7 +470,8 @@ clave sirve.
 
 ### Contrato del script
 
-La dirección es `RESERVAS_URL` en `js/reservas-url.js`.
+La dirección es la de `RESERVAS_URL` en `js/reservas-url.js`.
+Para cambiarla, edita esa línea.
 
 POST con `Content-Type: text/plain;charset=utf-8`:
 

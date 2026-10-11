@@ -130,10 +130,12 @@
         enviando = true;
         pintarBoton();
         var website = web ? String(web.value || '') : '';
-        window.BRUMA_LLAMADOS.llamar(mesa, website).then(function (data) {
+        window.BRUMA_LLAMADOS.llamar(mesa, website, function () {
+            decir('El script tardó. Reintentando…');
+        }).then(function (data) {
             enviando = false;
             if (!data || data.ok === false || !data.id) {
-                decir((data && data.error) ? String(data.error) : 'No pudimos avisar. Intenta de nuevo.');
+                decir('No pudimos avisar. Intenta de nuevo.');
                 pintarBoton();
                 return;
             }

@@ -176,6 +176,7 @@
                 <button type="button" class="cambiar" id="cambiar">Cambiar clave</button>
                 <button type="button" class="sonido" id="sonido" aria-pressed="false">Activar sonido</button>
             </div>
+            <p class="error" id="sala-aviso" hidden></p>
             <div id="lista"></div>
             <p class="vacio" id="vacio" hidden>No hay llamados.</p>
         </section>
@@ -308,7 +309,16 @@
                     return true;
                 }
                 if (data && data.ok === false) {
-                    claveMala();
+                    var codigo = data.error ? String(data.error) : '';
+                    if (!codigo || codigo === 'clave_invalida') {
+                        claveMala();
+                        return false;
+                    }
+                    parar();
+                    borrarClave();
+                    error.hidden = false;
+                    error.textContent = 'No se pudo leer los llamados.';
+                    mostrarFormulario();
                     return false;
                 }
                 if (primera) {
@@ -320,7 +330,18 @@
             }
 
             function consultar(primera) {
-                return window.BRUMA_LLAMADOS.llamados(claveActual).then(function (data) {
+                return window.BRUMA_LLAMADOS.llamados(claveActual, function () {
+                    var aviso = document.getElementById('sala-aviso');
+                    if (sala.hidden) {
+                        error.hidden = false;
+                        error.textContent = 'El script tardó. Reintentando…';
+                    } else if (aviso) {
+                        aviso.hidden = false;
+                        aviso.textContent = 'El script tardó. Reintentando…';
+                    }
+                }).then(function (data) {
+                    var aviso = document.getElementById('sala-aviso');
+                    if (aviso && data) aviso.hidden = true;
                     return alRecibir(data, primera);
                 }).catch(function () {
                     if (primera) {
@@ -347,7 +368,8 @@
                 window.BRUMA_LLAMADOS.listo(id, claveActual).then(function (data) {
                     if (!data || data.ok === false) {
                         boton.disabled = false;
-                        claveMala();
+                        var codigo = data && data.error ? String(data.error) : '';
+                        if (data && data.ok === false && (!codigo || codigo === 'clave_invalida')) claveMala();
                         return;
                     }
                     if (data.ok !== true) {

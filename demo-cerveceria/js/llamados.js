@@ -34,29 +34,30 @@
         localStorage.setItem(CLAVE_LISTA, JSON.stringify(lista));
     }
 
-    function post(cuerpo) {
-        return fetch(urlScript(), {
+    function post(cuerpo, alReintentar) {
+        return window.brumaLeerScript(urlScript(), {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(cuerpo)
-        }).then(function (res) {
-            return res.json().catch(function () { return null; });
-        });
+        }, alReintentar);
     }
 
-    function get(params) {
-        var destino = new URL(urlScript(), location.href);
+    function get(params, alReintentar) {
+        var destino;
+        try {
+            destino = new URL(urlScript(), location.href);
+        } catch (error) {
+            return Promise.resolve(null);
+        }
         Object.keys(params).forEach(function (clave) {
             destino.searchParams.set(clave, params[clave]);
         });
-        return fetch(destino.toString()).then(function (res) {
-            return res.json().catch(function () { return null; });
-        });
+        return window.brumaLeerScript(destino.toString(), { method: 'GET' }, alReintentar);
     }
 
     window.BRUMA_LLAMADOS = {
         esDemo: esDemo,
-        llamar: function (mesa, website) {
+        llamar: function (mesa, website, alReintentar) {
             if (esDemo()) {
                 var lista = leer();
                 var id = 'd' + Date.now().toString(36);
@@ -73,7 +74,7 @@
                 accion: 'llamar',
                 mesa: String(mesa),
                 website: website || ''
-            });
+            }, alReintentar);
         },
         llamado: function (id) {
             if (esDemo()) {
@@ -85,9 +86,9 @@
             }
             return get({ accion: 'llamado', id: String(id) });
         },
-        llamados: function () {
+        llamados: function (clave, alReintentar) {
             if (esDemo()) return Promise.resolve({ ok: true, llamados: leer() });
-            return get({ accion: 'llamados', clave: arguments[0] || '' });
+            return get({ accion: 'llamados', clave: clave || '' }, alReintentar);
         },
         listo: function (id, clave) {
             if (esDemo()) {

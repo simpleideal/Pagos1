@@ -4257,20 +4257,19 @@
 
             function anotarReserva() {
                 var url = String(typeof RESERVAS_URL === 'string' ? RESERVAS_URL : '').trim();
-                if (!url) return;
-                fetch(url, {
+                if (!url || typeof window.brumaLeerScript !== 'function') return;
+                window.brumaLeerScript(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(cuerpoReserva())
-                }).then(function (res) {
-                    return res.json().catch(function () { return null; });
+                }, function () {
+                    mostrarAviso('El script tardó. Reintentando…');
                 }).then(function (data) {
                     if (data && data.ok === true) {
                         mostrarAviso('Reserva enviada, el local te confirma por WhatsApp');
                         return;
                     }
-                    var error = data && data.error ? String(data.error) : '';
-                    mostrarAviso(error || 'No se pudo anotar la reserva. Te abrimos WhatsApp para avisarle al local.');
+                    mostrarAviso('No se pudo anotar la reserva. Te abrimos WhatsApp para avisarle al local.');
                 }).catch(function () {
                     mostrarAviso('No se pudo anotar la reserva. Te abrimos WhatsApp para avisarle al local.');
                 });
