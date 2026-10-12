@@ -491,8 +491,10 @@ GET:
 
 ## Pantalla del personal
 
-`admin.html` es para el teléfono de quien atiende. Pide la misma clave
-que `barra.html` y la guarda en el navegador. «Cambiar clave» la borra.
+`admin.html` es para el teléfono de quien atiende. Usa la misma fachada,
+las mismas tarjetas y los mismos botones que el formulario de reserva.
+Pide la misma clave que `barra.html` y la guarda en el navegador.
+«Cambiar clave» la borra.
 Si la clave no sirve, se lee «Clave incorrecta».
 
 Después de la clave hay tres botones: Reservas, Llamados y Carta.

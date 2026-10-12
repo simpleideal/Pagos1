@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bruma</title>
     <meta name="description" content="Pantalla del personal de Cervecería Bruma.">
-    <meta name="theme-color" content="#120c09">
+    <meta name="theme-color" content="#3d2918">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Bruma">
@@ -19,205 +19,277 @@
         :root {
             --cream: #f6efe3;
             --cream-soft: #e7dccb;
-            --verde: #1f8f4e;
-            --gris: #8a847c;
-            --tinta: #1a120c;
+            --amber: #c47d2a;
+            --wa: #1f8f4e;
+            --wa-ink: #f4fff7;
+            --tinta: #2a2118;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { background: #2a1a12; color-scheme: light; }
 
         body {
             min-height: 100vh;
             font-family: Outfit, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             color: var(--cream);
-            background: #120c09 url("img/fachada.jpg") center 42% / cover no-repeat;
+            background: transparent;
         }
 
-        body::before {
+        body::before,
+        body::after {
             content: "";
             position: fixed;
             inset: 0;
+            pointer-events: none;
+        }
+
+        body::before {
+            z-index: -2;
+            background: #120c09 url("img/fachada.jpg") center 42% / cover no-repeat;
+            filter: brightness(0.32) saturate(0.8);
+        }
+
+        body::after {
             z-index: -1;
-            background: rgba(8, 5, 3, 0.82);
+            background: linear-gradient(180deg,
+                rgba(8, 5, 3, 0.35) 0%,
+                rgba(8, 5, 3, 0.88) 14%,
+                rgba(8, 5, 3, 0.88) 50%,
+                rgba(8, 5, 3, 0.5) 68%,
+                rgba(8, 5, 3, 0.74) 100%);
         }
 
         :focus-visible {
-            outline: 2px solid var(--cream);
+            outline: 2px solid var(--amber);
             outline-offset: 3px;
         }
 
         main {
-            width: min(560px, 100%);
+            width: min(520px, 100%);
             margin: 0 auto;
-            padding: 22px 16px 40px;
+            padding: 28px 16px 48px;
         }
 
         h1 {
             font-family: Fraunces, Georgia, serif;
-            font-size: clamp(2.4rem, 8vw, 3.2rem);
             font-weight: 700;
+            font-size: 2.2rem;
             letter-spacing: -0.03em;
-            line-height: 1;
-            margin: 8px 0 18px;
+            line-height: 1.12;
+            text-align: center;
+            margin-bottom: 8px;
+            color: var(--cream);
         }
+
+        h1::after {
+            content: "";
+            display: block;
+            width: 46%;
+            height: 2px;
+            background: rgba(246, 239, 227, 0.45);
+            margin: 8px auto 0;
+        }
+
+        .panel > h1 {
+            font-size: 1.45rem;
+            text-align: left;
+            margin-bottom: 12px;
+        }
+
+        .panel > h1::after { display: none; }
 
         h2 {
             font-family: Fraunces, Georgia, serif;
-            font-size: 1.55rem;
+            font-size: 1.15rem;
             font-weight: 700;
             letter-spacing: -0.02em;
             line-height: 1.2;
         }
 
         .ejemplo {
-            margin-bottom: 14px;
             color: var(--cream-soft);
-            font-size: 1.15rem;
+            font-size: 0.88rem;
+            line-height: 1.4;
+            text-align: center;
+            margin-bottom: 12px;
         }
 
         .aviso {
-            margin-bottom: 14px;
-            font-size: 1.35rem;
+            margin: 0 0 12px;
+            color: var(--cream);
+            font-size: 0.9rem;
             font-weight: 700;
-            line-height: 1.3;
+            line-height: 1.4;
         }
 
         button,
-        summary {
-            font: inherit;
-        }
+        summary { font: inherit; }
 
         button {
             appearance: none;
-            border: 0;
-            border-radius: 12px;
             cursor: pointer;
         }
 
-        button:disabled { opacity: 0.45; }
+        button:disabled { opacity: 0.45; cursor: default; }
 
-        .panel {
-            padding: 18px;
-            border-radius: 12px;
+        .panel,
+        .tarjeta,
+        #confirmadas {
             background: rgba(0, 0, 0, 0.58);
             -webkit-backdrop-filter: blur(8px);
             backdrop-filter: blur(8px);
+            color: var(--cream);
+            border-radius: 8px;
         }
 
-        label {
+        .panel {
+            width: min(520px, 100%);
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .menu { display: grid; gap: 8px; }
+
+        .menu .btn { margin-top: 0; }
+
+        .tarjeta {
+            margin-bottom: 12px;
+            padding: 16px;
+        }
+
+        .campo {
             display: block;
-            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-size: 0.78rem;
             font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cream-soft);
         }
 
-        input[type="password"],
+        .campo input,
         .precio-input {
             display: block;
             width: 100%;
-            margin-top: 10px;
-            padding: 14px 16px;
-            border: 0;
-            border-radius: 12px;
-            background: rgba(246, 239, 227, 0.12);
+            min-height: 44px;
+            margin-top: 4px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(246, 239, 227, 0.28);
+            background: rgba(0, 0, 0, 0.45);
             color: var(--cream);
             font: inherit;
-            font-size: 1.6rem;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0;
+            text-transform: none;
         }
 
-        .entrar,
-        .grande,
-        .volver,
-        .confirmar,
-        .rechazar,
-        .listo,
-        .quitar,
-        .fija button {
+        .btn,
+        .listo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             width: 100%;
-            min-height: 72px;
-            font-size: 1.45rem;
-            font-weight: 700;
-        }
-
-        .entrar,
-        .grande,
-        .volver,
-        .fija button {
-            background: var(--cream);
-            color: var(--tinta);
-        }
-
-        .grande {
-            min-height: 104px;
-            margin-bottom: 14px;
-            font-family: Fraunces, Georgia, serif;
-            font-size: 2rem;
-        }
-
-        .volver { margin-bottom: 8px; }
-
-        .cambiar,
-        .sonido {
+            min-height: 48px;
             margin-top: 8px;
-            padding: 12px 16px;
-            border-radius: 12px;
+            padding: 12px 18px;
+            border-radius: 999px;
+            border: 1.5px solid transparent;
             background: transparent;
             color: var(--cream);
-            font-size: 1.15rem;
+            font-family: inherit;
+            font-size: 1rem;
             font-weight: 700;
-            border: 1px solid rgba(246, 239, 227, 0.45);
         }
 
-        .tarjeta {
-            margin-bottom: 14px;
-            padding: 16px;
-            border-radius: 12px;
-            background: rgba(0, 0, 0, 0.58);
-            -webkit-backdrop-filter: blur(8px);
-            backdrop-filter: blur(8px);
+        .btn:active,
+        .listo:active { transform: scale(0.98); }
+
+        .btn-wa,
+        .listo { background: var(--wa); color: var(--wa-ink); }
+
+        .btn-linea { border-color: rgba(246, 239, 227, 0.45); }
+
+        .btn-gris { background: #8a847c; color: #1a120e; }
+
+        .entrar { margin-top: 4px; }
+
+        .volver,
+        .cambiar {
+            display: block;
+            min-height: 44px;
+            padding: 8px 12px;
+            border: 0;
+            background: none;
+            color: var(--cream);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .volver { margin: 0 auto 4px; }
+
+        .cambiar {
+            width: 100%;
+            margin-top: 4px;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
+            border-radius: 0;
+        }
+
+        .sonido {
+            min-height: 40px;
+            margin-bottom: 12px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(246, 239, 227, 0.45);
+            background: transparent;
+            color: var(--cream);
+            font-size: 0.88rem;
+            font-weight: 700;
         }
 
         .telefono {
             display: inline-block;
-            margin: 10px 0 4px;
+            margin-top: 6px;
             color: var(--cream);
-            font-size: 1.45rem;
+            font-size: 1rem;
             font-weight: 700;
+            text-decoration: none;
         }
-
-        .confirmar,
-        .rechazar,
-        .listo,
-        .quitar {
-            margin-top: 10px;
-        }
-
-        .confirmar { background: var(--verde); color: var(--cream); }
-        .rechazar,
-        .listo,
-        .quitar { background: var(--gris); color: var(--tinta); }
 
         .pregunta {
-            margin-top: 12px;
-            font-size: 1.6rem;
+            margin-top: 10px;
+            font-size: 1.05rem;
             font-weight: 700;
         }
 
         .vacio {
-            font-size: 1.5rem;
             color: var(--cream-soft);
+            font-size: 0.95rem;
+            line-height: 1.45;
         }
 
-        details {
-            margin-top: 18px;
+        #confirmadas { margin-top: 16px; padding: 16px; }
+
+        #confirmadas .tarjeta {
+            margin: 12px 0 0;
+            padding: 12px 0 0;
+            border-radius: 0;
+            background: none;
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
         }
 
         summary {
-            font-size: 1.4rem;
+            font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
         }
 
-        #vista-reservas { padding-bottom: 110px; }
+        #vista-reservas { padding-bottom: 88px; }
 
         .fija {
             position: fixed;
@@ -225,98 +297,132 @@
             right: 0;
             bottom: 0;
             padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-            background: rgba(8, 5, 3, 0.94);
+            background: rgba(8, 5, 3, 0.72);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
         }
 
-        .fija button { max-width: 560px; display: block; margin: 0 auto; }
+        .fija .btn { max-width: 520px; margin: 0 auto; }
+
+        #lista-carta .tarjeta {
+            margin: 0;
+            padding: 14px 0;
+            border-radius: 0;
+            background: none;
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
+        }
+
+        #lista-carta .tarjeta:first-child {
+            border-top: 0;
+            padding-top: 0;
+        }
 
         .interruptor {
             display: flex;
             gap: 8px;
-            margin-top: 12px;
+            margin-top: 8px;
         }
 
         .estado {
             flex: 1;
-            min-height: 64px;
+            min-height: 44px;
+            border-radius: 999px;
+            border: 1px solid rgba(246, 239, 227, 0.28);
             background: transparent;
-            color: var(--cream);
-            border: 1px solid rgba(246, 239, 227, 0.45);
-            font-size: 1.35rem;
+            color: var(--cream-soft);
+            font-size: 0.88rem;
             font-weight: 700;
         }
 
-        .estado.activo { background: var(--cream); color: var(--tinta); }
+        .estado.activo {
+            border-color: transparent;
+            background: var(--wa);
+            color: var(--wa-ink);
+        }
+
+        .estado.activo[aria-pressed="true"]:last-child,
+        .interruptor .estado:last-child.activo {
+            background: #8a847c;
+            color: #1a120e;
+        }
 
         .precio {
-            display: block;
+            display: flex;
+            align-items: center;
             width: 100%;
-            margin-top: 12px;
-            min-height: 64px;
-            background: transparent;
-            color: var(--cream);
-            border: 1px solid rgba(246, 239, 227, 0.35);
-            font-size: 1.7rem;
+            min-height: 44px;
+            margin-top: 8px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(246, 239, 227, 0.28);
+            background: rgba(0, 0, 0, 0.45);
+            color: var(--amber);
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.15rem;
             font-weight: 700;
+            font-variant-numeric: tabular-nums;
         }
 
-        .oferta {
-            margin-top: 8px;
-        }
+        .oferta { margin-top: 4px; }
 
         .mesas {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin: 8px 0 18px;
+            gap: 8px;
+            margin: 8px 0 14px;
         }
 
         .mesa {
-            width: 84px;
-            height: 84px;
-            background: transparent;
-            color: var(--cream);
-            border: 1px solid rgba(246, 239, 227, 0.5);
+            width: 48px;
+            height: 48px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--wa);
+            color: var(--wa-ink);
             font-family: Fraunces, Georgia, serif;
-            font-size: 2rem;
+            font-size: 1rem;
             font-weight: 700;
         }
 
-        .mesa.elegida { background: var(--cream); color: var(--tinta); }
+        .mesa.elegida { box-shadow: 0 0 0 3px var(--cream); }
 
         .personas {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin: 12px 0 16px;
+            gap: 8px;
+            margin: 8px 0 12px;
         }
 
         .personas p {
-            font-size: 1.3rem;
+            font-size: 0.78rem;
             font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cream-soft);
         }
 
         .paso {
-            width: 72px;
-            height: 72px;
-            background: var(--cream);
-            color: var(--tinta);
-            font-size: 2rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            border: 1px solid rgba(246, 239, 227, 0.45);
+            background: transparent;
+            color: var(--cream);
+            font-size: 1.25rem;
             font-weight: 700;
         }
 
         #personas-num {
-            min-width: 48px;
+            min-width: 32px;
             font-family: Fraunces, Georgia, serif;
-            font-size: 2.4rem;
+            font-size: 1.45rem;
+            font-weight: 700;
+            letter-spacing: 0;
+            text-transform: none;
+            color: var(--cream);
             text-align: center;
-        }
-
-        .acciones {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 12px;
         }
 
         [hidden] { display: none !important; }
@@ -326,10 +432,10 @@
     <main>
         <form class="panel" id="vista-clave" data-vista="clave">
             <h1>Bruma</h1>
-            <label>Clave de la barra
+            <label class="campo">Clave de la barra
                 <input id="clave" type="password" name="clave" autocomplete="current-password" required>
             </label>
-            <button class="entrar" type="submit">Entrar</button>
+            <button class="btn btn-wa entrar" type="submit">Entrar</button>
             <p class="aviso" id="clave-espera" hidden>Un momento…</p>
             <p class="aviso" id="clave-error" hidden>Clave incorrecta</p>
         </form>
@@ -337,10 +443,12 @@
         <section id="vista-inicio" data-vista="inicio" hidden>
             <h1>Bruma</h1>
             <p class="ejemplo" id="ejemplo-inicio" hidden>Ejemplo</p>
-            <button type="button" class="grande" data-ir="reservas">Reservas</button>
-            <button type="button" class="grande" data-ir="llamados">Llamados</button>
-            <button type="button" class="grande" data-ir="carta">Carta</button>
-            <button type="button" class="cambiar" id="cambiar">Cambiar clave</button>
+            <div class="panel menu">
+                <button type="button" class="btn btn-linea" data-ir="reservas">Reservas</button>
+                <button type="button" class="btn btn-linea" data-ir="llamados">Llamados</button>
+                <button type="button" class="btn btn-linea" data-ir="carta">Carta</button>
+                <button type="button" class="cambiar" id="cambiar">Cambiar clave</button>
+            </div>
         </section>
 
         <section id="vista-reservas" data-vista="reservas" hidden>
@@ -355,7 +463,7 @@
                 <div id="lista-confirmadas"></div>
             </details>
             <div class="fija">
-                <button type="button" data-ir="llegada">Llegó sin reserva</button>
+                <button type="button" class="btn btn-linea" data-ir="llegada">Llegó sin reserva</button>
             </div>
         </section>
 
@@ -371,7 +479,7 @@
                 <p id="personas-num">2</p>
                 <button type="button" class="paso" id="personas-mas" aria-label="Más">+</button>
             </div>
-            <button type="button" class="entrar" id="llegada-listo">Listo</button>
+            <button type="button" class="btn btn-wa" id="llegada-listo">Listo</button>
         </section>
 
         <section id="vista-llamados" data-vista="llamados" hidden>
@@ -390,8 +498,10 @@
             <button type="button" class="volver" data-ir="inicio">Volver</button>
             <h1>Carta</h1>
             <p class="ejemplo" data-ejemplo="carta" hidden>Ejemplo</p>
-            <p class="aviso" id="aviso-carta" hidden></p>
-            <div id="lista-carta"></div>
+            <div class="panel">
+                <p class="aviso" id="aviso-carta" hidden></p>
+                <div id="lista-carta"></div>
+            </div>
         </section>
     </main>
     <script src="js/reservas-url.js"></script>

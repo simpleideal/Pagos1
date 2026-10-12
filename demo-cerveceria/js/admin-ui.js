@@ -1,4 +1,4 @@
-/* Pantalla del personal. Pocas palabras, letra grande. */
+/* Pantalla del personal. El aspecto es el de la página. */
 (function () {
     var CLAVE_GUARDADA = 'bruma-clave-barra';
     var DIAS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
@@ -237,15 +237,15 @@
             pregunta.className = 'pregunta';
             pregunta.textContent = '¿Rechazar?';
             art.appendChild(pregunta);
-            art.appendChild(boton('confirmar', 'Sí', function () { hacerRechazo(reserva.id); }));
-            art.appendChild(boton('rechazar', 'No', function () {
+            art.appendChild(boton('btn btn-wa', 'Sí', function () { hacerRechazo(reserva.id); }));
+            art.appendChild(boton('btn btn-gris', 'No', function () {
                 preguntando = null;
                 pintarReservas();
             }));
             return art;
         }
-        art.appendChild(boton('confirmar', 'Confirmar', function () { hacerConfirmar(reserva.id); }));
-        art.appendChild(boton('rechazar', 'Rechazar', function () {
+        art.appendChild(boton('btn btn-wa', 'Confirmar', function () { hacerConfirmar(reserva.id); }));
+        art.appendChild(boton('btn btn-gris', 'Rechazar', function () {
             preguntando = String(reserva.id);
             pintarReservas();
         }));
@@ -453,7 +453,7 @@
             var fila = document.createElement('div');
             fila.className = 'oferta';
             fila.appendChild(controlPrecio('Oferta', oferta, 'precio_oferta', item));
-            fila.appendChild(boton('quitar', 'Quitar oferta', function () {
+            fila.appendChild(boton('btn btn-linea', 'Quitar oferta', function () {
                 enviarCarta(item, { precio_oferta: '' });
             }));
             art.appendChild(fila);
