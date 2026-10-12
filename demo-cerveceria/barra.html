@@ -126,9 +126,34 @@
         }
 
         .cambiar,
+        .salir,
         .sonido {
             padding: 10px 14px;
             font-size: 1rem;
+        }
+
+        .salir { min-height: 48px; }
+
+        .salir-confirma { margin: 0 0 16px; }
+
+        .salir-confirma .pregunta {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .salir-sino { display: flex; gap: 8px; }
+
+        .salir-sino button {
+            flex: 1;
+            min-height: 48px;
+            font-size: 1.15rem;
+        }
+
+        #salir-si {
+            background: #1f8f4e;
+            border-color: transparent;
+            color: #f4fff7;
         }
 
         .sonido { margin-top: 0; }
@@ -174,7 +199,15 @@
         <section id="sala" hidden>
             <div class="barra-acciones">
                 <button type="button" class="cambiar" id="cambiar">Cambiar clave</button>
+                <button type="button" class="salir" id="salir">Salir</button>
                 <button type="button" class="sonido" id="sonido" aria-pressed="false">Activar sonido</button>
+            </div>
+            <div id="salir-confirma" class="salir-confirma" hidden>
+                <p class="pregunta">¿Cerrar sesión en este teléfono?</p>
+                <div class="salir-sino">
+                    <button type="button" id="salir-si">Sí</button>
+                    <button type="button" id="salir-no">No</button>
+                </div>
             </div>
             <p class="error" id="sala-aviso" hidden></p>
             <div id="lista"></div>
@@ -214,6 +247,8 @@
 
             function borrarClave() {
                 try { localStorage.removeItem(CLAVE_GUARDADA); }
+                catch (error) {}
+                try { sessionStorage.removeItem(CLAVE_GUARDADA); }
                 catch (error) {}
             }
 
@@ -280,6 +315,25 @@
             });
 
             document.getElementById('cambiar').addEventListener('click', function () {
+                borrarClave();
+                claveActual = '';
+                campo.value = '';
+                error.hidden = true;
+                if (aviso) aviso.hidden = true;
+                mostrarFormulario();
+            });
+
+            document.getElementById('salir').addEventListener('click', function () {
+                document.getElementById('salir').hidden = true;
+                document.getElementById('salir-confirma').hidden = false;
+            });
+            document.getElementById('salir-no').addEventListener('click', function () {
+                document.getElementById('salir-confirma').hidden = true;
+                document.getElementById('salir').hidden = false;
+            });
+            document.getElementById('salir-si').addEventListener('click', function () {
+                document.getElementById('salir-confirma').hidden = true;
+                document.getElementById('salir').hidden = false;
                 borrarClave();
                 claveActual = '';
                 campo.value = '';

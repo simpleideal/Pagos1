@@ -240,7 +240,8 @@
         }
 
         .volver,
-        .cambiar {
+        .cambiar,
+        .salir {
             display: block;
             min-height: 44px;
             padding: 8px 12px;
@@ -253,12 +254,17 @@
 
         .volver { margin: 0 auto 4px; }
 
-        .cambiar {
+        .cambiar,
+        .salir {
             width: 100%;
             margin-top: 4px;
             border-top: 1px solid rgba(246, 239, 227, 0.28);
             border-radius: 0;
         }
+
+        .salir { min-height: 48px; }
+
+        .salir-confirma .pregunta { text-align: center; }
 
         .sonido {
             min-height: 40px;
@@ -495,6 +501,12 @@
                 <button type="button" class="btn btn-linea" data-ir="carta">Carta</button>
                 <button type="button" class="btn btn-linea" data-ir="happy">Happy hour</button>
                 <button type="button" class="cambiar" id="cambiar">Cambiar clave</button>
+                <button type="button" class="salir" id="salir">Salir</button>
+                <div id="salir-confirma" class="salir-confirma" hidden>
+                    <p class="pregunta">¿Cerrar sesión en este teléfono?</p>
+                    <button type="button" class="btn btn-wa" id="salir-si">Sí</button>
+                    <button type="button" class="btn btn-linea" id="salir-no">No</button>
+                </div>
             </div>
         </section>
 
