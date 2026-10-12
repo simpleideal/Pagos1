@@ -720,16 +720,6 @@
         entrar(campoClave.value);
     });
 
-    $('cambiar').addEventListener('click', function () {
-        borrarClave();
-        claveActual = '';
-        campoClave.value = '';
-        errorClave.hidden = true;
-        if (esperaClave) esperaClave.hidden = true;
-        mostrar('clave');
-        campoClave.focus();
-    });
-
     $('salir').addEventListener('click', function () {
         $('salir').hidden = true;
         $('salir-confirma').hidden = false;
