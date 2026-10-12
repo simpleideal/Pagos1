@@ -3148,9 +3148,9 @@
            También vale una columna oferta con si, o con el precio nuevo.
 
            Happy hour, hora de Chile (America/Santiago), reloj del
-           dispositivo. Se lee datos/happy-hour.csv (dias, inicio, fin).
-           Otra hoja: pega su CSV en FUENTE.happy. Si ninguna responde,
-           se usan las constantes HAPPY.
+           dispositivo. Se lee FUENTE.happy (pestaña publicada). Si no
+           responde, constantes HAPPY. Si falta la columna activo,
+           queda encendido.
 
            Para mirar los dos estados sin esperar la hora:
            ?hh=ahora  y  ?hh=no
@@ -3164,7 +3164,7 @@
             carta: '',
             // PEGA AQUÍ el enlace CSV publicado de la pestaña «happy-hour»
             // (Archivo → Compartir → Publicar en la web → happy-hour → .csv).
-            happy: '',
+            happy: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSz2FQgS9ECLDJ6UjgvXPGx2rm5UThIzDaaR3BHyaiielF1_OrRD9Ibstp2Hy7bhwUUJ2w9lgIQh70V/pub?gid=292586376&single=true&output=csv',
             mesas: '',
             csvLocal: 'datos/carta.csv',
             happyLocal: 'datos/happy-hour.csv'

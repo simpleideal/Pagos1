@@ -409,10 +409,11 @@ pega la URL en `FUENTE.carta`.
 
 ### Happy hour
 
-`FUENTE.happy` queda `''`. Si está vacía o la hoja no responde, se
-usa `datos/happy-hour.csv`. Si ese archivo tampoco deja tramos, se
-usan las constantes `HAPPY`: lunes a jueves, 18:00 a 20:00, zona
-`America/Santiago`. El reloj es el del dispositivo.
+`FUENTE.happy` apunta al CSV publicado de la pestaña «happy-hour»
+(gid 292586376). Si esa hoja no responde, se usan las constantes
+`HAPPY`: lunes a jueves, 18:00 a 20:00, zona `America/Santiago`.
+El reloj es el del dispositivo. Si `FUENTE.happy` queda vacío, se
+usa `datos/happy-hour.csv`.
 
 Columnas: `dias`, `inicio`, `fin`, `zona`, `activo`. La muestra trae
 `lun-jue`, `18:00`, `20:00`, `America/Santiago`, `si`. Si `activo` es
@@ -690,8 +691,8 @@ Si la acción no está publicada todavía, se ve «Ejemplo» con
 `datos/happy-hour.csv` y no se guarda nada en la hoja.
 
 **Para que el cliente vea el cambio:** la página del cliente lee
-`FUENTE.happy` en `index.html`. Hoy está vacía y usa el CSV de
-muestra. Pega ahí el enlace CSV publicado de la pestaña «happy-hour».
+`FUENTE.happy` en `index.html`. Ya apunta al CSV publicado de
+«happy-hour» (gid 292586376).
 
 ### Pasos para José (en el PC)
 
@@ -703,9 +704,9 @@ muestra. Pega ahí el enlace CSV publicado de la pestaña «happy-hour».
    cambia la URL y la página deja de funcionar.
 4. Abre la página del personal → Happy hour. Si ya no dice «Ejemplo»,
    quedó.
-5. Publica la pestaña «happy-hour» (Archivo → Compartir → Publicar en
-   la web → happy-hour → .csv) y pasa el enlace para pegarlo en
-   `FUENTE.happy`. Nunca publiques «reservas» ni «llamados».
+5. La pestaña «happy-hour» ya está publicada y el enlace está en
+   `FUENTE.happy`. Si al publicar de nuevo cambia el enlace, pégalo
+   ahí. Nunca publiques «reservas» ni «llamados».
 
 ### Apps Script publicado
 
@@ -738,3 +739,8 @@ Enlace por mesa, `barra.html` y prueba: ver [«Llamado al mesero»](#llamado-al-
 La pantalla del teléfono está en [«Pantalla del personal»](#pantalla-del-personal).
 En producción el enlace es `https://simpleideal.github.io/Pagos1/demo-cerveceria/?mesa=N`.
 Tras probar con dos teléfonos, borra las filas de prueba en `llamados`.
+
+
+## Happy hour conectado a la hoja
+
+`FUENTE.happy` en `index.html` apunta a la pestaña «happy-hour» publicada como CSV (gid 292586376). Así, lo que el personal cambia en la sección Happy hour de `admin.html` (encendido/apagado, días y horas) le llega al cliente. Si la hoja no responde, se usan las constantes (lunes a jueves, 18:00 a 20:00). Si falta la columna `activo`, se toma como encendido.
