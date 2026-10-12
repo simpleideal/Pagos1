@@ -514,6 +514,28 @@ quedar. Cada encabezado tiene una nota (pasa el mouse sobre la celda)
 que explica la columna, un ejemplo y si la cambia el dueño o no se
 toca. Cómo publicar: ver «Conectar la hoja de Google», más arriba.
 
+La pestaña `reservas` tiene una columna `id` al final (J), que pone
+el script. Panel del personal y mesas ocupadas: ver «Para quien
+programa la página» en [`apps-script/README.md`](apps-script/README.md);
+todo usa la misma clave `CLAVE_BARRA`.
+Con esa clave también se puede marcar una cerveza como agotada y
+cambiar su precio u oferta (`accion=carta`), sin abrir la planilla.
+
+La planilla trae una pestaña **LÉEME** (azul, primera) con una guía
+corta para el local. Colores de las pestañas: verde = la edita el
+local (`carta`, `happy-hour`); gris = la llena la página
+(`reservas`, `llamados`); rojo = solo Simple Ideal (`mesas`).
+`disponible` y `destacada` de la carta tienen lista desplegable
+`si`/`no`.
+
+**Pestaña `mesas` protegida.** Solo pueden editarla
+`joserespaldo4@gmail.com` y el robot (protección «Solo Simple Ideal»).
+Las columnas `yaw`, `pitch`, `plano_x`, `plano_y` y `forma` están
+ocultas para que el dueño no las toque; para verlas, clic en las
+flechitas entre las letras de columna. Ocultas igual salen en el CSV
+publicado, así que la página no cambia. Para cambiar la protección:
+**Datos → Proteger hojas y rangos**.
+
 ### Robot (cuenta de servicio)
 
 - Cuenta: `cursor-vitrina@simple-ideal-vitrina.iam.gserviceaccount.com`,
