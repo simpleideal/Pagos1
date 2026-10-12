@@ -495,13 +495,31 @@ GET:
 las mismas tarjetas y los mismos botones que el formulario de reserva.
 Pide la misma clave que `barra.html` y la guarda en el navegador.
 «Cambiar clave» la borra.
-Si la clave no sirve, se lee «Clave incorrecta».
+Si la clave no sirve, se lee «Clave incorrecta». No se abre ninguna
+sección y no aparece «Ejemplo».
 
 Después de la clave hay tres botones: Reservas, Llamados y Carta.
 En cada uno hay «Volver».
 
 Para dejarla en la pantalla de inicio: abrir `admin.html` en el
 teléfono, menú del navegador, «Agregar a inicio». El ícono es una B.
+
+### Cómo probarla
+
+1. Abre `admin.html` junto a `index.html`.
+2. Escribe una clave que no sea la de la barra y toca «Entrar».
+   Tiene que decir «Clave incorrecta». Reservas, Llamados y Carta
+   siguen cerradas. No sale «Ejemplo» ni un código del script.
+3. Con la clave de la barra (propiedad del script; no va en el
+   repositorio ni en un chat) se abren las tres secciones y leen la
+   hoja. Para mirar sin cambiar datos, no toques «Confirmar»,
+   «Rechazar», «Hay», «Agotado», el precio ni «Llegó sin reserva».
+4. `?accion=ocupadas` no usa clave. Si responde
+   `{ok:true, ocupadas:[]}`, el plano sigue como la hoja de mesas.
+
+El script publicado ya atiende reservas, llamados, carta y ocupadas.
+«Ejemplo» queda solo si esa acción todavía no está en la versión
+publicada.
 
 ### Reservas
 
@@ -512,8 +530,6 @@ Se actualiza cada 15 segundos.
 
 «Llegó sin reserva»: se toca el número de una mesa libre, las personas
 con + y −, y «Listo». Queda ocupada dos horas.
-
-Si el script todavía no tiene la acción, se ve «Ejemplo».
 
 El contrato está en `js/admin-api.js`:
 
@@ -558,8 +574,8 @@ Si el script responde un error, la pantalla dice una frase corta:
 escribe solo números», «Elige Hay o Agotado», «No está en la carta»,
 «Hay dos con el mismo nombre», «No había cambios».
 
-Si la acción todavía no está publicada, la carta de ejemplo sale de
-`datos/carta.csv` y se ve «Ejemplo».
+Si la acción de carta no está en la versión publicada, el ejemplo
+sale de `datos/carta.csv` y se ve «Ejemplo».
 
 ## Operación (para quien mantenga Bruma)
 
