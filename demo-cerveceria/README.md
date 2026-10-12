@@ -738,3 +738,8 @@ Enlace por mesa, `barra.html` y prueba: ver [«Llamado al mesero»](#llamado-al-
 La pantalla del teléfono está en [«Pantalla del personal»](#pantalla-del-personal).
 En producción el enlace es `https://simpleideal.github.io/Pagos1/demo-cerveceria/?mesa=N`.
 Tras probar con dos teléfonos, borra las filas de prueba en `llamados`.
+
+
+## Happy hour conectado a la hoja
+
+`FUENTE.happy` en `index.html` apunta a la pestaña «happy-hour» publicada como CSV (gid 292586376). Así, lo que el personal cambia en la sección Happy hour de `admin.html` (encendido/apagado, días y horas) le llega al cliente. Si la hoja no responde, la página usa `datos/happy-hour.csv`. Si falta la columna `activo`, se toma como encendido.
