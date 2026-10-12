@@ -453,10 +453,11 @@ de esa mesa.
 
 En el computador de la barra se abre `barra.html`, en la misma
 carpeta que `index.html`, y se deja esa pestaña abierta. Al
-entrar pide la clave, la guarda en el navegador y tiene
-«Cambiar clave» y «Salir». «Salir» pregunta «¿Cerrar sesión en
-este teléfono?». Si se confirma, borra la clave de este navegador
-y vuelve a pedirla. Cada 4 segundos mira los llamados pendientes.
+entrar pide la clave y la guarda en el navegador. Al final,
+debajo de los llamados y separado con una línea, está «Salir»
+en rojo claro. Pregunta «¿Cerrar sesión en este teléfono?». Si
+se confirma, borra la clave de este navegador y vuelve a pedirla.
+Cada 4 segundos mira los llamados pendientes.
 Una tarjeta se lee «Mesa 14 · hace 1 min». «Listo» avisa que el
 mesero va.
 
@@ -499,14 +500,14 @@ GET:
 `admin.html` es para el teléfono de quien atiende. Usa la misma fachada,
 las mismas tarjetas y los mismos botones que el formulario de reserva.
 Pide la misma clave que `barra.html` y la guarda en el navegador.
-«Cambiar clave» la borra. «Salir», en el menú, pregunta «¿Cerrar
-sesión en este teléfono?». Si se confirma, borra la clave de este
-teléfono y vuelve a la pantalla de la clave.
 Si la clave no sirve, se lee «Clave incorrecta». No se abre ninguna
 sección y no aparece «Ejemplo».
 
-Después de la clave hay tres botones: Reservas, Llamados y Carta.
-En cada uno hay «Volver».
+Después de la clave están Reservas, Llamados, Carta y Happy hour.
+Al final, separado con una línea, está «Salir» en rojo claro.
+Pregunta «¿Cerrar sesión en este teléfono?». Si se confirma, borra
+la clave de este teléfono y vuelve a pedirla. En cada sección hay
+«Volver».
 
 ### Instalar en el teléfono
 
@@ -523,7 +524,7 @@ Las llamadas al script no se guardan: salen siempre a la red. La clave
 tampoco queda en esa carcasa.
 
 Cuando se fusiona un cambio de la carcasa, sube el número del caché en
-`sw.js` (`bruma-personal-v3`). Al volver a abrir la app, el teléfono
+`sw.js` (`bruma-personal-v4`). Al volver a abrir la app, el teléfono
 toma la versión nueva. No hace falta instalarla otra vez.
 
 Las rutas son relativas a la carpeta `demo-cerveceria/`. En GitHub

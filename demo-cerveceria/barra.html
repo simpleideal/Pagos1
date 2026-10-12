@@ -125,16 +125,30 @@
             margin-bottom: 18px;
         }
 
-        .cambiar,
-        .salir,
         .sonido {
             padding: 10px 14px;
             font-size: 1rem;
         }
 
-        .salir { min-height: 48px; }
+        .sesion {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
+        }
 
-        .salir-confirma { margin: 0 0 16px; }
+        .salir {
+            min-height: 48px;
+            padding: 12px 18px;
+            border-radius: 999px;
+            border: 1.5px solid #d47a6e;
+            background: #f4d0c8;
+            color: #3d1814;
+            font-size: 1.05rem;
+        }
+
+        .sesion > .salir { width: 100%; }
+
+        .salir-confirma { margin-top: 12px; }
 
         .salir-confirma .pregunta {
             margin-bottom: 10px;
@@ -148,12 +162,6 @@
             flex: 1;
             min-height: 48px;
             font-size: 1.15rem;
-        }
-
-        #salir-si {
-            background: #1f8f4e;
-            border-color: transparent;
-            color: #f4fff7;
         }
 
         .sonido { margin-top: 0; }
@@ -198,20 +206,21 @@
 
         <section id="sala" hidden>
             <div class="barra-acciones">
-                <button type="button" class="cambiar" id="cambiar">Cambiar clave</button>
-                <button type="button" class="salir" id="salir">Salir</button>
                 <button type="button" class="sonido" id="sonido" aria-pressed="false">Activar sonido</button>
-            </div>
-            <div id="salir-confirma" class="salir-confirma" hidden>
-                <p class="pregunta">¿Cerrar sesión en este teléfono?</p>
-                <div class="salir-sino">
-                    <button type="button" id="salir-si">Sí</button>
-                    <button type="button" id="salir-no">No</button>
-                </div>
             </div>
             <p class="error" id="sala-aviso" hidden></p>
             <div id="lista"></div>
             <p class="vacio" id="vacio" hidden>No hay llamados.</p>
+            <div class="sesion">
+                <button type="button" class="salir" id="salir">Salir</button>
+                <div id="salir-confirma" class="salir-confirma" hidden>
+                    <p class="pregunta">¿Cerrar sesión en este teléfono?</p>
+                    <div class="salir-sino">
+                        <button type="button" class="salir" id="salir-si">Sí</button>
+                        <button type="button" id="salir-no">No</button>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
@@ -312,15 +321,6 @@
                 evento.preventDefault();
                 error.hidden = true;
                 empezar(campo.value);
-            });
-
-            document.getElementById('cambiar').addEventListener('click', function () {
-                borrarClave();
-                claveActual = '';
-                campo.value = '';
-                error.hidden = true;
-                if (aviso) aviso.hidden = true;
-                mostrarFormulario();
             });
 
             document.getElementById('salir').addEventListener('click', function () {
