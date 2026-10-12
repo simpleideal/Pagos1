@@ -501,8 +501,26 @@ sección y no aparece «Ejemplo».
 Después de la clave hay tres botones: Reservas, Llamados y Carta.
 En cada uno hay «Volver».
 
-Para dejarla en la pantalla de inicio: abrir `admin.html` en el
-teléfono, menú del navegador, «Agregar a inicio». El ícono es una B.
+### Instalar en el teléfono
+
+En Android, abre `admin.html` en Chrome. Si el navegador lo permite,
+debajo de «Entrar» aparece «Instalar en el teléfono». El nombre es
+Bruma Personal y el ícono es una B. Se abre sola, sin la barra del
+navegador.
+
+En iPhone, ábrela en Safari. Toca Compartir y luego «Agregar a
+pantalla de inicio». En la página se lee esa misma línea.
+
+La carcasa (la página, su código y los íconos) queda en el teléfono.
+Las llamadas al script no se guardan: salen siempre a la red. La clave
+tampoco queda en esa carcasa.
+
+Cuando se fusiona un cambio de la carcasa, sube el número del caché en
+`sw.js` (`bruma-personal-v1`). Al volver a abrir la app, el teléfono
+toma la versión nueva. No hace falta instalarla otra vez.
+
+Las rutas son relativas a la carpeta `demo-cerveceria/`. En GitHub
+Pages quedan bajo `/Pagos1/`.
 
 ### Cómo probarla
 
