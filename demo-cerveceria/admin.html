@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bruma</title>
+    <title>Bruma Personal</title>
     <meta name="description" content="Pantalla del personal de Cervecería Bruma.">
     <meta name="theme-color" content="#3d2918">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="Bruma">
-    <link rel="manifest" href="admin.webmanifest">
-    <link rel="apple-touch-icon" href="img/admin-icono-192.png">
+    <meta name="apple-mobile-web-app-title" content="Bruma Personal">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
     <link rel="icon" href="img/admin-icono-192.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -216,6 +217,27 @@
         .btn-gris { background: #8a847c; color: #1a120e; }
 
         .entrar { margin-top: 4px; }
+
+        .instalar {
+            margin-top: 14px;
+            text-align: center;
+            color: var(--cream-soft);
+            font-size: 0.88rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .instalar button {
+            border: 0;
+            background: none;
+            color: var(--cream-soft);
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            min-height: 44px;
+            padding: 8px;
+        }
 
         .volver,
         .cambiar {
@@ -438,6 +460,10 @@
             <button class="btn btn-wa entrar" type="submit">Entrar</button>
             <p class="aviso" id="clave-espera" hidden>Un momento…</p>
             <p class="aviso" id="clave-error" hidden>Clave incorrecta</p>
+            <p class="instalar" id="instalar" hidden>
+                <button type="button" id="instalar-boton">Instalar en el teléfono</button>
+            </p>
+            <p class="instalar" id="instalar-iphone" hidden>En iPhone: Compartir → Agregar a pantalla de inicio.</p>
         </form>
 
         <section id="vista-inicio" data-vista="inicio" hidden>
@@ -511,5 +537,6 @@
     <script src="js/mesas.js"></script>
     <script src="js/ocupadas.js"></script>
     <script src="js/admin-ui.js"></script>
+    <script src="js/instalar.js"></script>
 </body>
 </html>
