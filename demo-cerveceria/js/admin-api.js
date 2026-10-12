@@ -16,6 +16,11 @@
         Errores: disponible_invalido, precio_invalido, precio_oferta_invalido,
         no_existe, nombre_repetido, sin_cambios.
 
+   GET  ?accion=happy&clave=K
+        {ok, happy:{dias, inicio, fin, activo}}   dias como «lun-jue» o «lun,mie,vie»
+   POST {accion:'happy', clave, activo?, dias?, inicio?, fin?} -> {ok, happy}
+        Errores: activo_invalido, dias_invalidos, hora_invalida, horas_iguales.
+
    Si la acción no está publicada, el script responde accion_invalida
    y aquí se usan datos de ejemplo. */
 (function () {
@@ -28,7 +33,11 @@
         no_existe: 'No está en la carta',
         nombre_repetido: 'Hay dos con el mismo nombre',
         sin_cambios: 'No había cambios',
-        clave_invalida: 'Clave incorrecta'
+        clave_invalida: 'Clave incorrecta',
+        activo_invalido: 'Elige Encendido o Apagado',
+        dias_invalidos: 'Elige al menos un día',
+        hora_invalida: 'Esa hora no sirve',
+        horas_iguales: 'La hora de inicio y de término no pueden ser iguales'
     };
 
     var reservasDemo = null;
@@ -507,7 +516,71 @@
         });
     }
 
+    var HAPPY_CSV = 'datos/happy-hour.csv';
+    var happyDemo = null;
+
+    function cargarHappyCsv() {
+        if (happyDemo) return Promise.resolve(happyDemo);
+        return fetch(HAPPY_CSV, { cache: 'no-store' }).then(function (res) {
+            if (!res.ok) throw new Error('csv');
+            return res.text();
+        }).then(function (texto) {
+            var fila = parsearCsv(texto)[0] || {};
+            happyDemo = {
+                dias: fila.dias || 'lun-jue',
+                inicio: fila.inicio || '18:00',
+                fin: fila.fin || '20:00',
+                activo: /^no$/i.test(fila.activo || '') ? 'no' : 'si'
+            };
+            return happyDemo;
+        }).catch(function () {
+            happyDemo = { dias: 'lun-jue', inicio: '18:00', fin: '20:00', activo: 'si' };
+            return happyDemo;
+        });
+    }
+
+    function validarHappy(c) {
+        if (c.activo != null && c.activo !== 'si' && c.activo !== 'no') return 'activo_invalido';
+        if (c.dias != null && !/^[a-z,-]+$/.test(c.dias)) return 'dias_invalidos';
+        var hora = /^([01]\d|2[0-3]):[0-5]\d$/;
+        if (c.inicio != null && !hora.test(c.inicio)) return 'hora_invalida';
+        if (c.fin != null && !hora.test(c.fin)) return 'hora_invalida';
+        if (c.inicio != null && c.inicio === c.fin) return 'horas_iguales';
+        return '';
+    }
+
+    function happy(clave, demo, alReintentar) {
+        if (demo || !urlScript()) {
+            return cargarHappyCsv().then(function (h) { return { ok: true, happy: h, demo: true }; });
+        }
+        return get({ accion: 'happy', clave: clave || '' }, alReintentar).then(function (data) {
+            if (esAccionInvalida(data)) {
+                return cargarHappyCsv().then(function (h) { return { ok: true, happy: h, demo: true }; });
+            }
+            return data;
+        });
+    }
+
+    function guardarHappy(clave, cambios, demo) {
+        var malo = validarHappy(cambios);
+        if (malo) return Promise.resolve({ ok: false, error: malo });
+        function local() {
+            return cargarHappyCsv().then(function (h) {
+                Object.keys(cambios).forEach(function (k) { h[k] = cambios[k]; });
+                return { ok: true, happy: h };
+            });
+        }
+        if (demo || !urlScript()) return local();
+        var cuerpo = { accion: 'happy', clave: clave || '' };
+        Object.keys(cambios).forEach(function (k) { cuerpo[k] = cambios[k]; });
+        return post(cuerpo).then(function (data) {
+            return esAccionInvalida(data) ? local() : data;
+        });
+    }
+
     window.BRUMA_ADMIN = {
+        happy: happy,
+        guardarHappy: guardarHappy,
         disponibleHay: 'si',
         disponibleNo: 'no',
         frase: frase,

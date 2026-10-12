@@ -2,7 +2,7 @@
    Al cambiar el html, el css, el js o los íconos, sube el número:
    bruma-personal-v2. Así el teléfono toma la versión nueva al abrirla.
    No guarda la clave ni las respuestas del script. */
-var CACHE = "bruma-personal-v1";
+var CACHE = "bruma-personal-v2";
 
 var CARCASA = [
     "admin.html",

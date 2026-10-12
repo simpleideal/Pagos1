@@ -414,8 +414,10 @@ usa `datos/happy-hour.csv`. Si ese archivo tampoco deja tramos, se
 usan las constantes `HAPPY`: lunes a jueves, 18:00 a 20:00, zona
 `America/Santiago`. El reloj es el del dispositivo.
 
-Columnas: `dias`, `inicio`, `fin`, `zona`. La muestra trae
-`lun-jue`, `18:00`, `20:00`, `America/Santiago`.
+Columnas: `dias`, `inicio`, `fin`, `zona`, `activo`. La muestra trae
+`lun-jue`, `18:00`, `20:00`, `America/Santiago`, `si`. Si `activo` es
+`no`, la página del cliente no muestra el happy hour (ni usa las
+constantes). Si la columna no está, cuenta como `si`.
 
 Para otra hoja, pega su CSV publicado en `FUENTE.happy`.
 
@@ -656,6 +658,54 @@ publicado, así que la página no cambia. Para cambiar la protección:
   seguro del chat privado. El «ID de clave» solo no sirve.
 - Después, en la misma pestaña **Claves**, borra las llaves viejas
   (ícono de basurero) para que solo quede la que está en uso.
+
+### Happy hour
+
+Botón «Happy hour» en el menú. Tiene tres cosas, nada más:
+
+1. **Encendido / Apagado.** Apagado = los clientes no ven el happy hour.
+2. **Días**: se tocan para marcarlos (verde = sí).
+3. **Desde / Hasta** y el botón «Guardar horario».
+
+Los **precios de oferta no se cambian aquí**: ya se cambian en
+«Carta», en «Oferta» de cada cerveza. La pantalla lo dice con un
+enlace a Carta.
+
+Escribe en la pestaña «happy-hour», primera fila con datos. Si falta
+la columna `activo`, el script la crea solo y la llena con `si` (si
+falta la pestaña completa, también la crea).
+
+En `js/admin-api.js`:
+
+- GET `?accion=happy&clave=…` responde
+  `{ok, happy:{dias, inicio, fin, activo}}`.
+- POST `{accion:"happy", clave, activo?, dias?, inicio?, fin?}`
+  responde `{ok, happy}`. `dias` es `lun-jue` o `lun,mie,vie`
+  (sin tildes: lun mar mie jue vie sab dom); horas `HH:MM`.
+  Errores: «Elige Encendido o Apagado», «Elige al menos un día»,
+  «Esa hora no sirve», «La hora de inicio y de término no pueden ser
+  iguales».
+
+Si la acción no está publicada todavía, se ve «Ejemplo» con
+`datos/happy-hour.csv` y no se guarda nada en la hoja.
+
+**Para que el cliente vea el cambio:** la página del cliente lee
+`FUENTE.happy` en `index.html`. Hoy está vacía y usa el CSV de
+muestra. Pega ahí el enlace CSV publicado de la pestaña «happy-hour».
+
+### Pasos para José (en el PC)
+
+1. Abre el Sheets «bar la bruma» → Extensiones → Apps Script.
+2. Selecciona todo el código y bórralo. Pega el `apps-script/Code.gs`
+   **completo** de este repo. Guarda (disquete).
+3. **Implementar → Administrar implementaciones → lápiz → Versión:
+   Nueva versión → Implementar.** **Nunca «Nueva implementación»**:
+   cambia la URL y la página deja de funcionar.
+4. Abre la página del personal → Happy hour. Si ya no dice «Ejemplo»,
+   quedó.
+5. Publica la pestaña «happy-hour» (Archivo → Compartir → Publicar en
+   la web → happy-hour → .csv) y pasa el enlace para pegarlo en
+   `FUENTE.happy`. Nunca publiques «reservas» ni «llamados».
 
 ### Apps Script publicado
 

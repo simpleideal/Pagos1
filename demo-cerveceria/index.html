@@ -3162,6 +3162,8 @@
 
         var FUENTE = {
             carta: '',
+            // PEGA AQUÍ el enlace CSV publicado de la pestaña «happy-hour»
+            // (Archivo → Compartir → Publicar en la web → happy-hour → .csv).
             happy: '',
             mesas: '',
             csvLocal: 'datos/carta.csv',
@@ -3977,6 +3979,8 @@
         function tramosDesdeFilas(filas) {
             var lista = [];
             filas.forEach(function (fila) {
+                // activo = no: el personal apagó el happy hour.
+                if (/^no$/i.test(String(fila.activo || '').trim())) return;
                 var dias = parsearDias(fila.dias || '');
                 var inicio = normalizarHora(fila.inicio || '');
                 var fin = normalizarHora(fila.fin || '');
@@ -4005,6 +4009,10 @@
                 : resolverFuente(FUENTE.happy, FUENTE.happyLocal);
             return cargarFilas(fuente).then(function (filas) {
                 var tramos = tramosDesdeFilas(filas);
+                var apagado = filas.length && filas.every(function (fila) {
+                    return /^no$/i.test(String(fila.activo || '').trim());
+                });
+                if (apagado) return { tramos: [], zona: HAPPY.zona };
                 if (!tramos.length) return respaldo;
                 return { tramos: tramos, zona: tramos[0].zona || HAPPY.zona };
             }).catch(function (err) {
