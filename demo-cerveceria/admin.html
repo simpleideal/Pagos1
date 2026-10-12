@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bruma</title>
+    <meta name="description" content="Pantalla del personal de Cervecería Bruma.">
+    <meta name="theme-color" content="#3d2918">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Bruma">
+    <link rel="manifest" href="admin.webmanifest">
+    <link rel="apple-touch-icon" href="img/admin-icono-192.png">
+    <link rel="icon" href="img/admin-icono-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #f6efe3;
+            --cream-soft: #e7dccb;
+            --amber: #c47d2a;
+            --wa: #1f8f4e;
+            --wa-ink: #f4fff7;
+            --tinta: #2a2118;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { background: #2a1a12; color-scheme: light; }
+
+        body {
+            min-height: 100vh;
+            font-family: Outfit, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--cream);
+            background: transparent;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        body::before {
+            z-index: -2;
+            background: #120c09 url("img/fachada.jpg") center 42% / cover no-repeat;
+            filter: brightness(0.32) saturate(0.8);
+        }
+
+        body::after {
+            z-index: -1;
+            background: linear-gradient(180deg,
+                rgba(8, 5, 3, 0.35) 0%,
+                rgba(8, 5, 3, 0.88) 14%,
+                rgba(8, 5, 3, 0.88) 50%,
+                rgba(8, 5, 3, 0.5) 68%,
+                rgba(8, 5, 3, 0.74) 100%);
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--amber);
+            outline-offset: 3px;
+        }
+
+        main {
+            width: min(520px, 100%);
+            margin: 0 auto;
+            padding: 28px 16px 48px;
+        }
+
+        h1 {
+            font-family: Fraunces, Georgia, serif;
+            font-weight: 700;
+            font-size: 2.2rem;
+            letter-spacing: -0.03em;
+            line-height: 1.12;
+            text-align: center;
+            margin-bottom: 8px;
+            color: var(--cream);
+        }
+
+        h1::after {
+            content: "";
+            display: block;
+            width: 46%;
+            height: 2px;
+            background: rgba(246, 239, 227, 0.45);
+            margin: 8px auto 0;
+        }
+
+        .panel > h1 {
+            font-size: 1.45rem;
+            text-align: left;
+            margin-bottom: 12px;
+        }
+
+        .panel > h1::after { display: none; }
+
+        h2 {
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .ejemplo {
+            color: var(--cream-soft);
+            font-size: 0.88rem;
+            line-height: 1.4;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .aviso {
+            margin: 0 0 12px;
+            color: var(--cream);
+            font-size: 0.9rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        button,
+        summary { font: inherit; }
+
+        button {
+            appearance: none;
+            cursor: pointer;
+        }
+
+        button:disabled { opacity: 0.45; cursor: default; }
+
+        .panel,
+        .tarjeta,
+        #confirmadas {
+            background: rgba(0, 0, 0, 0.58);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            color: var(--cream);
+            border-radius: 8px;
+        }
+
+        .panel {
+            width: min(520px, 100%);
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .menu { display: grid; gap: 8px; }
+
+        .menu .btn { margin-top: 0; }
+
+        .tarjeta {
+            margin-bottom: 12px;
+            padding: 16px;
+        }
+
+        .campo {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cream-soft);
+        }
+
+        .campo input,
+        .precio-input {
+            display: block;
+            width: 100%;
+            min-height: 44px;
+            margin-top: 4px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(246, 239, 227, 0.28);
+            background: rgba(0, 0, 0, 0.45);
+            color: var(--cream);
+            font: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .btn,
+        .listo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            min-height: 48px;
+            margin-top: 8px;
+            padding: 12px 18px;
+            border-radius: 999px;
+            border: 1.5px solid transparent;
+            background: transparent;
+            color: var(--cream);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .btn:active,
+        .listo:active { transform: scale(0.98); }
+
+        .btn-wa,
+        .listo { background: var(--wa); color: var(--wa-ink); }
+
+        .btn-linea { border-color: rgba(246, 239, 227, 0.45); }
+
+        .btn-gris { background: #8a847c; color: #1a120e; }
+
+        .entrar { margin-top: 4px; }
+
+        .volver,
+        .cambiar {
+            display: block;
+            min-height: 44px;
+            padding: 8px 12px;
+            border: 0;
+            background: none;
+            color: var(--cream);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .volver { margin: 0 auto 4px; }
+
+        .cambiar {
+            width: 100%;
+            margin-top: 4px;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
+            border-radius: 0;
+        }
+
+        .sonido {
+            min-height: 40px;
+            margin-bottom: 12px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(246, 239, 227, 0.45);
+            background: transparent;
+            color: var(--cream);
+            font-size: 0.88rem;
+            font-weight: 700;
+        }
+
+        .telefono {
+            display: inline-block;
+            margin-top: 6px;
+            color: var(--cream);
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .pregunta {
+            margin-top: 10px;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .vacio {
+            color: var(--cream-soft);
+            font-size: 0.95rem;
+            line-height: 1.45;
+        }
+
+        #confirmadas { margin-top: 16px; padding: 16px; }
+
+        #confirmadas .tarjeta {
+            margin: 12px 0 0;
+            padding: 12px 0 0;
+            border-radius: 0;
+            background: none;
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
+        }
+
+        summary {
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #vista-reservas { padding-bottom: 88px; }
+
+        .fija {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+            background: rgba(8, 5, 3, 0.72);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+        }
+
+        .fija .btn { max-width: 520px; margin: 0 auto; }
+
+        #lista-carta .tarjeta {
+            margin: 0;
+            padding: 14px 0;
+            border-radius: 0;
+            background: none;
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+            border-top: 1px solid rgba(246, 239, 227, 0.28);
+        }
+
+        #lista-carta .tarjeta:first-child {
+            border-top: 0;
+            padding-top: 0;
+        }
+
+        .interruptor {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .estado {
+            flex: 1;
+            min-height: 44px;
+            border-radius: 999px;
+            border: 1px solid rgba(246, 239, 227, 0.28);
+            background: transparent;
+            color: var(--cream-soft);
+            font-size: 0.88rem;
+            font-weight: 700;
+        }
+
+        .estado.activo {
+            border-color: transparent;
+            background: var(--wa);
+            color: var(--wa-ink);
+        }
+
+        .estado.activo[aria-pressed="true"]:last-child,
+        .interruptor .estado:last-child.activo {
+            background: #8a847c;
+            color: #1a120e;
+        }
+
+        .precio {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            min-height: 44px;
+            margin-top: 8px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(246, 239, 227, 0.28);
+            background: rgba(0, 0, 0, 0.45);
+            color: var(--amber);
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .oferta { margin-top: 4px; }
+
+        .mesas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 8px 0 14px;
+        }
+
+        .mesa {
+            width: 48px;
+            height: 48px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--wa);
+            color: var(--wa-ink);
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .mesa.elegida { box-shadow: 0 0 0 3px var(--cream); }
+
+        .personas {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0 12px;
+        }
+
+        .personas p {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cream-soft);
+        }
+
+        .paso {
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            border: 1px solid rgba(246, 239, 227, 0.45);
+            background: transparent;
+            color: var(--cream);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        #personas-num {
+            min-width: 32px;
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            letter-spacing: 0;
+            text-transform: none;
+            color: var(--cream);
+            text-align: center;
+        }
+
+        [hidden] { display: none !important; }
+    </style>
+</head>
+<body>
+    <main>
+        <form class="panel" id="vista-clave" data-vista="clave">
+            <h1>Bruma</h1>
+            <label class="campo">Clave de la barra
+                <input id="clave" type="password" name="clave" autocomplete="current-password" required>
+            </label>
+            <button class="btn btn-wa entrar" type="submit">Entrar</button>
+            <p class="aviso" id="clave-espera" hidden>Un momento…</p>
+            <p class="aviso" id="clave-error" hidden>Clave incorrecta</p>
+        </form>
+
+        <section id="vista-inicio" data-vista="inicio" hidden>
+            <h1>Bruma</h1>
+            <p class="ejemplo" id="ejemplo-inicio" hidden>Ejemplo</p>
+            <div class="panel menu">
+                <button type="button" class="btn btn-linea" data-ir="reservas">Reservas</button>
+                <button type="button" class="btn btn-linea" data-ir="llamados">Llamados</button>
+                <button type="button" class="btn btn-linea" data-ir="carta">Carta</button>
+                <button type="button" class="cambiar" id="cambiar">Cambiar clave</button>
+            </div>
+        </section>
+
+        <section id="vista-reservas" data-vista="reservas" hidden>
+            <button type="button" class="volver" data-ir="inicio">Volver</button>
+            <h1>Pendientes</h1>
+            <p class="ejemplo" data-ejemplo="reservas" hidden>Ejemplo</p>
+            <p class="aviso" id="aviso-reservas" hidden></p>
+            <div id="lista-pendientes"></div>
+            <p class="vacio" id="vacio-pendientes" hidden>No hay pendientes.</p>
+            <details id="confirmadas">
+                <summary>Confirmadas hoy</summary>
+                <div id="lista-confirmadas"></div>
+            </details>
+            <div class="fija">
+                <button type="button" class="btn btn-linea" data-ir="llegada">Llegó sin reserva</button>
+            </div>
+        </section>
+
+        <section id="vista-llegada" data-vista="llegada" hidden>
+            <button type="button" class="volver" data-ir="reservas">Volver</button>
+            <h1>¿Qué mesa?</h1>
+            <p class="aviso" id="aviso-llegada" hidden></p>
+            <div class="mesas" id="mesas-libre"></div>
+            <p class="vacio" id="sin-mesas" hidden>No hay mesas libres.</p>
+            <div class="personas">
+                <p>Personas</p>
+                <button type="button" class="paso" id="personas-menos" aria-label="Menos">−</button>
+                <p id="personas-num">2</p>
+                <button type="button" class="paso" id="personas-mas" aria-label="Más">+</button>
+            </div>
+            <button type="button" class="btn btn-wa" id="llegada-listo">Listo</button>
+        </section>
+
+        <section id="vista-llamados" data-vista="llamados" hidden>
+            <button type="button" class="volver" data-ir="inicio">Volver</button>
+            <h1>Llamados</h1>
+            <p class="ejemplo" data-ejemplo="llamados" hidden>Ejemplo</p>
+            <div class="acciones">
+                <button type="button" class="sonido" id="sonido" aria-pressed="false">Activar sonido</button>
+            </div>
+            <p class="aviso" id="aviso-llamados" hidden></p>
+            <div id="lista-llamados"></div>
+            <p class="vacio" id="vacio-llamados" hidden>No hay llamados.</p>
+        </section>
+
+        <section id="vista-carta" data-vista="carta" hidden>
+            <button type="button" class="volver" data-ir="inicio">Volver</button>
+            <h1>Carta</h1>
+            <p class="ejemplo" data-ejemplo="carta" hidden>Ejemplo</p>
+            <div class="panel">
+                <p class="aviso" id="aviso-carta" hidden></p>
+                <div id="lista-carta"></div>
+            </div>
+        </section>
+    </main>
+    <script src="js/reservas-url.js"></script>
+    <script src="js/llamados.js"></script>
+    <script src="js/admin-api.js"></script>
+    <script src="js/sala-llamados.js"></script>
+    <script src="js/mesas.js"></script>
+    <script src="js/ocupadas.js"></script>
+    <script src="js/admin-ui.js"></script>
+</body>
+</html>

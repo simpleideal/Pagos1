@@ -289,8 +289,8 @@ publicado:
 
 `https://script.google.com/macros/s/AKfycbzbHLeRKXEEPZznsRXroGQXJtL2tTRFsz7MyqNL4Nb7g4I60RZKXpME4sac2dbtAKM/exec`
 
-La usan el cuadrito, la franja del mesero y `barra.html`. Para
-cambiarla, edita solo esa línea. Si José publica otra
+La usan el cuadrito, la franja del mesero, `barra.html` y `admin.html`.
+Para cambiarla, edita solo esa línea. Si José publica otra
 implementación, pega ahí la URL nueva que termina en `/exec`.
 
 Si queda `''`, el cuadrito solo abre WhatsApp y los llamados
@@ -489,6 +489,94 @@ GET:
   `{ok:true, llamados:[{id, mesa, hora, estado}]}`.
   Si la clave no sirve, `{ok:false}`.
 
+## Pantalla del personal
+
+`admin.html` es para el teléfono de quien atiende. Usa la misma fachada,
+las mismas tarjetas y los mismos botones que el formulario de reserva.
+Pide la misma clave que `barra.html` y la guarda en el navegador.
+«Cambiar clave» la borra.
+Si la clave no sirve, se lee «Clave incorrecta». No se abre ninguna
+sección y no aparece «Ejemplo».
+
+Después de la clave hay tres botones: Reservas, Llamados y Carta.
+En cada uno hay «Volver».
+
+Para dejarla en la pantalla de inicio: abrir `admin.html` en el
+teléfono, menú del navegador, «Agregar a inicio». El ícono es una B.
+
+### Cómo probarla
+
+1. Abre `admin.html` junto a `index.html`.
+2. Escribe una clave que no sea la de la barra y toca «Entrar».
+   Tiene que decir «Clave incorrecta». Reservas, Llamados y Carta
+   siguen cerradas. No sale «Ejemplo» ni un código del script.
+3. Con la clave de la barra (propiedad del script; no va en el
+   repositorio ni en un chat) se abren las tres secciones y leen la
+   hoja. Para mirar sin cambiar datos, no toques «Confirmar»,
+   «Rechazar», «Hay», «Agotado», el precio ni «Llegó sin reserva».
+4. `?accion=ocupadas` no usa clave. Si responde
+   `{ok:true, ocupadas:[]}`, el plano sigue como la hoja de mesas.
+
+El script publicado ya atiende reservas, llamados, carta y ocupadas.
+«Ejemplo» queda solo si esa acción todavía no está en la versión
+publicada.
+
+### Reservas
+
+Arriba, las pendientes. Cada una se lee «Mesa 5 · sáb 21:00 · 4
+personas · Juan», con el teléfono, «Confirmar» y «Rechazar».
+«Rechazar» pregunta «¿Rechazar?». Abajo, «Confirmadas hoy», cerrado.
+Se actualiza cada 15 segundos.
+
+«Llegó sin reserva»: se toca el número de una mesa libre, las personas
+con + y −, y «Listo». Queda ocupada dos horas.
+
+El contrato está en `js/admin-api.js`:
+
+- GET `?accion=reservas&clave=…` responde
+  `{ok, reservas:[{id, mesa, fecha, hora, personas, nombre, telefono, estado}]}`.
+- POST `{accion:"confirmar"|"rechazar", id, clave}`.
+- POST `{accion:"sin_reserva", mesa, personas, minutos, clave}`
+  responde `{ok, id}`. Sin `minutos`, son 120.
+
+### Ocupadas en la página pública
+
+El plano y el 360 siguen la hoja de mesas (`datos/mesas.csv` o
+`FUENTE.mesas`). Además, si `?accion=ocupadas` responde
+`{ok, ocupadas:[{mesa, fecha, desde, hasta}]}`, esas mesas se marcan
+ocupadas en la hora de ahora. Si ese pedido falla, el plano queda
+como la hoja de mesas.
+
+### Llamados
+
+La misma lista que `barra.html`. El código está en
+`js/sala-llamados.js`. `barra.html` sigue en el computador de la barra.
+
+### Carta
+
+Cada cerveza tiene «Hay» o «Agotado», y el precio se toca para
+cambiarlo (teclado de números). Si tiene oferta, también se edita, con
+«Quitar oferta». Al guardar se lee «Listo. Se ve en la carta en unos
+minutos».
+
+`disponible` se manda `si` o `no`, igual que la hoja. Para quitar la
+oferta se manda `precio_oferta` vacío.
+
+En `js/admin-api.js`:
+
+- GET `?accion=carta&clave=…` responde
+  `{ok, carta:[{fila, nombre, precio, precio_oferta, disponible}]}`.
+- POST `{accion:"carta", clave, nombre, disponible?, precio?, precio_oferta?}`
+  responde `{ok, fila}`. Busca por nombre.
+
+Si el script responde un error, la pantalla dice una frase corta:
+«Ese precio no sirve, escribe solo números», «Esa oferta no sirve,
+escribe solo números», «Elige Hay o Agotado», «No está en la carta»,
+«Hay dos con el mismo nombre», «No había cambios».
+
+Si la acción de carta no está en la versión publicada, el ejemplo
+sale de `datos/carta.csv` y se ve «Ejemplo».
+
 ## Operación (para quien mantenga Bruma)
 
 ### Planilla «bar la bruma»
@@ -579,5 +667,6 @@ terminar.
 ### Pegatinas y pantalla de la barra
 
 Enlace por mesa, `barra.html` y prueba: ver [«Llamado al mesero»](#llamado-al-mesero).
+La pantalla del teléfono está en [«Pantalla del personal»](#pantalla-del-personal).
 En producción el enlace es `https://simpleideal.github.io/Pagos1/demo-cerveceria/?mesa=N`.
 Tras probar con dos teléfonos, borra las filas de prueba en `llamados`.
