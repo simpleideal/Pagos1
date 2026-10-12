@@ -33,6 +33,8 @@
     function borrarClave() {
         try { localStorage.removeItem(CLAVE_GUARDADA); }
         catch (error) {}
+        try { sessionStorage.removeItem(CLAVE_GUARDADA); }
+        catch (error) {}
     }
 
     function $(id) { return document.getElementById(id); }
@@ -719,6 +721,26 @@
     });
 
     $('cambiar').addEventListener('click', function () {
+        borrarClave();
+        claveActual = '';
+        campoClave.value = '';
+        errorClave.hidden = true;
+        if (esperaClave) esperaClave.hidden = true;
+        mostrar('clave');
+        campoClave.focus();
+    });
+
+    $('salir').addEventListener('click', function () {
+        $('salir').hidden = true;
+        $('salir-confirma').hidden = false;
+    });
+    $('salir-no').addEventListener('click', function () {
+        $('salir-confirma').hidden = true;
+        $('salir').hidden = false;
+    });
+    $('salir-si').addEventListener('click', function () {
+        $('salir-confirma').hidden = true;
+        $('salir').hidden = false;
         borrarClave();
         claveActual = '';
         campoClave.value = '';

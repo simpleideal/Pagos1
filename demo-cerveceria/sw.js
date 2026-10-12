@@ -1,8 +1,8 @@
 /* Carcasa de Bruma Personal.
-   Al cambiar el html, el css, el js o los íconos, sube el número:
-   bruma-personal-v2. Así el teléfono toma la versión nueva al abrirla.
+   Al cambiar el html, el css, el js o los íconos, sube el número
+   (ahora bruma-personal-v3). Así el teléfono toma la versión nueva.
    No guarda la clave ni las respuestas del script. */
-var CACHE = "bruma-personal-v2";
+var CACHE = "bruma-personal-v3";
 
 var CARCASA = [
     "admin.html",
