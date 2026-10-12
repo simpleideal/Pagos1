@@ -447,6 +447,26 @@
             text-align: center;
         }
 
+        .happy-nota { margin-top: 10px; }
+        .happy-horario { margin-top: 16px; }
+        #happy-dias .mesa { width: auto; min-width: 56px; padding: 0 10px; }
+        .mesa.apagada {
+            background: transparent;
+            color: var(--cream-soft);
+            border: 1px solid rgba(246, 239, 227, 0.28);
+        }
+        .horas { display: flex; gap: 12px; margin-bottom: 14px; }
+        .horas .campo { flex: 1; }
+        .horas input { font-size: 1.3rem; }
+        .enlace {
+            border: 0;
+            padding: 0;
+            background: none;
+            color: var(--amber);
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
         [hidden] { display: none !important; }
     </style>
 </head>
@@ -473,6 +493,7 @@
                 <button type="button" class="btn btn-linea" data-ir="reservas">Reservas</button>
                 <button type="button" class="btn btn-linea" data-ir="llamados">Llamados</button>
                 <button type="button" class="btn btn-linea" data-ir="carta">Carta</button>
+                <button type="button" class="btn btn-linea" data-ir="happy">Happy hour</button>
                 <button type="button" class="cambiar" id="cambiar">Cambiar clave</button>
             </div>
         </section>
@@ -527,6 +548,32 @@
             <div class="panel">
                 <p class="aviso" id="aviso-carta" hidden></p>
                 <div id="lista-carta"></div>
+            </div>
+        </section>
+
+        <section id="vista-happy" data-vista="happy" hidden>
+            <button type="button" class="volver" data-ir="inicio">Volver</button>
+            <h1>Happy hour</h1>
+            <p class="ejemplo" data-ejemplo="happy" hidden>Ejemplo</p>
+            <div class="panel">
+                <p class="aviso" id="aviso-happy" hidden></p>
+                <h2>¿Hay happy hour?</h2>
+                <div class="interruptor" id="happy-interruptor" role="group" aria-label="Happy hour"></div>
+                <p class="vacio happy-nota" id="happy-estado"></p>
+            </div>
+            <div class="panel happy-horario">
+                <h2>Días</h2>
+                <div class="mesas" id="happy-dias"></div>
+                <div class="horas">
+                    <label class="campo">Desde
+                        <input id="happy-inicio" type="time" step="900">
+                    </label>
+                    <label class="campo">Hasta
+                        <input id="happy-fin" type="time" step="900">
+                    </label>
+                </div>
+                <button type="button" class="btn btn-wa" id="happy-guardar">Guardar horario</button>
+                <p class="vacio happy-nota">Los precios de oferta se cambian en <button type="button" class="enlace" data-ir="carta">Carta</button>, en «Oferta» de cada cerveza.</p>
             </div>
         </section>
     </main>

@@ -5,7 +5,7 @@
     var LISTO_CARTA = 'Listo. Se ve en la carta en unos minutos';
 
     var claveActual = '';
-    var modo = { reservas: false, llamados: false, carta: false };
+    var modo = { reservas: false, llamados: false, carta: false, happy: false };
     var vista = 'clave';
     var salaCtrl = null;
     var preguntando = null;
@@ -48,7 +48,7 @@
 
     function pintarEjemplo() {
         var inicio = $('ejemplo-inicio');
-        if (inicio) inicio.hidden = !(modo.reservas || modo.llamados || modo.carta);
+        if (inicio) inicio.hidden = !(modo.reservas || modo.llamados || modo.carta || modo.happy);
         Array.prototype.forEach.call(document.querySelectorAll('[data-ejemplo]'), function (nodo) {
             var cual = nodo.getAttribute('data-ejemplo');
             nodo.hidden = !modo[cual];
@@ -109,6 +109,7 @@
             modo.reservas = !!res.demoReservas;
             modo.llamados = !!res.demoLlamados;
             modo.carta = false;
+            modo.happy = false;
             if (res.guardarClave) guardarClave(claveActual);
             else borrarClave();
             campoClave.value = '';
@@ -487,6 +488,116 @@
         });
     }
 
+    // ---------- Happy hour ----------
+    var DIAS_HAPPY = ['lun', 'mar', 'mie', 'jue', 'vie', 'sab', 'dom'];
+    var DIAS_HAPPY_TXT = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+    var happyActual = null;
+    var diasElegidos = [];
+
+    function avisoHappy(texto) {
+        var nodo = $('aviso-happy');
+        nodo.hidden = !texto;
+        nodo.textContent = texto || '';
+    }
+
+    // «lun-jue» o «lun,mie,vie» -> [0, 1, 2, 3] (0 = lunes)
+    function leerDias(texto) {
+        var lista = [];
+        String(texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .split(',').forEach(function (parte) {
+                var r = parte.trim().split('-');
+                var a = DIAS_HAPPY.indexOf(r[0].slice(0, 3));
+                var b = r.length > 1 ? DIAS_HAPPY.indexOf(r[1].slice(0, 3)) : a;
+                if (a < 0 || b < 0) return;
+                for (var i = a, g = 0; g < 7; i = (i + 1) % 7, g += 1) {
+                    if (lista.indexOf(i) === -1) lista.push(i);
+                    if (i === b) break;
+                }
+            });
+        return lista.sort();
+    }
+
+    function escribirDias(lista) {
+        var orden = lista.slice().sort();
+        var seguidos = orden.length > 1 && orden.every(function (d, i) { return i === 0 || d === orden[i - 1] + 1; });
+        if (seguidos) return DIAS_HAPPY[orden[0]] + '-' + DIAS_HAPPY[orden[orden.length - 1]];
+        return orden.map(function (d) { return DIAS_HAPPY[d]; }).join(',');
+    }
+
+    function pintarHappyAdmin() {
+        var h = happyActual;
+        var encendido = h.activo !== 'no';
+        var grupo = $('happy-interruptor');
+        grupo.innerHTML = '';
+        grupo.appendChild(botonEstado('Encendido', encendido, function () {
+            if (!encendido) enviarHappy({ activo: 'si' }, 'Listo. Happy hour encendido');
+        }));
+        grupo.appendChild(botonEstado('Apagado', !encendido, function () {
+            if (encendido) enviarHappy({ activo: 'no' }, 'Listo. Happy hour apagado');
+        }));
+        var caja = $('happy-dias');
+        caja.innerHTML = '';
+        DIAS_HAPPY_TXT.forEach(function (txt, i) {
+            var elegido = diasElegidos.indexOf(i) !== -1;
+            var b = boton(elegido ? 'mesa elegida' : 'mesa apagada', txt, function () {
+                if (elegido) diasElegidos = diasElegidos.filter(function (d) { return d !== i; });
+                else diasElegidos.push(i);
+                pintarHappyAdmin();
+            });
+            b.setAttribute('aria-pressed', elegido ? 'true' : 'false');
+            caja.appendChild(b);
+        });
+        $('happy-estado').textContent = encendido
+            ? 'Los clientes ven el happy hour.'
+            : 'Apagado: los clientes no ven el happy hour.';
+    }
+
+    function enviarHappy(cambios, listo) {
+        avisoHappy('Un momento…');
+        window.BRUMA_ADMIN.guardarHappy(claveActual, cambios, modo.happy).then(function (data) {
+            if (data && data.ok === true) {
+                if (data.happy) happyActual = data.happy;
+                else Object.keys(cambios).forEach(function (k) { happyActual[k] = cambios[k]; });
+                diasElegidos = leerDias(happyActual.dias);
+                pintarHappyAdmin();
+                avisoHappy(listo + '. Se ve en la página en unos minutos');
+                return;
+            }
+            if (data && data.error === 'clave_invalida') { claveMala(); return; }
+            avisoHappy(window.BRUMA_ADMIN.frase(data && data.error));
+        });
+    }
+
+    function guardarHorario() {
+        if (!diasElegidos.length) { avisoHappy('Elige al menos un día'); return; }
+        var inicio = $('happy-inicio').value;
+        var fin = $('happy-fin').value;
+        if (!inicio || !fin) { avisoHappy('Escribe la hora de inicio y de término'); return; }
+        enviarHappy({ dias: escribirDias(diasElegidos), inicio: inicio, fin: fin }, 'Listo. Horario guardado');
+    }
+
+    function abrirHappy() {
+        mostrar('happy');
+        avisoHappy('');
+        window.BRUMA_ADMIN.happy(claveActual, modo.happy, alReintentar).then(function (data) {
+            if (data && data.ok === true && data.happy) {
+                modo.happy = !!data.demo;
+                pintarEjemplo();
+                happyActual = data.happy;
+                diasElegidos = leerDias(happyActual.dias);
+                $('happy-inicio').value = happyActual.inicio || '';
+                $('happy-fin').value = happyActual.fin || '';
+                avisoHappy('');
+                pintarHappyAdmin();
+                return;
+            }
+            if (data && data.error === 'clave_invalida') claveMala();
+            else avisoHappy('No se pudo leer.');
+        });
+    }
+
+    $('happy-guardar').addEventListener('click', guardarHorario);
+
     function mesasLibres() {
         var lista = window.BRUMA_MESAS;
         if (!lista || !lista.length) {
@@ -596,6 +707,7 @@
             if (destino === 'reservas') abrirReservas();
             else if (destino === 'llamados') abrirLlamados();
             else if (destino === 'carta') abrirCarta();
+            else if (destino === 'happy') abrirHappy();
             else if (destino === 'llegada') abrirLlegada();
             else if (destino === 'inicio') mostrar('inicio');
         });

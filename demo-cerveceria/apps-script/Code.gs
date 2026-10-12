@@ -28,6 +28,7 @@ var FORMATO_FECHA = 'yyyy-MM-dd HH:mm:ss';
  * GET ?accion=llamados&clave=K  -> {ok, llamados:[{id, mesa, hora, estado}]}  (pantalla de la barra)
  * GET ?accion=reservas&clave=K  -> {ok, reservas:[{id, fila, creada, mesa, fecha, hora, personas, nombre, telefono, estado}]}
  * GET ?accion=carta&clave=K     -> {ok, carta:[{fila, nombre, precio, precio_oferta, disponible}]}
+ * GET ?accion=happy&clave=K     -> {ok, happy:{dias, inicio, fin, activo}}
  * GET ?accion=ocupadas          -> {ok, ocupadas:[{mesa, fecha, desde, hasta}]}  (público, sin datos personales)
  */
 function doGet(e) {
@@ -40,6 +41,10 @@ function doGet(e) {
     if (accion === 'carta') {
       if (!claveValida_(p.clave)) return responder_({ ok: false, error: 'clave_invalida' });
       return listarCarta_();
+    }
+    if (accion === 'happy') {
+      if (!claveValida_(p.clave)) return responder_({ ok: false, error: 'clave_invalida' });
+      return listarHappy_();
     }
     if (accion === 'reservas') {
       if (!claveValida_(p.clave)) return responder_({ ok: false, error: 'clave_invalida' });
@@ -61,6 +66,7 @@ function doGet(e) {
  * POST accion=listo {id, clave}      -> {ok}
  * POST accion=confirmar|rechazar {id, clave} -> {ok}
  * POST accion=carta {clave, nombre, disponible?, precio?, precio_oferta?} -> {ok, fila}
+ * POST accion=happy {clave, activo?, dias?, inicio?, fin?} -> {ok, happy}
  * POST accion=sin_reserva {mesa, personas?, minutos?, clave} -> {ok, id}
  */
 function doPost(e) {
@@ -77,6 +83,7 @@ function doPost(e) {
   if (accion === 'rechazar') return cambiarEstadoReserva_(datos, 'rechazada');
   if (accion === 'sin_reserva') return sinReserva_(datos);
   if (accion === 'carta') return cambiarCarta_(datos);
+  if (accion === 'happy') return cambiarHappy_(datos);
   if (accion !== 'reservar') return responder_({ ok: false, error: 'accion_invalida' });
   return reservar_(datos);
 }
@@ -573,6 +580,121 @@ function cambiarCarta_(datos) {
     }
     SpreadsheetApp.flush();
     return responder_({ ok: true, fila: fila });
+  });
+}
+
+// ---------- Happy hour (personal, con CLAVE_BARRA) ----------
+// Pestaña «happy-hour»: dias, inicio, fin, zona, activo. Se usa la primera
+// fila con datos. Si falta la columna «activo», el script la crea con «si».
+// La página del cliente oculta el happy hour cuando activo es «no».
+
+var HOJA_HAPPY = 'happy-hour';
+var COLUMNAS_HAPPY = ['dias', 'inicio', 'fin', 'zona', 'activo'];
+var DIAS_HAPPY = ['lun', 'mar', 'mie', 'jue', 'vie', 'sab', 'dom'];
+var DIAS_PATRON = /^(lun|mar|mie|jue|vie|sab|dom)(-(lun|mar|mie|jue|vie|sab|dom))?(,(lun|mar|mie|jue|vie|sab|dom)(-(lun|mar|mie|jue|vie|sab|dom))?)*$/;
+var HORA_PATRON = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+function hojaHappy_() {
+  var libro = SpreadsheetApp.getActiveSpreadsheet();
+  var hoja = libro.getSheetByName(HOJA_HAPPY);
+  if (!hoja) {
+    hoja = libro.insertSheet(HOJA_HAPPY);
+    hoja.getRange(1, 1, 2, COLUMNAS_HAPPY.length).setNumberFormat('@');
+    hoja.getRange(1, 1, 2, COLUMNAS_HAPPY.length).setValues([COLUMNAS_HAPPY, ['lun-jue', '18:00', '20:00', ZONA, 'si']]);
+    hoja.getRange(1, 1, 1, COLUMNAS_HAPPY.length).setFontWeight('bold');
+  }
+  var ancho = Math.max(hoja.getLastColumn(), 1);
+  var encabezado = hoja.getRange(1, 1, 1, ancho).getValues()[0];
+  var col = {};
+  for (var j = 0; j < encabezado.length; j++) {
+    var n = texto_(encabezado[j]).toLowerCase();
+    if (n && col[n] === undefined) col[n] = j;
+  }
+  for (var k = 0; k < COLUMNAS_HAPPY.length; k++) {
+    var nombre = COLUMNAS_HAPPY[k];
+    if (col[nombre] !== undefined) continue;
+    ancho += 1;
+    hoja.getRange(1, ancho, 1, 1).setValue(nombre).setFontWeight('bold');
+    col[nombre] = ancho - 1;
+    if (nombre === 'activo' && hoja.getLastRow() >= 2) {
+      var vacias = [];
+      for (var r = 2; r <= hoja.getLastRow(); r++) vacias.push(['si']);
+      hoja.getRange(2, ancho, vacias.length, 1).setValues(vacias);
+    }
+  }
+  var alto = hoja.getLastRow();
+  var fila = 2;
+  if (alto >= 2) {
+    var filas = hoja.getRange(2, 1, alto - 1, ancho).getValues();
+    for (var i = 0; i < filas.length; i++) {
+      if (texto_(filas[i][col.dias]) || texto_(filas[i][col.inicio])) { fila = i + 2; break; }
+    }
+  }
+  var valores = hoja.getRange(fila, 1, 1, ancho).getValues()[0];
+  return { hoja: hoja, col: col, fila: fila, valores: valores };
+}
+
+function datosHappy_(h) {
+  var activo = texto_(h.valores[h.col.activo]).toLowerCase();
+  return {
+    dias: texto_(h.valores[h.col.dias]).toLowerCase(),
+    inicio: horaTexto_(h.valores[h.col.inicio]),
+    fin: horaTexto_(h.valores[h.col.fin]),
+    activo: activo === 'no' ? 'no' : 'si'
+  };
+}
+
+function listarHappy_() {
+  return conLock_(function () {
+    var h = hojaHappy_();
+    SpreadsheetApp.flush();
+    return responder_({ ok: true, happy: datosHappy_(h) });
+  });
+}
+
+function cambiarHappy_(datos) {
+  if (!claveValida_(datos.clave)) return responder_({ ok: false, error: 'clave_invalida' });
+  var cambios = {};
+  if (datos.activo !== undefined) {
+    var a = texto_(datos.activo).toLowerCase();
+    if (DISPONIBLE_VALORES.indexOf(a) === -1) return responder_({ ok: false, error: 'activo_invalido' });
+    cambios.activo = a;
+  }
+  if (datos.dias !== undefined) {
+    var d = texto_(datos.dias).toLowerCase().replace(/\s+/g, '');
+    if (!DIAS_PATRON.test(d)) return responder_({ ok: false, error: 'dias_invalidos' });
+    cambios.dias = d;
+  }
+  if (datos.inicio !== undefined) {
+    var ini = texto_(datos.inicio);
+    if (!HORA_PATRON.test(ini)) return responder_({ ok: false, error: 'hora_invalida' });
+    cambios.inicio = ini;
+  }
+  if (datos.fin !== undefined) {
+    var fin = texto_(datos.fin);
+    if (!HORA_PATRON.test(fin)) return responder_({ ok: false, error: 'hora_invalida' });
+    cambios.fin = fin;
+  }
+  if (Object.keys(cambios).length === 0) return responder_({ ok: false, error: 'sin_cambios' });
+
+  return conLock_(function () {
+    var h = hojaHappy_();
+    var actual = datosHappy_(h);
+    var inicio = cambios.inicio || actual.inicio;
+    var termino = cambios.fin || actual.fin;
+    if (inicio && inicio === termino) return responder_({ ok: false, error: 'horas_iguales' });
+    for (var campo in cambios) {
+      // Formato texto: así Sheets no convierte «18:00» en una fecha.
+      var celda = h.hoja.getRange(h.fila, h.col[campo] + 1, 1, 1);
+      celda.setNumberFormat('@');
+      celda.setValues([[cambios[campo]]]);
+      h.valores[h.col[campo]] = cambios[campo];
+    }
+    if (!texto_(h.valores[h.col.zona])) {
+      h.hoja.getRange(h.fila, h.col.zona + 1, 1, 1).setValue(ZONA);
+    }
+    SpreadsheetApp.flush();
+    return responder_({ ok: true, happy: datosHappy_(h) });
   });
 }
 
