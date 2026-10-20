@@ -126,3 +126,7 @@ bloque **CARTA**. Es otra página, solo la carta, con idioma y voz.
 El botón 🔊 busca primero un MP3 (`pastel-de-choclo.es.mp3`) y, si
 no está, usa la voz del navegador. `FUENTE.carta` queda vacío hasta
 pegar el CSV publicado. Pasos: `demo-carta-idiomas/HOJA.md`.
+
+## Seguridad: recursos externos verificados (integridad)
+Los estilos y scripts que la página carga desde otros sitios (jsdelivr, cdnjs, Google) ahora llevan una "huella" (`integrity="sha384-…"`). El navegador comprueba que el archivo no haya sido modificado; si alguien lo cambiara, simplemente no se carga. La página se ve igual que antes.
+Si algún día se cambia la versión de una librería, hay que actualizar también su huella.
