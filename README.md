@@ -63,6 +63,9 @@ entre sí.
   y lectura en voz alta. Si no hay hoja, usa
   `demo-carta-idiomas/datos/carta.csv`. Cómo publicar la hoja y
   `GOOGLETRANSLATE`: `demo-carta-idiomas/HOJA.md`. — `demo-carta-idiomas/`
+- **Mojados:** menú del local en una sola imagen, sin reescribirla.
+  El pie enlaza Instagram, Facebook, TikTok y la reseña de Google.
+  — `demo-mojados/`
 
 ## Abrir las muestras
 
@@ -75,6 +78,7 @@ entre sí.
 - [3 · Vitrina Huerto Dulce](https://simpleideal.github.io/Pagos1/demo-vitrina/)
 - [3 · Cervecería Bruma](https://simpleideal.github.io/Pagos1/demo-cerveceria/)
 - [3 · Carta Fogón del Lago](https://simpleideal.github.io/Pagos1/demo-carta-idiomas/)
+- [3 · Menú Mojados](https://simpleideal.github.io/Pagos1/demo-mojados/)
 
 ```bash
 python3 -m http.server 8080 --bind 0.0.0.0
@@ -126,6 +130,11 @@ bloque **CARTA**. Es otra página, solo la carta, con idioma y voz.
 El botón 🔊 busca primero un MP3 (`pastel-de-choclo.es.mp3`) y, si
 no está, usa la voz del navegador. `FUENTE.carta` queda vacío hasta
 pegar el CSV publicado. Pasos: `demo-carta-idiomas/HOJA.md`.
+
+Muestra 3, Mojados: en `demo-mojados/index.html`. La carta es
+`menu.jpg`, de fondo y entera. No se recorta ni se vuelve a guardar.
+Los enlaces del pie (Instagram, Facebook, TikTok y la reseña de
+Google) están en el `href` de cada botón.
 
 ## Seguridad: recursos externos verificados (integridad)
 Los estilos y scripts que la página carga desde otros sitios (jsdelivr, cdnjs, Google) ahora llevan una "huella" (`integrity="sha384-…"`). El navegador comprueba que el archivo no haya sido modificado; si alguien lo cambiara, simplemente no se carga. La página se ve igual que antes.

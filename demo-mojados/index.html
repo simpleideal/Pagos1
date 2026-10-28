@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú · Mojados</title>
+    <meta name="description" content="Menú de Mojados. Completos, combo, bebestibles y mayonesas.">
+    <link rel="preload" as="image" href="menu.jpg">
+    <style>
+        :root {
+            --fondo: #111111;
+            --rojo: #e2231a;
+            --pie: calc(78px + env(safe-area-inset-bottom, 0px));
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            background: var(--fondo);
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding-bottom: var(--pie);
+        }
+
+        /* La carta es la imagen, entera. No se recorta ni se estira. */
+        .menu {
+            width: min(100%, 520px);
+            margin: 0 auto;
+            aspect-ratio: 1024 / 1536;
+            background-color: var(--fondo);
+            background-image: url("menu.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+
+        footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+            background: #0c0c0c;
+            border-top: 2px solid var(--rojo);
+            padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+        }
+
+        nav {
+            width: min(100%, 520px);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr) 1.35fr;
+            gap: 8px;
+            align-items: stretch;
+        }
+
+        a {
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        a:focus-visible {
+            outline: 2px solid #ffffff;
+            outline-offset: 2px;
+        }
+
+        .red {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            min-height: 58px;
+            border-radius: 12px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .red svg {
+            width: 22px;
+            height: 22px;
+            display: block;
+            fill: currentColor;
+        }
+
+        .red:active { background: rgba(255, 255, 255, 0.08); }
+
+        .resena {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 58px;
+            padding: 8px 10px;
+            border-radius: 12px;
+            background: var(--rojo);
+            color: #ffffff;
+            font-size: 0.92rem;
+            font-weight: 800;
+            line-height: 1.15;
+            text-align: center;
+        }
+
+        .resena:active { filter: brightness(1.08); }
+    </style>
+</head>
+<body>
+    <!--
+      Menú de Mojados.
+      menu.jpg es el fondo, tal como llegó. No recortarla ni reescribirla.
+      Para cambiar un enlace, edita el href del pie.
+    -->
+    <main class="menu" role="img" aria-label="Menú de Mojados, con completos, combo, bebestibles y mayonesas."></main>
+
+    <footer>
+        <nav aria-label="Redes y reseña">
+            <a class="red" href="https://www.instagram.com/mojados_osorno" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4c0 3.2-2.6 5.8-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2zm0 2C5.7 4 4 5.7 4 7.8v8.4C4 18.3 5.7 20 7.8 20h8.4c2.1 0 3.8-1.7 3.8-3.8V7.8C20 5.7 18.3 4 16.2 4H7.8zM17.5 5.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+                Instagram
+            </a>
+            <a class="red" href="https://www.facebook.com/share/1CCYcDWK8E/" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 4h3V.5h-3.3C10.2.5 9.5 3.4 9.5 5.3V7.5h-3v4h3V23.5h5v-12h3.9l.4-4H14.5z"/></svg>
+                Facebook
+            </a>
+            <a class="red" href="https://www.tiktok.com/@mojados.osorno" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.77 1.52V6.76a4.85 4.85 0 0 1-1-.07z"/></svg>
+                TikTok
+            </a>
+            <a class="resena" href="https://search.google.com/local/writereview?placeid=ChIJ12ElPAA3FpYRTk-PuIP3Z5s&amp;source=g.page.m.kd._&amp;laa=lu-desktop-review-solicitation" target="_blank" rel="noopener noreferrer">Reseña en Google</a>
+        </nav>
+    </footer>
+</body>
+</html>
