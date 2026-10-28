@@ -1,5 +1,13 @@
 # Notas para agentes
 
+Este repositorio, Pagos1, es solo de muestras. Los nombres, precios,
+fotos, cuentas y teléfonos son inventados.
+
+Una página de un local real no va aquí. El menú del negocio, sus
+redes, su reseña de Google y sus precios de verdad van en un
+repositorio propio de ese local. No abras una rama ni un pull request
+en Pagos1 para publicarlos.
+
 Hay tres tipos de muestra. No se mezclan: cobro (1), portafolio (2),
 carta o vitrina (3).
 
